@@ -49,4 +49,37 @@ method noRepetitionsQuadratic(arr : array<nat>) returns (b: bool)
 
 method noRepetitionsLinear(arr : array<nat>) returns (b: bool)
 {
+  b := true; 
+  var j := 0;
+
+  var max_val := 0;
+  var min_val := 0;
+  while (j < arr.Length) // O(n) - One pass through array
+  {
+    var v := arr[j]; 
+    if (v > max_val) {
+       max_val := v;
+    }
+    if (v < min_val) {
+       min_val := v;
+    }
+    j := j+1;
+  }
+  
+  j := 0;
+  // Podemos assumir max_val como uma constante / muito menor que n?
+  var table := new bool[max_val + 1](x => false); // O(max_val) - Initialize table
+
+  while (j < arr.Length) // O(n) - One pass through array
+  {
+    var v := arr[j]; 
+    if (table[v]) {
+      b := false; 
+      return; 
+    }
+    table[v] := true;
+    j := j+1;
+  }
+
+  // O(n) + O(n) + O(max_val) = O(max(n, max_val))  
 }
