@@ -45,14 +45,29 @@ method noRepetitionsQuadratic(arr : array<nat>) returns (b: bool)
 
 
 method noRepetitionsLinear(arr : array<nat>) returns (b: bool)
+  // ensures b == true ==> forall i: nat, j: nat :: 
+  //                       inBounds(i, arr) && inBounds(j, arr) && i != j
+  //                       ==> arr[i] != arr[j]
+  ensures b == false ==> forall i: nat, j: nat :: 
+                          inBounds(i, arr) && inBounds(j, arr) && arr[i] != arr[j]
+                          ==> i != j
 {
-  b := true; 
+  if (arr[..] == []) {
+    b := true;
+    return;
+  }
+
   var j := 0;
 
-  var max_val := 0;
-  var min_val := 0;
+  var max_val := arr[0];
+  var min_val := arr[0];
   while (j < arr.Length) // O(n) - One pass through array
     invariant 0 <= j <= arr.Length
+    // Tudo o que vimos até agora é no máximo max_val
+    invariant forall k :: (0 <= k < j) ==> arr[k] <= max_val
+    // Tudo o que vimos até agora é no mínimo min_val
+    invariant forall k :: (0 <= k < j) ==> arr[k] >= min_val
+    invariant max_val >= min_val
   {
     var v := arr[j]; 
     if (v > max_val) {
@@ -63,22 +78,31 @@ method noRepetitionsLinear(arr : array<nat>) returns (b: bool)
     }
     j := j+1;
   }
-  
+
   j := 0;
   // Podemos assumir max_val como uma constante / muito menor que n?
   var table := new bool[max_val + 1](x => false); // O(max_val) - Initialize table
 
   while (j < arr.Length) // O(n) - One pass through array
     invariant 0 <= j <= arr.Length
+    // Tudo o que já vimos, tem a entrada da tabela a true
+    invariant forall k :: (0 <= k < j) ==> table[arr[k]] == true
+    // O que não vimos está a false
+    invariant forall k :: 0 <= k < max_val + 1 && table[k] == false
+                          ==>
+                          forall l :: 0 <= l < j ==> arr[l] != k
   {
-    var v := arr[j]; 
+    var v := arr[j];
     if (table[v]) {
       b := false; 
-      return; 
+      return;
     }
     table[v] := true;
     j := j+1;
   }
 
   // O(n) + O(n) + O(max_val) = O(max(n, max_val))  
+
+  b := true;
+  return;
 }
