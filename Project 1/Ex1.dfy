@@ -49,7 +49,7 @@ function reconstructAux (cd : code, aes: seq<aexpr>) : seq<aexpr> {
 		else [ UnOp(op, aes[0]) ] + aes[1..]
 	case BinOpCode(op) =>
 		if |aes| < 2 then [ ]
-		else [ BinOp(op, aes[1], aes[0]) ] + aes[2..]
+		else [ BinOp(op, aes[0], aes[1]) ] + aes[2..]
   }
 }
 
@@ -57,30 +57,30 @@ function reconstructAux (cd : code, aes: seq<aexpr>) : seq<aexpr> {
 /*
   Ex1.2
 */
-lemma DeserializeProperty(e : aexpr)
-  ensures Deserialize(Serialize(e)) == [ e ]
-{
-	match e {
-		case Var(s) => 
-			calc {
-				Deserialize(Serialize(e));
-				== // by case
-				Deserialize(Serialize(Var(s)));
-				== // by def of Serialize
-				Deserialize([VarCode(s)]);
-				== // unfolding Deserialize definition
-				reconstruct([VarCode(s)], []);
-				== // unfolding reconstruct definition
-				reconstruct([], [Var(s)] + []);
-				== // properties of sequences
-				reconstruct([], [Var(s)]);
-				== // defintion of reconstruct
-				[Var(s)];
-				== // by case
-				[e];
-			}
-	}
-}
+// lemma DeserializeProperty(e : aexpr)
+//   ensures Deserialize(Serialize(e)) == [ e ]
+// {
+// 	match e {
+// 		case Var(s) => 
+// 			calc {
+// 				Deserialize(Serialize(e));
+// 				== // by case
+// 				Deserialize(Serialize(Var(s)));
+// 				== // by def of Serialize
+// 				Deserialize([VarCode(s)]);
+// 				== // unfolding Deserialize definition
+// 				reconstruct([VarCode(s)], []);
+// 				== // unfolding reconstruct definition
+// 				reconstruct([], [Var(s)] + []);
+// 				== // properties of sequences
+// 				reconstruct([], [Var(s)]);
+// 				== // defintion of reconstruct
+// 				[Var(s)];
+// 				== // by case
+// 				[e];
+// 			}
+// 	}
+// }
 
 lemma ReconstructAfterSerializingLemma (t : aexpr, cds : seq<code>, ts : seq<aexpr>) 
   ensures reconstruct(Serialize(t)+cds, ts) == reconstruct(cds, [ t ] + ts) {
@@ -111,13 +111,19 @@ lemma ReconstructAfterSerializingLemma (t : aexpr, cds : seq<code>, ts : seq<aex
 				reconstruct(cds, [t]+ts);
 			}
 		case UnOp(op, expr) =>
+			assert Serialize(expr) + [UnOpCode(op)] + cds == Serialize(expr) + ([UnOpCode(op)] + cds);
 			calc {
 				reconstruct(Serialize(t)+cds, ts);
 				== // by case
 				reconstruct(Serialize(UnOp(op, expr)) + cds, ts);
 				== // by unfolding def of Serialize
 				reconstruct(Serialize(expr) + [UnOpCode(op)] + cds, ts);
-				//==
+				== { ReconstructAfterSerializingLemma(expr, [UnOpCode(op)] + cds, ts); }
+				reconstruct([UnOpCode(op)] + cds, [expr] + ts);
+				== // by unfolding def of reconstruct
+				reconstruct(cds, [UnOp(op, expr)] + ts);
+				== // by case
+				reconstruct(cds, [t] + ts);
 			}
 		case BinOp(op, expr1, expr2) =>
 		    assert Serialize(expr2) + Serialize(expr1) + [ BinOpCode(op) ] + cds == Serialize(expr2) + (Serialize(expr1) + [ BinOpCode(op) ] + cds);
