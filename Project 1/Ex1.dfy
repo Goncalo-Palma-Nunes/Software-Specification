@@ -176,9 +176,34 @@ function SerializeCodes(cs : seq<code>) : seq<nat>
 
 }
 
-// function DeserializeCodes(ints : seq<nat>) : seq<code> {
-  
-// }
+function DeserializeBop(n: nat) : bop
+{
+	if n == 0 then Plus
+	else Minus
+}
+
+function DeserializeUop(n: nat) : uop
+{
+	Neg
+}
+
+function DeserializeCodes(ints : seq<nat>) : seq<code> {
+  if ints == [] then []
+  else if |ints| < 2 then []
+  else if ints[0] == 0 then
+    var size := ints[1];
+	if |ints| < 2 + size then []
+	else
+		[VarCode(ints[2..2+size])] + DeserializeCodes(ints[2+size..])
+  else if ints[0] == 1 then
+    [BinOpCode(DeserializeBop(ints[1]))] + DeserializeCodes(ints[2..])
+  else if ints[0] == 2 then
+    [UnOpCode(DeserializeUop(ints[1]))] + DeserializeCodes(ints[2..])
+  else if ints[0] == 3 then
+    [ValCode(ints[1])] + DeserializeCodes(ints[2..])
+  else
+    [] // This case should never occur
+}
 
 
 // /*
