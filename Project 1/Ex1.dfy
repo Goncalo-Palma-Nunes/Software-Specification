@@ -57,30 +57,20 @@ function reconstructAux (cd : code, aes: seq<aexpr>) : seq<aexpr> {
 /*
   Ex1.2
 */
-// lemma DeserializeProperty(e : aexpr)
-//   ensures Deserialize(Serialize(e)) == [ e ]
-// {
-// 	match e {
-// 		case Var(s) => 
-// 			calc {
-// 				Deserialize(Serialize(e));
-// 				== // by case
-// 				Deserialize(Serialize(Var(s)));
-// 				== // by def of Serialize
-// 				Deserialize([VarCode(s)]);
-// 				== // unfolding Deserialize definition
-// 				reconstruct([VarCode(s)], []);
-// 				== // unfolding reconstruct definition
-// 				reconstruct([], [Var(s)] + []);
-// 				== // properties of sequences
-// 				reconstruct([], [Var(s)]);
-// 				== // defintion of reconstruct
-// 				[Var(s)];
-// 				== // by case
-// 				[e];
-// 			}
-// 	}
-// }
+lemma DeserializeProperty(e : aexpr)
+  ensures Deserialize(Serialize(e)) == [ e ]
+{
+	assert Serialize(e) + [] == Serialize(e);
+	calc {
+		Deserialize(Serialize(e));
+		== // by def of Deserialize
+		reconstruct(Serialize(e), []);
+		== { ReconstructAfterSerializingLemma(e, [], []); }
+		reconstruct([], [e]);
+		== // by def of reconstruct
+		[e];
+	}
+}
 
 lemma ReconstructAfterSerializingLemma (t : aexpr, cds : seq<code>, ts : seq<aexpr>) 
   ensures reconstruct(Serialize(t)+cds, ts) == reconstruct(cds, [ t ] + ts) {
