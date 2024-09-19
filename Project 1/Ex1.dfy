@@ -27,31 +27,31 @@ function Serialize(a : aexpr) : seq<code>
 /*
   Ex1.1
 */
-// function Deserialize(cs : seq<code>) : seq<aexpr> 
-// {
-// 	reconstruct(cs, [])
-// }
+function Deserialize(cs : seq<code>) : seq<aexpr> 
+{
+	reconstruct(cs, [])
+}
 
-// function reconstruct(cs : seq<code>, aes : seq<aexpr>) : seq<aexpr>
-// 	decreases cs, aes
-// {
-// 	if (cs == [])
-// 	then aes
-// 	else reconstruct(cs[1..], reconstructAux(cs[0], aes))
-// }
+function reconstruct(cs : seq<code>, aes : seq<aexpr>) : seq<aexpr>
+	decreases cs, aes
+{
+	if (cs == [])
+	then aes
+	else reconstruct(cs[1..], reconstructAux(cs[0], aes))
+}
 
-// function reconstructAux (cd : code, aes: seq<aexpr>) : seq<aexpr> {
-//   match cd {
-//     case VarCode(s) => [Var(s)] + aes
-// 	case ValCode(i) => [Val(i)] + aes
-// 	case UnOpCode(op) =>
-// 		if |aes| < 1 then [ ]
-// 		else [ UnOp(op, aes[0]) ] + aes[1..]
-// 	case BinOpCode(op) =>
-// 		if |aes| < 2 then [ ]
-// 		else [ BinOp(op, aes[0], aes[1]) ] + aes[2..]
-//   }
-// }
+function reconstructAux (cd : code, aes: seq<aexpr>) : seq<aexpr> {
+  match cd {
+    case VarCode(s) => [Var(s)] + aes
+	case ValCode(i) => [Val(i)] + aes
+	case UnOpCode(op) =>
+		if |aes| < 1 then [ ]
+		else [ UnOp(op, aes[0]) ] + aes[1..]
+	case BinOpCode(op) =>
+		if |aes| < 2 then [ ]
+		else [ BinOp(op, aes[0], aes[1]) ] + aes[2..]
+  }
+}
 
 
 /*
@@ -189,7 +189,7 @@ function DeserializeUop(n: nat) : uop
 
 function DeserializeCodes(ints : seq<nat>) : seq<code> {
   if ints == [] then []
-  else if |ints| < 2 then []
+  else if |ints| < 2 then [] // Têm todos tag + algo
   else if ints[0] == 0 then
     var size := ints[1];
 	if |ints| < 2 + size then []
@@ -202,28 +202,46 @@ function DeserializeCodes(ints : seq<nat>) : seq<code> {
   else if ints[0] == 3 then
     [ValCode(ints[1])] + DeserializeCodes(ints[2..])
   else
-    [] // This case should never occur
+    [] // Isto nunca acontece na realidade
 }
 
 
-// /*
-//   Ex1.4
-// */
+/*
+  Ex1.4
+*/
 // lemma DeserializeCodesProperty(cs : seq<code>)
 //   ensures DeserializeCodes(SerializeCodes(cs)) == cs
 // {
+//   if cs == [] {
+//     calc {
+//       DeserializeCodes(SerializeCodes(cs));
+//       == // by case
+//       DeserializeCodes(SerializeCodes([]));
+//       == // by def of SerializeCodes
+//       DeserializeCodes([]);
+//       == // by def of DeserializeCodes
+//       [];
+//       == // by case
+//       cs;
+//     }
+//   }
+//   else {
+//     calc {
+//       DeserializeCodes(SerializeCodes(cs));
+//     }
+//   }
 // }
 
 // /*
 //   Ex1.5
 // */
-// function FullSerialize(e : aexpr) : seq<nat> {
- 
-// }
+function FullSerialize(e : aexpr) : seq<nat> {
+ SerializeCodes(Serialize(e))
+}
 
-// function FullDeserealize(nats : seq<nat>) : seq<aexpr> {
- 
-// }
+function FullDeserealize(nats : seq<nat>) : seq<aexpr> {
+  Deserialize(DeserializeCodes(nats))
+}
 
 // /*
 //   Ex1.6
