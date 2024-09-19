@@ -232,9 +232,9 @@ function DeserializeCodes(ints : seq<nat>) : seq<code> {
 //   }
 // }
 
-// /*
-//   Ex1.5
-// */
+/*
+  Ex1.5
+*/
 function FullSerialize(e : aexpr) : seq<nat> {
  SerializeCodes(Serialize(e))
 }
@@ -243,11 +243,85 @@ function FullDeserealize(nats : seq<nat>) : seq<aexpr> {
   Deserialize(DeserializeCodes(nats))
 }
 
-// /*
-//   Ex1.6
-// */
+/*
+  Ex1.6
+*/
 // lemma FullDeserealizeProperty(e : aexpr)
 //   ensures FullDeserealize(FullSerialize(e)) == [ e ]
 // {
+//   match e {
     
+//     case Var(s) =>
+//       calc {
+//         FullDeserealize(FullSerialize(e));
+//         == // by case
+//         FullDeserealize(FullSerialize(Var(s)));
+//         == // by def of FullSerialize
+//         FullDeserealize(SerializeCodes(Serialize(Var(s))));
+//         == // by def of Serialize
+//         FullDeserealize(SerializeCodes([VarCode(s)]));
+//         == // by def of FullDeserealize
+//         Deserialize(DeserializeCodes(SerializeCodes([VarCode(s)])));
+//         == { DeserializeCodesProperty([VarCode(s)]); }
+//         Deserialize([VarCode(s)]);
+//         == { DeserializeProperty(Var(s)); }
+//         [Var(s)];
+//         == // by case
+//         [e];
+//       }
+//       case Val(i) =>
+//         calc {
+//           FullDeserealize(FullSerialize(e));
+//           == // by case
+//           FullDeserealize(FullSerialize(Val(i)));
+//           == // by def of FullSerialize
+//           FullDeserealize(SerializeCodes(Serialize(Val(i))));
+//           == // by def of Serialize
+//           FullDeserealize(SerializeCodes([ValCode(i)]));
+//           == // by def of FullDeserealize
+//           Deserialize(DeserializeCodes(SerializeCodes([ValCode(i)])));
+//           == { DeserializeCodesProperty([ValCode(i)]); }
+//           Deserialize([ValCode(i)]);
+//           == { DeserializeProperty(Val(i)); }
+//           [Val(i)];
+//           == // by case
+//           [e];
+//         }
+//       case UnOp(op, expr) =>
+//         calc {
+//           FullDeserealize(FullSerialize(e));
+//           == // by case
+//           FullDeserealize(FullSerialize(UnOp(op, expr)));
+//           == // by def of FullSerialize
+//           FullDeserealize(SerializeCodes(Serialize(UnOp(op, expr))));
+//           == // by def of Serialize
+//           FullDeserealize(SerializeCodes(Serialize(expr) + [UnOpCode(op)]));
+//           == // by def of FullDeserealize
+//           Deserialize(DeserializeCodes(SerializeCodes(Serialize(expr) + [UnOpCode(op)])));
+//           == { DeserializeCodesProperty(Serialize(expr) + [UnOpCode(op)]); }
+//           Deserialize(Serialize(expr) + [UnOpCode(op)]);
+//           == { DeserializeProperty(UnOp(op, expr)); }
+//           [UnOp(op, expr)];
+//           == // by case
+//           [e];
+//         }
+//       case BinOp(op, expr1, expr2) =>
+//         calc {
+//           FullDeserealize(FullSerialize(e));
+//           == // by case
+//           FullDeserealize(FullSerialize(BinOp(op, expr1, expr2)));
+//           == // by def of FullSerialize
+//           FullDeserealize(SerializeCodes(Serialize(BinOp(op, expr1, expr2))));
+//           == // by def of Serialize
+//           FullDeserealize(SerializeCodes(Serialize(expr2) + Serialize(expr1) + [BinOpCode(op)]));
+//           == // by def of FullDeserealize
+//           Deserialize(DeserializeCodes(SerializeCodes(Serialize(expr2) + Serialize(expr1) + [BinOpCode(op)])));
+//           == { DeserializeCodesProperty(Serialize(expr2) + Serialize(expr1) + [BinOpCode(op)]); }
+//           Deserialize(Serialize(expr2) + Serialize(expr1) + [BinOpCode(op)]);
+//           == { DeserializeProperty(BinOp(op, expr1, expr2)); }
+//           [BinOp(op, expr1, expr2)];
+//           == // by case
+//           [e];
+//         }
+//   }
 // }
