@@ -5,9 +5,9 @@ function inBounds(i: nat, arr: array<nat>) : bool {
 }
 
 method noRepetitionsQuadratic(arr : array<nat>) returns (b: bool) 
-  // ensures b ==> forall i: nat, j: nat :: 
-  //                       inBounds(i, arr) && inBounds(j, arr) && i != j
-  //                       ==> arr[i] != arr[j]
+  ensures b ==> forall i: nat, j: nat :: 
+                        inBounds(i, arr) && inBounds(j, arr) && i != j
+                        ==> arr[i] != arr[j]
   ensures !b ==> exists i: nat, j: nat :: 
                         inBounds(i, arr) && inBounds(j, arr) && arr[i] == arr[j] && i != j
  {
