@@ -86,12 +86,7 @@ method noRepetitionsLinear(arr : array<nat>) returns (b: bool)
     invariant forall k :: ((k >= j) && (k < arr.Length) && table[arr[k]] ==>
                       exists k1 :: (0 <= k1 < j) && arr[k1] == arr[k])
     // Quaisqueres dois índices k e k1 já vistos, o valor nesses índices é diferente
-    invariant forall k, k1 :: (0 <= k < j && 0 <= k1 < j && k != k1) ==> arr[k] != arr[k1]
-    // Se vimos um número k, então existe um índice de arr já visto onde esse número está
-    invariant forall k :: (0 <= k < max_val) && table[k]
-                      ==> exists k1 :: (0 <= k1 < j) && arr[k1] == k               
-    // Se ainda não vimos uma entrada k, então a tabela diz que não vimos
-    invariant exists k :: ((k > j) && (k < arr.Length) ==> !table[arr[k]])
+    invariant forall k, k1 :: (0 <= k < j && 0 <= k1 < j && k != k1) ==> arr[k] != arr[k1]      
     // Tudo o que vimos até agora está a true na tabela
     invariant forall k :: (0 <= k < j) ==> table[arr[k]]
   {
