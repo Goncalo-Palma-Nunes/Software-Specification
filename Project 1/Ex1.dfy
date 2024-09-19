@@ -188,21 +188,21 @@ function DeserializeUop(n: nat) : uop
 }
 
 function DeserializeCodes(ints : seq<nat>) : seq<code> {
-  if ints == [] then []
-  else if |ints| < 2 then [] // Têm todos tag + algo
-  else if ints[0] == 0 then
-    var size := ints[1];
-	if |ints| < 2 + size then []
-	else
+  if |ints| < 2 then [] // Ou vazio ou mal formado (Têm todos tag + algo)
+  else match ints[0] {
+    case 0 =>
+	  var size := ints[1];
+	  if |ints| < 2 + size then []
+	  else
 		[VarCode(ints[2..2+size])] + DeserializeCodes(ints[2+size..])
-  else if ints[0] == 1 then
-    [BinOpCode(DeserializeBop(ints[1]))] + DeserializeCodes(ints[2..])
-  else if ints[0] == 2 then
-    [UnOpCode(DeserializeUop(ints[1]))] + DeserializeCodes(ints[2..])
-  else if ints[0] == 3 then
-    [ValCode(ints[1])] + DeserializeCodes(ints[2..])
-  else
-    [] // Isto nunca acontece na realidade
+	case 1 => 
+	  [BinOpCode(DeserializeBop(ints[1]))] + DeserializeCodes(ints[2..])
+	case 2 => 
+	  [UnOpCode(DeserializeUop(ints[1]))] + DeserializeCodes(ints[2..])
+	case 3 => 
+	  [ValCode(ints[1])] + DeserializeCodes(ints[2..])
+	case _ => [] // Isto nunca acontece na realidade
+  }
 }
 
 

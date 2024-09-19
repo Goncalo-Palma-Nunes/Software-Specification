@@ -1,7 +1,5 @@
 function inBounds(i: nat, arr: array<nat>) : bool {
-  if (0 <= i && i < arr.Length)
-    then true
-    else false
+  0 <= i && i < arr.Length
 }
 
 method noRepetitionsQuadratic(arr : array<nat>) returns (b: bool) 
@@ -57,21 +55,14 @@ method noRepetitionsLinear(arr : array<nat>) returns (b: bool)
   var j := 0;
 
   var max_val := arr[0];
-  var min_val := arr[0];
   while (j < arr.Length) // O(n) - One pass through array
     invariant 0 <= j <= arr.Length
     // Tudo o que vimos até agora é no máximo max_val
     invariant forall k :: (0 <= k < j) ==> arr[k] <= max_val
-    // Tudo o que vimos até agora é no mínimo min_val
-    invariant forall k :: (0 <= k < j) ==> arr[k] >= min_val
-    invariant max_val >= min_val
   {
     var v := arr[j]; 
     if (v > max_val) {
        max_val := v;
-    }
-    if (v < min_val) {
-       min_val := v;
     }
     j := j+1;
   }
@@ -85,7 +76,7 @@ method noRepetitionsLinear(arr : array<nat>) returns (b: bool)
     // então existe esse valor num índice anterior já visto
     invariant forall k :: ((k >= j) && (k < arr.Length) && table[arr[k]] ==>
                       exists k1 :: (0 <= k1 < j) && arr[k1] == arr[k])
-    // Quaisqueres dois índices k e k1 já vistos, o valor nesses índices é diferente
+    // Quaisquer dois índices k e k1 já vistos, o valor nesses índices é diferente
     invariant forall k, k1 :: (0 <= k < j && 0 <= k1 < j && k != k1) ==> arr[k] != arr[k1]      
     // Tudo o que vimos até agora está a true na tabela
     invariant forall k :: (0 <= k < j) ==> table[arr[k]]
