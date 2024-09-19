@@ -5,12 +5,11 @@ function inBounds(i: nat, arr: array<nat>) : bool {
 }
 
 method noRepetitionsQuadratic(arr : array<nat>) returns (b: bool) 
-  ensures b == true ==> forall i: nat, j: nat :: 
-                        inBounds(i, arr) && inBounds(j, arr) && i != j
-                        ==> arr[i] != arr[j]
-  ensures b == false ==> forall i: nat, j: nat :: 
-                          inBounds(i, arr) && inBounds(j, arr) && arr[i] != arr[j]
-                          ==> i != j
+  // ensures b ==> forall i: nat, j: nat :: 
+  //                       inBounds(i, arr) && inBounds(j, arr) && i != j
+  //                       ==> arr[i] != arr[j]
+  ensures !b ==> exists i: nat, j: nat :: 
+                        inBounds(i, arr) && inBounds(j, arr) && arr[i] == arr[j] && i != j
  {
   var i := 0; 
   b := true; 
@@ -43,14 +42,12 @@ method noRepetitionsQuadratic(arr : array<nat>) returns (b: bool)
 
 
 
-
 method noRepetitionsLinear(arr : array<nat>) returns (b: bool)
-  // ensures b == true ==> forall i: nat, j: nat :: 
-  //                       inBounds(i, arr) && inBounds(j, arr) && i != j
-  //                       ==> arr[i] != arr[j]
-  ensures b == false ==> forall i: nat, j: nat :: 
-                          inBounds(i, arr) && inBounds(j, arr) && arr[i] != arr[j]
-                          ==> i != j
+   ensures b ==> forall i: nat, j: nat :: 
+                         inBounds(i, arr) && inBounds(j, arr) && i != j
+                         ==> arr[i] != arr[j]
+  ensures !b ==> exists i: nat, j: nat :: 
+                        inBounds(i, arr) && inBounds(j, arr) && arr[i] == arr[j] && i != j
 {
   if (arr[..] == []) {
     b := true;
@@ -80,17 +77,23 @@ method noRepetitionsLinear(arr : array<nat>) returns (b: bool)
   }
 
   j := 0;
-  // Podemos assumir max_val como uma constante / muito menor que n?
-  var table := new bool[max_val + 1](x => false); // O(max_val) - Initialize table
+  var table := new bool[max_val + 1](x => false);
 
   while (j < arr.Length) // O(n) - One pass through array
     invariant 0 <= j <= arr.Length
-    // Tudo o que já vimos, tem a entrada da tabela a true
-    invariant forall k :: (0 <= k < j) ==> table[arr[k]] == true
-    // O que não vimos está a false
-    invariant forall k :: 0 <= k < max_val + 1 && table[k] == false
-                          ==>
-                          forall l :: 0 <= l < j ==> arr[l] != k
+    // Se o valor num índice do array ainda não visto é verdade na tabela,
+    // então existe esse valor num índice anterior já visto
+    invariant forall k :: ((k >= j) && (k < arr.Length) && table[arr[k]] ==>
+                      exists k1 :: (0 <= k1 < j) && arr[k1] == arr[k])
+    // Quaisqueres dois índices k e k1 já vistos, o valor nesses índices é diferente
+    invariant forall k, k1 :: (0 <= k < j && 0 <= k1 < j && k != k1) ==> arr[k] != arr[k1]
+    // Se vimos um número k, então existe um índice de arr já visto onde esse número está
+    invariant forall k :: (0 <= k < max_val) && table[k]
+                      ==> exists k1 :: (0 <= k1 < j) && arr[k1] == k               
+    // Se ainda não vimos uma entrada k, então a tabela diz que não vimos
+    invariant exists k :: ((k > j) && (k < arr.Length) ==> !table[arr[k]])
+    // Tudo o que vimos até agora está a true na tabela
+    invariant forall k :: (0 <= k < j) ==> table[arr[k]]
   {
     var v := arr[j];
     if (table[v]) {
@@ -101,7 +104,9 @@ method noRepetitionsLinear(arr : array<nat>) returns (b: bool)
     j := j+1;
   }
 
-  // O(n) + O(n) + O(max_val) = O(max(n, max_val))  
+  // O(n) + O(n) = O(n)  
+
+  assert j == arr.Length;
 
   b := true;
   return;
