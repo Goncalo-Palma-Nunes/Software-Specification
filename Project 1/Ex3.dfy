@@ -34,7 +34,7 @@ module Ex3 {
 
     constructor (v : nat)
       ensures Valid()
-      ensures this.val == v && this.next == null
+      ensures this.val == v && this.next == null && this.content == {v} && this.footprint == {this}
     {
       this.val := v;
       this.next := null;
