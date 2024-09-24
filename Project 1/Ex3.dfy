@@ -55,8 +55,31 @@ module Ex3 {
     }
 
     method mem(v : nat) returns (b : bool)
+      requires Valid()
+      ensures b == (v in this.content)
     {
-  
+      var curr := this;
+      b := false;
+
+      ghost var setAux: set<int> := {};
+      while (curr != null)
+        invariant curr != null ==> curr.Valid()
+        invariant curr != null ==> this.content == setAux + curr.content
+        invariant curr == null ==> this.content == setAux
+        invariant v !in setAux
+        decreases if (curr != null)
+                    then curr.footprint
+                  else {}
+      {
+        if (curr.val == v) {
+          b := true;
+          return;
+        }
+        setAux := setAux + {curr.val};
+        curr := curr.next;
+      }
+
+      return;
     }
 
     method copy() returns (n : Node)
