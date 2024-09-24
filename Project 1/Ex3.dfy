@@ -43,7 +43,15 @@ module Ex3 {
     }
 
     method add(v : nat) returns (r : Node)
+      requires Valid()
+      ensures r.Valid()
+      ensures r.content == {v} + this.content && r.footprint == {r} + this.footprint
     {
+      r := new Node(v);
+      r.next := this;
+
+      r.footprint := {r} + this.footprint;
+      r.content := {v} + this.content;
     }
 
     method mem(v : nat) returns (b : bool)
