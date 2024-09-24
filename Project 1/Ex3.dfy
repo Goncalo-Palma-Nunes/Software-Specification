@@ -32,8 +32,14 @@ module Ex3 {
           this.next.Valid()
     }
 
-    constructor (v : nat) 
+    constructor (v : nat)
+      ensures Valid()
+      ensures this.val == v && this.next == null
     {
+      this.val := v;
+      this.next := null;
+      this.footprint := {this};
+      this.content := {v};
     }
 
     method add(v : nat) returns (r : Node)
