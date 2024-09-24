@@ -35,13 +35,60 @@ module Ex4 {
 
 
     method mem (v : nat) returns (b : bool)
+      requires Valid()
+      ensures b == (v in this.content)
     {
-   
+      b := false;
+      if (this.list != null) {
+        b := this.list.mem(v);
+      }
+      return;
+
+      /*
+        A condição "this !in this.next.footprint" na função Valid() da classe Node
+        garante que não há ciclos numa lista válida. Se houvesse, teria de ser possível
+        chegar a "this" a partir de um dos nós seguintes. Como para um nó ser válido, ele não
+        pode estar no footprint do nó seguinte, não pode haver ciclos.
+
+        O método mem da classe Node percorre a lista até ao fim. Sendo que não há ciclos,
+        o método termina e nunca visita um mesmo nó duas vezes. Assim sendo, percorre
+        no máximo O(n) nós
+      */
     }
 
 
-    method add (v : nat) 
+    method add (v : nat)
+      requires Valid()
+      ensures Valid()
+      ensures this.content == {v} + old(this.content)
+      ensures this.footprint == {this.list} + old(this.footprint)
+      // ensures this.list == old(this.list).add(v)
+      modifies this // do we need to say it modifies footprint?
     {
+      if (this.list == null) {
+        var n := new Ex3.Node(v); // Criar um nó é O(1)
+        this.list := n; // Associar o nó à lista é O(1)
+
+        // this.list == null ==> this.add(v) in O(1)
+      } 
+      else {
+        this.list := this.list.add(v);
+
+        /*
+          O método add da classe Node está em O(1), pois só cria
+          um nó, mete-o a apontar para a antiga cabeça da lista
+          e atualiza cada ghost var com um assignment O(1)
+
+          this.list != null ==> this.add(v) in O(1)
+        */
+      }
+      this.footprint := this.list.footprint; // O(1)
+      this.content := this.list.content; // O(1)
+
+      /*
+        this.add(v) in O(1)
+        Qualquer função em O(1) está em O(n)
+      */
     }
 
 
