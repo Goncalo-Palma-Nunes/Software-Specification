@@ -62,9 +62,6 @@ module Ex4 {
       ensures Valid()
       ensures this.content == {v} + old(this.content)
       ensures this.footprint == {this.list} + old(this.footprint)
-      // ensures fresh(this.footprint - old(this.footprint))
-      // ensures this.list != null ==> this.list.Valid()
-      // ensures this.list == old(this.list).add(v)
       modifies this // do we need to say it modifies footprint?
     {
       if (this.list == null) {
@@ -97,7 +94,7 @@ module Ex4 {
       requires Valid()
       ensures r.Valid()
       ensures r.content == this.content
-      // ensures fresh(footprint - old(footprint))
+      ensures fresh(r)
     {
       r := new Set();
       if (this.list != null) {
@@ -113,18 +110,11 @@ module Ex4 {
       requires Valid() && s.Valid()
       ensures r.Valid()
       ensures r.content == this.content + s.content
-      // ensures r.footprint == this.footprint + s.footprint
+      ensures r.footprint == this.footprint + s.footprint
     {
-      r := new Set();
-      if (this.list != null) {
-        /* Se o set não está vazio, então a união dele com outro tem, pelo menos, 
-        todos os elementos desse set */
-        r.list := this.list.copy(); // O(n)
-        r.footprint := r.list.footprint; // O(1)
-        r.content := r.list.content; // O(1)
-
-        // TODO - Substituir por uma chamada a this.copy()
-      }
+      /* Se o set não está vazio, então a união dele com outro tem, pelo menos, 
+      todos os elementos desse set */
+      r := this.copy();
 
       var curr := s.list;
       while (curr != null)
@@ -134,10 +124,9 @@ module Ex4 {
         decreases if (curr != null)
                     then curr.footprint
                   else {}
-
       {
         var inR := r.mem(curr.val); // O(n)
-        if (inR) {
+        if (!inR) {
           r.add(curr.val); // O(1)
         }
         curr := curr.next; // O(1)
