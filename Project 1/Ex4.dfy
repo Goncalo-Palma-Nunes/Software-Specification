@@ -62,6 +62,7 @@ module Ex4 {
       ensures Valid()
       ensures this.content == {v} + old(this.content)
       ensures this.footprint == {this.list} + old(this.footprint)
+      ensures fresh(this.list) && fresh(this.footprint - old(this.footprint))
       modifies this // do we need to say it modifies footprint?
     {
       if (this.list == null) {
@@ -94,7 +95,7 @@ module Ex4 {
       requires Valid()
       ensures r.Valid()
       ensures r.content == this.content
-      ensures fresh(r)
+      ensures fresh(r) && fresh(r.footprint)
     {
       r := new Set();
       if (this.list != null) {
@@ -110,7 +111,7 @@ module Ex4 {
       requires Valid() && s.Valid()
       ensures r.Valid()
       ensures r.content == this.content + s.content
-      ensures r.footprint == this.footprint + s.footprint
+      ensures fresh(r.footprint)
     {
       /* Se o set não está vazio, então a união dele com outro tem, pelo menos, 
       todos os elementos desse set */
@@ -119,8 +120,13 @@ module Ex4 {
       var curr := s.list;
       while (curr != null)
         invariant curr != null ==> curr.Valid()
-        invariant s.Valid() && this.Valid()
+        invariant s.Valid()
         invariant r.Valid()
+        invariant curr != null ==> r.content + curr.content == this.content + s.content
+        invariant curr == null ==> r.content == this.content + s.content
+        // r is freshly allocated
+        invariant r.footprint!!this.footprint && r.footprint!!s.footprint
+        invariant fresh(r.footprint)
         decreases if (curr != null)
                     then curr.footprint
                   else {}
