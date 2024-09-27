@@ -85,9 +85,9 @@ module Ex3 {
 
     method copy() returns (n : Node)
       requires Valid()
-      ensures n.Valid() && Valid()
-      ensures fresh(n.footprint)
+      ensures n.Valid()
       ensures n.content == this.content 
+      ensures fresh(n) && fresh(n.footprint)
       decreases footprint
     {
       n := new Node(this.val);
