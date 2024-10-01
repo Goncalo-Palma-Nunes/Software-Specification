@@ -143,9 +143,27 @@ module Ex4 {
 
 
   method inter(s : Set) returns (r : Set)
+    requires Valid() && s.Valid()
     {
-      
+      r := new Set();
 
+      var curr := this.list;
+      while (curr != null)
+        invariant curr != null ==> curr.Valid()
+        invariant s.Valid()
+        invariant r.Valid()
+        decreases if (curr != null)
+                    then curr.footprint
+                  else {}
+      {
+        var inS := s.mem(curr.val);
+        if (inS) {
+          r.add(curr.val);
+        }
+        curr := curr.next;
+      }
+
+      return;
     }
   }
 
