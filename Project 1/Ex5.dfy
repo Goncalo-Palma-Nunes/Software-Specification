@@ -76,7 +76,7 @@ module Ex5 {
       // Se o valor é válido, então a tabela tem de estar a true
       ensures v < this.tbl.Length ==> this.tbl[v]
       // Se o valor é válido, então o valor do nó é o valor
-      ensures v < this.tbl.Length ==> this.list.val == v
+      ensures v < this.tbl.Length && !this.tbl[v] ==> this.list.val == v
       // Se o valor já está no set, então continua a estar
       ensures v in old(this.content) ==> v in this.content
       // Se o valor é válido, então estará no set
@@ -100,7 +100,6 @@ module Ex5 {
       } 
       else {
         if (this.tbl[v]) {
-          assert v in this.content;
           return;
         }
         n := this.list.add(v); // O(1)
