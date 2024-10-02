@@ -5,9 +5,18 @@ module Ex5 {
   import Ex3=Ex3
 
   function allFalse(tbl : array<bool>) : bool
+    reads tbl
   {
     forall i :: 0 <= i < tbl.Length ==> !tbl[i]
   }
+
+  lemma existsTrue(tbl : array<bool>)
+    requires exists i :: 0 <= i < tbl.Length && tbl[i]
+    ensures allFalse(tbl) == false
+    {
+    }
+
+  lemma 
 
   class Set {
     var tbl : array<bool>  
