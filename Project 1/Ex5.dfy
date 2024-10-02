@@ -16,8 +16,6 @@ module Ex5 {
     {
     }
 
-  lemma 
-
   class Set {
     var tbl : array<bool>  
     var list : Ex3.Node?
