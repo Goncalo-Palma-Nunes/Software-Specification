@@ -10,12 +10,6 @@ module Ex5 {
     forall i :: 0 <= i < tbl.Length ==> !tbl[i]
   }
 
-  lemma existsTrue(tbl : array<bool>)
-    requires exists i :: 0 <= i < tbl.Length && tbl[i]
-    ensures allFalse(tbl) == false
-    {
-    }
-
   class Set {
     var tbl : array<bool>  
     var list : Ex3.Node?
@@ -45,6 +39,10 @@ module Ex5 {
           tbl[this.list.val]
           &&
           this.list.Valid()
+          &&
+          !allFalse(this.tbl)
+          &&
+          ((this.list.val in this.content) <==> this.tbl[this.list.val])
     }
       
     constructor (size : nat)
@@ -60,13 +58,58 @@ module Ex5 {
       footprint := {};
     }
 
-
     method mem (v : nat) returns (b : bool)
+      requires Valid()
+      ensures b == (v in this.content)
     {
+      b := false;
+      if (v < this.tbl.Length) {
+        b := this.tbl[v]; // O(1) lookup
+      }
+
+      return;
     }
     
-    method add (v : nat) 
+    method add (v : nat)
+      requires Valid()
+      ensures Valid()
+      // Se o valor é válido, então a tabela tem de estar a true
+      ensures v < this.tbl.Length ==> this.tbl[v]
+      // Se o valor é válido, então o valor do nó é o valor
+      ensures v < this.tbl.Length ==> this.list.val == v
+      // Se o valor já está no set, então continua a estar
+      ensures v in old(this.content) ==> v in this.content
+      // Se o valor é válido, então estará no set
+      ensures v < this.tbl.Length ==> v in this.content
+      // Se o valor é inválido, nada muda
+      ensures v >= this.tbl.Length ==> 
+                        (
+                          this.content == old(this.content)
+                          && this.footprint == old(this.footprint)
+                        )
+      ensures fresh(this.footprint - old(this.footprint))
+      modifies this.tbl, this
     {
+      if (v >= this.tbl.Length) {
+        return;
+      }
+
+      var n: Ex3.Node;
+      if (this.list == null) {
+        n := new Ex3.Node(v); // O(1)
+      } 
+      else {
+        if (this.tbl[v]) {
+          assert v in this.content;
+          return;
+        }
+        n := this.list.add(v); // O(1)
+      }
+      this.list := n;
+      this.tbl[v] := true; // O(1)
+      this.content := this.list.content;
+      this.footprint := this.list.footprint;
+      return;
     }
 
     method union(s : Set) returns (r : Set)
