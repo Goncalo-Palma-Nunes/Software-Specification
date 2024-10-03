@@ -23,6 +23,8 @@ module Ex4 {
           content == list.content
           &&
           list.Valid()
+          &&
+          this.list.val in this.content
     }
 
     constructor () 
@@ -56,13 +58,14 @@ module Ex4 {
       */
     }
 
-
     method add (v : nat)
       requires Valid()
       ensures Valid()
       ensures this.content == {v} + old(this.content)
       ensures this.footprint == {this.list} + old(this.footprint)
-      ensures fresh(this.list) && fresh(this.footprint - old(this.footprint))
+      ensures this.list.val in this.content
+      ensures this.list.val == v && v in this.content
+      ensures fresh(this.footprint - old(this.footprint))
       modifies this // do we need to say it modifies footprint?
     {
       if (this.list == null) {
@@ -141,9 +144,11 @@ module Ex4 {
       return;
     }
 
-
   method inter(s : Set) returns (r : Set)
     requires Valid() && s.Valid()
+    ensures r.Valid()
+    ensures r.content == this.content * s.content // interseção
+    ensures fresh(r.footprint)
     {
       r := new Set();
 
@@ -152,6 +157,17 @@ module Ex4 {
         invariant curr != null ==> curr.Valid()
         invariant s.Valid()
         invariant r.Valid()
+        invariant curr != null ==> curr in this.footprint
+        invariant curr != null ==> curr.val in this.content
+        invariant fresh(r.footprint)
+        // Quando se chega ao fim da lista, o conteúdo do novo set já é a interseção
+        invariant curr == null ==> r.content == this.content * s.content
+        invariant curr != null ==> // Qualquer valor no novo set está na interseção
+                  forall v : nat :: v in r.content ==> v in this.content * s.content
+        // Um valor que esteja na interceção, mas não no curr, tem de já ter sido
+        // adicionado ao r
+        invariant curr != null ==> 
+                  forall v : nat :: v in this.content * s.content && v !in curr.content ==> v in r.content
         decreases if (curr != null)
                     then curr.footprint
                   else {}
