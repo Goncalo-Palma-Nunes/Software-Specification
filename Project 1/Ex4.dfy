@@ -64,7 +64,6 @@ module Ex4 {
       ensures this.content == {v} + old(this.content)
       ensures this.footprint == {this.list} + old(this.footprint)
       ensures this.list.val in this.content
-      ensures this.list.val == v && v in this.content
       ensures fresh(this.footprint - old(this.footprint))
       modifies this // do we need to say it modifies footprint?
     {
@@ -153,12 +152,12 @@ module Ex4 {
       r := new Set();
 
       var curr := this.list;
+      var seen := new Set();
       while (curr != null)
         invariant curr != null ==> curr.Valid()
         invariant s.Valid()
         invariant r.Valid()
-        invariant curr != null ==> curr in this.footprint
-        invariant curr != null ==> curr.val in this.content
+        invariant curr != null ==> this.content == seen.content + curr.content
         invariant fresh(r.footprint)
         // Quando se chega ao fim da lista, o conteúdo do novo set já é a interseção
         invariant curr == null ==> r.content == this.content * s.content
@@ -176,6 +175,8 @@ module Ex4 {
         if (inS) {
           r.add(curr.val);
         }
+        seen.footprint := {curr} + seen.footprint;
+        seen.content := {curr.val} + seen.content;
         curr := curr.next;
       }
 
