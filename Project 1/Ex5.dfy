@@ -34,15 +34,9 @@ module Ex5 {
           &&
           this.list.val in this.content
           &&
-          0 <= this.list.val < this.tbl.Length
-          &&
-          tbl[this.list.val]
-          &&
           this.list.Valid()
           &&
-          !allFalse(this.tbl)
-          &&
-          ((this.list.val in this.content) <==> this.tbl[this.list.val])
+          forall v : nat :: v in this.content <==> 0 <= v < this.tbl.Length && tbl[v]
     }
       
     constructor (size : nat)
