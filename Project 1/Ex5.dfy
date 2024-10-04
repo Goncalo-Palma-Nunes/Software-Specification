@@ -69,6 +69,10 @@ module Ex5 {
                                     && n in this.list.footprint
                                     && this.tbl[n.val])
           &&
+          (forall n : Ex3.Node :: n in this.list.footprint ==> n in this.footprint)
+          &&
+          (forall v : nat :: v in this.content ==> v in this.list.content)
+          &&
           (forall v : nat :: v in this.content ==>
                 v in this.list.content
                 &&
@@ -80,7 +84,7 @@ module Ex5 {
                 (this.tbl[i] == (exists n : Ex3.Node :: n in this.footprint && n.val == i))
                 &&
                 (this.tbl[i] ==> i in this.content)
-          ) 
+          )
     }
       
     constructor (size : nat)
