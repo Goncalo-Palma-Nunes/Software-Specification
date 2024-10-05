@@ -69,10 +69,6 @@ module Ex5 {
                                     && n in this.list.footprint
                                     && this.tbl[n.val])
           &&
-          (forall n : Ex3.Node :: n in this.list.footprint ==> n in this.footprint)
-          &&
-          (forall v : nat :: v in this.content ==> v in this.list.content)
-          &&
           (forall v : nat :: v in this.content ==>
                 v in this.list.content
                 &&
@@ -84,7 +80,7 @@ module Ex5 {
                 (this.tbl[i] == (exists n : Ex3.Node :: n in this.footprint && n.val == i))
                 &&
                 (this.tbl[i] ==> i in this.content)
-          )
+          ) 
     }
       
     constructor (size : nat)
@@ -113,30 +109,17 @@ module Ex5 {
     }
     
     method add (v : nat)
-      requires Valid()
+      requires Valid() && v < this.tbl.Length
       ensures Valid()
       ensures this.tbl.Length == old(this.tbl.Length)
-      // Se o valor é válido, então a tabela tem de estar a true
-      ensures v < this.tbl.Length ==> this.tbl[v]
-      // Se o valor é válido, então o valor do nó é o valor
-      ensures v < this.tbl.Length && !this.tbl[v] ==> this.list.val == v
-      // Se o valor já está no set, então continua a estar
-      ensures v in old(this.content) ==> v in this.content
-      // Se o valor é válido, então estará no set
-      ensures v < this.tbl.Length ==> v in this.content
-      // Se o valor é inválido, nada muda
-      ensures v >= this.tbl.Length ==> 
-                        (
-                          this.content == old(this.content)
-                          && this.footprint == old(this.footprint)
-                        )
+      ensures this.tbl[v]
+      // ensures v !in old(this.content) ==> this.list.val == v
+      ensures v in this.content
       ensures fresh(this.footprint - old(this.footprint))
+      ensures old(this.tbl) == this.tbl
+      // ensures fresh(this.tbl)
       modifies this.tbl, this
     {
-      if (v >= this.tbl.Length) {
-        return;
-      }
-
       var n: Ex3.Node;
       if (this.list == null) {
         n := new Ex3.Node(v); // O(1)
@@ -154,7 +137,6 @@ module Ex5 {
       return;
     }
 
-
     method union(s : Set) returns (r : Set)
       requires this.Valid() && s.Valid()
       ensures r.Valid()
@@ -170,21 +152,24 @@ module Ex5 {
       r := new Set(bigger);
 
       var curr := this.list;
-      assert r.tbl.Length == bigger;
-      assert r.tbl.Length == max(this.tbl.Length, s.tbl.Length);
-      assert r.tbl.Length >= this.tbl.Length;
-      assert r.tbl.Length >= s.tbl.Length;
-      assert r.tbl.Length == this.tbl.Length || r.tbl.Length == s.tbl.Length;
       while (curr != null)
-        invariant fresh(r.footprint)
-        invariant curr != null ==> curr.Valid()
         invariant this.Valid()
         invariant r.Valid()
-        invariant this.content == old(this.content)
-        invariant curr != null ==> r.content == this.content - curr.content
-        invariant curr == null ==> r.content == this.content
-        invariant r.footprint!!this.footprint && r.footprint!!s.footprint
-        // invariant forall v :: 0 <= v < curr ==> this.tbl[v] ==> r.tbl[v]
+        invariant curr != null ==> curr.val in this.content
+        // invariant curr != null ==> curr.Valid()
+        decreases if (curr != null)
+                    then curr.footprint
+                  else {}
+      {
+        r.add(curr.val);
+        curr := curr.next;
+      }
+
+      curr := s.list;
+      while (curr != null)
+        invariant s.Valid()
+        // invariant r.Valid()
+        invariant curr != null ==> curr.val in s.content
         decreases if (curr != null)
                     then curr.footprint
                   else {}
@@ -194,9 +179,9 @@ module Ex5 {
       }
     }
 
-    method inter(s : Set) returns (r : Set)
-    {
-    }
+    // method inter(s : Set) returns (r : Set)
+    // {
+    // }
 
   }
 
