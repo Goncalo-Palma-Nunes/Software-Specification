@@ -126,7 +126,6 @@ module Ex4 {
         invariant r.Valid()
         invariant curr != null ==> r.content + curr.content == this.content + s.content
         invariant curr == null ==> r.content == this.content + s.content
-        // r is freshly allocated
         invariant r.footprint!!this.footprint && r.footprint!!s.footprint
         invariant fresh(r.footprint)
         decreases if (curr != null)
