@@ -14,28 +14,6 @@ module Ex5 {
   {
     if (a > b) then a else b
   }
-
-  lemma maxComparison(a : nat, b : nat)
-    ensures max(a, b) == a ==> a >= b
-  {
-  }
-
-  lemma maxCommutativity(a : nat, b : nat)
-    ensures max(a, b) == max(b, a)
-  {
-  }
-
-  lemma maxTransitivity(a : nat, b : nat, c : nat)
-    ensures max(a, b) == a && max(b, c) == b ==> max(a, c) == a
-  {
-  }
-
-  lemma maxCeil(a : nat, b : nat)
-    ensures max(a, b) >= a && max(a, b) >= b
-          && (max(a, b) == a || max(a, b) == b)
-  {
-  }
-
   class Set {
     var tbl : array<bool>  
     var list : Ex3.Node?
@@ -62,16 +40,9 @@ module Ex5 {
           &&
           this.list.Valid()
           &&
-          (forall v : nat :: v in this.content <==> 0 <= v < this.tbl.Length && this.tbl[v])
-          &&
-          (forall n : Ex3.Node :: n in this.footprint ==> 
-                                    && n.val in this.content
-                                    && n in this.list.footprint
-                                    && this.tbl[n.val])
+          (forall v : nat :: v in this.content ==> 0 <= v < this.tbl.Length)
           &&
           (forall i : nat :: 0 <= i < this.tbl.Length ==>
-                (this.tbl[i] == (exists n : Ex3.Node :: n in this.footprint && n.val == i))
-                &&
                 (this.tbl[i] == (i in this.content))
           ) 
     }
@@ -81,6 +52,7 @@ module Ex5 {
       ensures this.tbl.Length == size && (forall i :: 0 <= i < size ==> !this.tbl[i])
       ensures this.list == null
       ensures this.content == {} && this.footprint == {}
+      ensures fresh(this.tbl)
     {
       tbl := new bool[size](x => false);
       list := null;
@@ -95,7 +67,7 @@ module Ex5 {
     {
       b := false;
       if (v < this.tbl.Length) {
-        b := this.tbl[v]; // O(1) lookup
+        b := this.tbl[v];
       }
 
       return;
@@ -113,16 +85,16 @@ module Ex5 {
     {
       var n: Ex3.Node;
       if (this.list == null) {
-        n := new Ex3.Node(v); // O(1)
+        n := new Ex3.Node(v);
       } 
       else {
         if (this.tbl[v]) {
           return;
         }
-        n := this.list.add(v); // O(1)
+        n := this.list.add(v);
       }
       this.list := n;
-      this.tbl[v] := true; // O(1)
+      this.tbl[v] := true;
       this.content := this.list.content;
       this.footprint := this.list.footprint;
       return;
@@ -143,8 +115,10 @@ module Ex5 {
       while (curr != null)
         invariant this.Valid()
         invariant r.Valid()
-        invariant curr != null ==> curr.val in this.content && curr.Valid()
-        invariant curr != null ==> r.content == this.content - curr.content
+        invariant r.tbl.Length == bigger
+        invariant fresh(r) && fresh(r.tbl)
+        invariant curr != null ==> curr.Valid()
+        invariant curr != null ==> this.content == r.content + curr.content
         invariant curr == null ==> r.content == this.content
         invariant r.footprint!!this.footprint
         invariant fresh(r.footprint)
@@ -160,12 +134,14 @@ module Ex5 {
       while (curr != null)
         invariant s.Valid()
         invariant r.Valid()
+        invariant r.tbl.Length == bigger
+        invariant fresh(r) && fresh(r.tbl)
         invariant curr != null ==> curr.val in s.content && curr.Valid()
         invariant curr != null ==> r.content == this.content + (s.content - curr.content)
         invariant curr != null ==> curr.val in s.content
         invariant curr == null ==> r.content == this.content + s.content
-        invariant r.footprint!!s.footprint && r.footprint!!this.footprint
-        invariant fresh(r.footprint)
+        //invariant r.footprint!!s.footprint && r.footprint!!this.footprint
+        //invariant fresh(r.footprint)
         decreases if (curr != null)
                     then curr.footprint
                   else {}
@@ -188,6 +164,8 @@ module Ex5 {
       var seen := new Set(biggest);
       while (curr != null)
         invariant curr != null ==> curr.Valid()
+        invariant seen.tbl.Length == biggest && r.tbl.Length == biggest
+        invariant fresh(r.tbl) && fresh(seen.tbl)
         invariant s.Valid()
         invariant r.Valid()
         invariant curr != null ==> this.content == seen.content + curr.content
