@@ -23,3 +23,13 @@ abstract sig Msg {
 }
 
 sig SentMsg, SendingMsg, PendingMsg extends Msg {}
+
+
+fact NoMembersInQueue {
+    // all m: Member | no n: m.qnxt.Node | n !in Member
+    Member.qnxt.Node !in Member
+}
+
+fact LeaderCandidatesAreMembers {
+    Leader.lnxt.Node in Member
+}
