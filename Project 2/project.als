@@ -23,7 +23,3 @@ abstract sig Msg {
 }
 
 sig SentMsg, SendingMsg, PendingMsg extends Msg {}
-
-fact looplessRing {
-    no (^nxt & iden)
-}
