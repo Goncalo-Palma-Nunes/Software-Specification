@@ -31,7 +31,10 @@ fact NoMembersInQueue {
 }
 
 fact LeaderCandidatesAreMembers {
-    Leader.lnxt.Node in Member
+    /* all nodes in the leader queue are members */
+    Leader.lnxt.Node in LQueue
+
+    // TODO - how do we relate it to LQueue?
 }
 
 fact {
@@ -39,4 +42,12 @@ fact {
         at a time. */
     all m1, m2: Member | 
         m1 != m2 => no (m1.qnxt.Node & m2.qnxt.Node)
+}
+
+fact MemberRing {
+    /* From one member you can get to all others 
+    through the next pointer */
+    all m: Member | m in m.^nxt
+
+    // TODO - without forall?
 }
