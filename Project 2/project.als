@@ -33,3 +33,10 @@ fact NoMembersInQueue {
 fact LeaderCandidatesAreMembers {
     Leader.lnxt.Node in Member
 }
+
+fact {
+    /* non-member nodes are not allowed to queue in more than one member queue
+        at a time. */
+    all m1, m2: Member | 
+        m1 != m2 => no (m1.qnxt.Node & m2.qnxt.Node)
+}
