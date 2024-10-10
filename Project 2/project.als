@@ -49,12 +49,15 @@ fact NoMemberInQueue {
     // (Member.qnxt.Node & Member) ?????
 }
 
-// fact {
-//     /* non-member nodes are not allowed to queue in more than one member queue
-//         at a time. */
-//     all m1, m2: Member | 
-//         m1 != m2 => no (m1.qnxt.Node & m2.qnxt.Node)
-// }
+fact {
+    /* non-member nodes are not allowed to queue in more than one member queue
+        at a time. */
+    all m1, m2: Member | 
+        m1 != m2 => no (m1.qnxt.Node & m2.qnxt.Node)
+}
 
+pred nonMembersQueued {
+    all n: Node | n !in Member => one m: Member | n in m.qnxt.Node
+}
 
-run {#Node=5 && #Member=2} for 5
+run {#Node=5 && #Member=2 && nonMembersQueued} for 5
