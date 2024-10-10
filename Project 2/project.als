@@ -40,6 +40,15 @@ fact LeaderCandidatesAreMembers {
     // TODO - how do we relate it to LQueue?
 }
 
+fact NoMemberInQueue {
+    /* no member is in the queue of another member */
+    // all m: Member | no m.qnxt.Member
+
+    all m: Member | no (m.qnxt.Node & Member)
+
+    // (Member.qnxt.Node & Member) ?????
+}
+
 // fact {
 //     /* non-member nodes are not allowed to queue in more than one member queue
 //         at a time. */
@@ -48,4 +57,4 @@ fact LeaderCandidatesAreMembers {
 // }
 
 
-run {#Node=3 && #Member=3} for 5
+run {#Node=5 && #Member=2} for 5
