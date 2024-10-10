@@ -6,7 +6,7 @@ sig Node {
 sig Member in Node {
     nxt: lone Member,
     qnxt : Node -> lone Node,
-    outbox: set Msg
+    // outbox: set Msg
 }
 
 one sig Leader in Member {
@@ -35,7 +35,7 @@ fact MemberRing {
 
 fact LeaderCandidatesAreMembers {
     /* all nodes in the leader queue are members */
-    Leader.lnxt.Node in LQueue
+    all n: Node | n !in Member implies n !in Leader.lnxt.Node
 
     // TODO - how do we relate it to LQueue?
 }
@@ -60,4 +60,49 @@ pred nonMembersQueued {
     all n: Node | n !in Member => one m: Member | n in m.qnxt.Node
 }
 
-run {#Node=5 && #Member=2 && nonMembersQueued} for 5
+pred oneMemberInLQueue {
+    one m: Member | m in LQueue
+}
+
+pred addQueue[n: Node, m: Member] {
+    // Pre-conditions
+    n !in Member
+    n !in m.qnxt.Node
+
+    // Post-conditions
+    m.qnxt' = m.qnxt + (m -> n)
+
+    // Frame
+    n !in Member
+    m in Member
+}
+
+pred promoteMember[n: Node, m: Member] {
+    // Pre-conditions
+    n !in Member
+    n in m.qnxt.Node
+
+    // Post-conditions
+    m.qnxt' = m.qnxt - (m -> n)
+    n in Member
+    n.nxt' = m.nxt
+    m.nxt' = n
+
+    // Frame
+    m in Member
+}
+
+pred dropQueue[n: Node, m: Member] {
+    // Pre-conditions
+    n !in Member
+    n in m.qnxt.Node
+
+    // Post-conditions
+    m.qnxt' = m.qnxt - (m -> n)
+
+    // Frame
+    n !in Member
+    m in Member
+}
+
+run {#Node=3 && #Member=2 && nonMembersQueued && oneMemberInLQueue} for 5
