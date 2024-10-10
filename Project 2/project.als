@@ -128,8 +128,22 @@ pred LeaveMemberRing[n: Node] {
     n !in Leader
 
     // Post-conditions
-    n.nxt.qnxt' = n.nxt.qnxt + n.qnxt
+    n.nxt.qnxt' = n.nxt.qnxt + n.qnxt   // TODO - what if it is a single node ring?
     n !in Member
+
+    // Frame
+}
+
+pred PromoteLeader[n: Node, l: Leader] {
+    // Pre-conditions
+    n in Member
+    n in Leader.lnxt.Node
+
+    // Post-conditions
+    n in Leader
+    n !in LQueue
+    n.lnxt' = l.lnxt - (l -> n)
+    l !in Leader
 
     // Frame
 }
