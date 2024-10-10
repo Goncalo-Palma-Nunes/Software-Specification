@@ -76,6 +76,9 @@ pred addQueue[n: Node, m: Member] {
     // Frame
     n !in Member
     m in Member
+
+
+    // TODO - Perguntar ao fragoso
 }
 
 pred promoteMember[n: Node, m: Member] {
@@ -104,6 +107,31 @@ pred dropQueue[n: Node, m: Member] {
     // Frame
     n !in Member
     m in Member
+}
+
+pred QueueLeader[n: Node] {
+    // Pre-conditions
+    n in Member
+    n !in Leader.lnxt.Node
+
+    // Post-conditions
+    Leader.lnxt' = Leader.lnxt + (Leader -> n)
+    n in LQueue
+    n in Leader.lnxt.Node
+
+    // Frame
+}
+
+pred LeaveMemberRing[n: Node] {
+    // Pre-conditions
+    n in Member
+    n !in Leader
+
+    // Post-conditions
+    n.nxt.qnxt' = n.nxt.qnxt + n.qnxt
+    n !in Member
+
+    // Frame
 }
 
 run {#Node=3 && #Member=2 && nonMembersQueued && oneMemberInLQueue} for 5
