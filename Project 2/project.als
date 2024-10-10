@@ -25,9 +25,12 @@ abstract sig Msg {
 sig SentMsg, SendingMsg, PendingMsg extends Msg {}
 
 
-fact NoMembersInQueue {
-    // all m: Member | no n: m.qnxt.Node | n !in Member
-    Member.qnxt.Node !in Member
+fact MemberRing {
+    /* From one member you can get to all others 
+    through the next pointer */
+    all m1, m2: Member | m1 in m2.^nxt
+
+    // TODO - without forall?
 }
 
 fact LeaderCandidatesAreMembers {
@@ -37,17 +40,12 @@ fact LeaderCandidatesAreMembers {
     // TODO - how do we relate it to LQueue?
 }
 
-fact {
-    /* non-member nodes are not allowed to queue in more than one member queue
-        at a time. */
-    all m1, m2: Member | 
-        m1 != m2 => no (m1.qnxt.Node & m2.qnxt.Node)
-}
+// fact {
+//     /* non-member nodes are not allowed to queue in more than one member queue
+//         at a time. */
+//     all m1, m2: Member | 
+//         m1 != m2 => no (m1.qnxt.Node & m2.qnxt.Node)
+// }
 
-fact MemberRing {
-    /* From one member you can get to all others 
-    through the next pointer */
-    all m: Member | m in m.^nxt
 
-    // TODO - without forall?
-}
+run {#Node=3 && #Member=3} for 5
