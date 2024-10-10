@@ -17,12 +17,12 @@ sig LQueue in Member {
 
 }
 
-abstract sig Msg {
-    sndr: Node,
-    rcvrs: set Node
-}
+//abstract sig Msg {
+//    sndr: Node,
+//    rcvrs: set Node
+//}
 
-sig SentMsg, SendingMsg, PendingMsg extends Msg {}
+// sig SentMsg, SendingMsg, PendingMsg extends Msg {}
 
 
 fact MemberRing {
@@ -37,6 +37,7 @@ fact LeaderCandidatesAreMembers {
     /* all nodes in the leader queue are members */
     all n: Node | n !in Member implies n !in Leader.lnxt.Node
 
+    // Leader.lnxt.Node in Member
     // TODO - how do we relate it to LQueue?
 }
 
