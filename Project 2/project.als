@@ -6,7 +6,7 @@ sig Node {
 sig Member in Node {
     nxt: lone Member,
     qnxt : Node -> lone Node,
-    outbox: set Msg
+    // outbox: set Msg
 }
 
 one sig Leader in Member {
@@ -17,12 +17,12 @@ sig LQueue in Member {
 
 }
 
-abstract sig Msg {
-    sndr: Node,
-    rcvrs: set Node
-}
+//abstract sig Msg {
+//    sndr: Node,
+//    rcvrs: set Node
+//}
 
-sig SentMsg, SendingMsg, PendingMsg extends Msg {}
+// sig SentMsg, SendingMsg, PendingMsg extends Msg {}
 
 
 fact MemberRing {
@@ -35,8 +35,8 @@ fact MemberRing {
 
 fact LeaderCandidatesAreMembers {
     /* all nodes in the leader queue are members */
-    Leader.lnxt.Node in LQueue
-
+    all n: Node | n !in Member implies n !in Leader.lnxt.Node
+    // Leader.lnxt.Node in Member
     // TODO - how do we relate it to LQueue?
 }
 
@@ -60,4 +60,12 @@ pred nonMembersQueued {
     all n: Node | n !in Member => one m: Member | n in m.qnxt.Node
 }
 
-run {#Node=5 && #Member=2 && nonMembersQueued} for 5
+pred oneMemberInLQueue {
+    one m: Member | m in LQueue
+}
+
+pred someMemberInLQueue {
+    some m: Member | m in LQueue
+}
+
+run {#Node=5 && #Member=2 && nonMembersQueued && oneMemberInLQueue} for 5
