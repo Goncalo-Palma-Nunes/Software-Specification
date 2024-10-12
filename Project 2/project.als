@@ -6,7 +6,7 @@ sig Node {
 sig Member in Node {
     nxt: lone Member,
     qnxt : Node -> lone Node,
-    // outbox: set Msg
+    outbox: set Msg
 }
 
 one sig Leader in Member {
@@ -17,12 +17,12 @@ sig LQueue in Member {
 
 }
 
-//abstract sig Msg {
-//    sndr: Node,
-//    rcvrs: set Node
-//}
+abstract sig Msg {
+   sndr: Node,
+   rcvrs: set Node
+}
 
-// sig SentMsg, SendingMsg, PendingMsg extends Msg {}
+sig SentMsg, SendingMsg, PendingMsg extends Msg {}
 
 
 fact MemberRing {
@@ -56,6 +56,39 @@ fact {
     all m1, m2: Member | 
         m1 != m2 => no (m1.qnxt.Node & m2.qnxt.Node)
 }
+
+fact {
+    /* A message is considered sent when broadcasting process 
+        has terminated (the leader received back the message) */
+    all msg: SentMsg | msg.sndr in msg.rcvrs
+
+    /* if the sender is in the receiver set, then the message
+        already cycled through the ring */
+}
+
+fact {
+    /* A message is considered pending, if the broadcasting
+        process has not yet started. In other words, the message
+        hasn't left the leader and no one has received it yet. */
+    all msg: PendingMsg | no msg.rcvrs
+}
+
+fact {
+    /* A message is considered sending, if the broadcasting
+        process has started, but not yet finished. In other words,
+        the message has left the leader, but it hasn't received it
+        back  yet. */
+    all msg: SendingMsg | (some msg.rcvrs) && (msg.sndr !in msg.rcvrs)
+}
+
+assert PendingMsgsNotReceived {
+    /* If a message is sending, it shouldn't be in anyone's outbox */
+    all msg: PendingMsg | msg !in Member.outbox
+
+    // TODO - Isto talvez seja útil para dar debug com checks? Não sei...
+    // Será que fazia sentido ser um facto?
+}
+
 
 pred nonMembersQueued {
     all n: Node | n !in Member => one m: Member | n in m.qnxt.Node
