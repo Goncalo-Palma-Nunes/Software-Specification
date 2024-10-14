@@ -28,26 +28,47 @@ sig SentMsg, SendingMsg, PendingMsg extends Msg {}
 fact MemberRing {
     /* From one member you can get to all others 
     through the next pointer */
-    all m1, m2: Member | m1 in m2.^nxt
-
+    all m: Member | Member in m.*nxt
     // TODO - without forall?
 }
 
 fact LeaderCandidatesAreMembers {
     /* all nodes in the leader queue are members */
-    all n: Node | n !in Member implies n !in Leader.lnxt.Node
-
-    // Leader.lnxt.Node in Member
-    // TODO - how do we relate it to LQueue?
+    // Node.(~(Leader.lnxt)) = LQueue && Leader !in LQueue
+	Leader.lnxt.Node = LQueue && Leader !in LQueue
 }
 
+fact allRoadsLeadtoLeader {
+	/* Leader is always reached by following the leader queue (order)*/
+	all lq: LQueue | Leader in lq.^(Leader.lnxt)
+	// TODO - without forall ?
+}
+
+fact oneLeaderQueue {
+	/* There can only be a single leader queue */
+	one Leader.lnxt.Leader
+}
+
+fact allRoadsLeadtoMember {
+	/* Member is always reached by following the member queue (order)*/
+	all n: Node, m: Member | n in m.qnxt.Node implies m in n.^(m.qnxt)
+	// TODO - without forall ?
+}
+
+fact oneMemberQueue {
+	/* Only a single member queue per member */
+	all m: Member | lone m.qnxt.m
+}
+
+fact noLoopsMemberQueue {
+	/* Node cannot reach self following the queue (order)*/
+	all n: Node | n !in n.^(Member.qnxt)
+}
+
+
 fact NoMemberInQueue {
-    /* no member is in the queue of another member */
-    // all m: Member | no m.qnxt.Member
-
-    all m: Member | no (m.qnxt.Node & Member)
-
-    // (Member.qnxt.Node & Member) ?????
+    /* no member in a member queue*/
+	no (Member.qnxt.Node & Member)
 }
 
 fact {
@@ -77,7 +98,7 @@ fact {
     /* A message is considered sending, if the broadcasting
         process has started, but not yet finished. In other words,
         the message has left the leader, but it hasn't received it
-        back  yet. */
+        back yet. */
     all msg: SendingMsg | (some msg.rcvrs) && (msg.sndr !in msg.rcvrs)
 }
 
@@ -94,8 +115,8 @@ pred nonMembersQueued {
     all n: Node | n !in Member => one m: Member | n in m.qnxt.Node
 }
 
-pred oneMemberInLQueue {
-    one m: Member | m in LQueue
+pred someMessageEach {
+	some SentMsg && some SendingMsg && some PendingMsg 
 }
 
 pred addQueue[n: Node, m: Member] {
@@ -181,4 +202,12 @@ pred PromoteLeader[n: Node, l: Leader] {
     // Frame
 }
 
-run {#Node=3 && #Member=2 && nonMembersQueued && oneMemberInLQueue} for 5
+fun visQueueNext[]: Node -> lone Node {
+	Member.qnxt
+}
+
+fun visLeaderNext[]: Node -> lone Node {
+	Leader.lnxt
+}
+
+run {#Node=5 && #Member=2 && #Member.qnxt.Member>1 && some LQueue && someMessageEach } for 5
