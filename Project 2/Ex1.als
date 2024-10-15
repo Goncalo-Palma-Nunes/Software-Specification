@@ -3,17 +3,17 @@ sig Node {
 
 }
 
-var sig Member in Node {
-    var nxt: lone Member,
-    var qnxt : Node -> lone Node,
+sig Member in Node {
+    nxt: lone Member,
+    qnxt : Node -> lone Node,
     outbox: set Msg
 }
 
-var one sig Leader in Member {
-    var lnxt: Node -> lone Node
+one sig Leader in Member {
+    lnxt: Node -> lone Node
 }
 
-var sig LQueue in Member {
+sig LQueue in Member {
 
 }
 
@@ -110,129 +110,13 @@ assert PendingMsgsNotReceived {
     // Será que fazia sentido ser um facto?
 }
 
+
 pred nonMembersQueued {
     all n: Node | n !in Member => one m: Member | n in m.qnxt.Node
 }
 
 pred someMessageEach {
 	some SentMsg && some SendingMsg && some PendingMsg 
-}
-
-/* == DYNAMIC MODELLING == */
-
-pred init[] {
-	// Set of members consists only of the leader
-	Member = Leader
-	// All messages are in pending state
-	PendingMsg = Msg
-	// No node is queueing to become the leader
-	no LQueue
-}
-
-pred stutter[] {
-	// TODO - do we need to mention every attribute remains the same? doing it anyway...
-	// Nodes
-	Member' = Member
-	nxt' = nxt
-	qnxt' = qnxt
-	
-	Leader' = Leader
-	lnxt' = lnxt
-	LQueue' = LQueue
-	// Messages
-}
-
-pred addQueue[n: Node, m: Member] {
-    // Pre-conditions
-    n !in Member
-    n !in m.qnxt.Node
-
-    // Post-conditions
-    m.qnxt' = m.qnxt + (m -> n)
-
-    // Frame
-    n !in Member
-    m in Member
-
-
-    // TODO - Perguntar ao fragoso
-}
-
-pred promoteMember[n: Node, m: Member] {
-    // Pre-conditions
-    n !in Member
-    m.qnxt.m = n // n is head of m's queue
-
-    // Post-conditions
-    m.qnxt' = m.qnxt - (m -> n) // TODO what to do about the next pair(n->x)? if it exists
-    Member' = Member + n // TODO n in Member
-    n.nxt' = m.nxt // TODO
-    m.nxt' = n // TODO
-
-    // Frame (nxt,qnxt,Member,LQueue,Leader,lnxt)
-	all m: Member - m | m.qnxt' = m.qnxt && m.nxt' = m.nxt
-	Leader' = Leader
-	lnxt' = lnxt
-}
-
-pred dropQueue[n: Node, m: Member] {
-    // Pre-conditions
-    n !in Member
-    n in m.qnxt.Node
-
-    // Post-conditions
-    m.qnxt' = m.qnxt - (m -> n) // TODO - (x->n) and etc
-
-    // Frame
-    Member' = Member
-	nxt' = nxt
-	all m1: Member - m | m1.qnxt' = m.qnxt
-	Leader' = Leader
-	lnxt' = lnxt 
-}
-
-pred QueueLeader[n: Node] {
-    // Pre-conditions
-    n in Member
-    n !in Leader.lnxt.Node
-
-    // Post-conditions
-    Leader.lnxt' = Leader.lnxt + ((Leader.lnxt.Member - Member.(Leader.lnxt)) -> n) // n in Leader.lnxt.Node
-    LQueue' = LQueue + n // n in LQueue
-
-    // Frame
-	Member' = Member
-	Leader' = Leader
-	nxt' = nxt
-	qnxt' = qnxt
-}
-
-pred LeaveMemberRing[m: Member] {
-    // Pre-conditions
-    m !in Leader
-
-    // Post-conditions
-    m.nxt.qnxt' = m.nxt.qnxt + m.qnxt   // TODO - what if it is a single node ring?
-    // TODO
-	Member' = Member - m
-
-    // Frame
-	// TODO
-}
-
-pred PromoteLeader[m: Member, l: Leader] {
-    // Pre-conditions
-    m = Leader.(~(Leader.lnxt)) // m in Leader.lnxt.Node
-
-    // Post-conditions
-    Leader' = m
-    LQueue' = LQueue - m
-    m.lnxt' = l.lnxt - (m -> l) // TODO is the new head cool afterwards? Actually I think so but idk
-
-    // Frame
-	Member' = Member
-	qnxt' = qnxt
-	nxt' = nxt
 }
 
 fun visQueueNext[]: Node -> lone Node {
