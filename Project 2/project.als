@@ -142,18 +142,24 @@ pred stutter[] {
 	// Messages
 }
 
+pred trans[] {
+	stutter[]
+}
+
 pred addQueue[n: Node, m: Member] {
     // Pre-conditions
     n !in Member
     n !in m.qnxt.Node
 
     // Post-conditions
-    m.qnxt' = m.qnxt + (m -> n)
+    m.qnxt' = m.qnxt + (n -> (m.qnxt.Node - Node.(m.lnxt)))
 
     // Frame
-    n !in Member
-    m in Member
-
+    Member' = Member
+	nxt' = nxt
+	all m: Member - m | m.qnxt' = m.qnxt 
+	Leader' = Leader
+	lnxt = lnxt
 
     // TODO - Perguntar ao fragoso
 }
@@ -164,7 +170,7 @@ pred promoteMember[n: Node, m: Member] {
     m.qnxt.m = n // n is head of m's queue
 
     // Post-conditions
-    m.qnxt' = m.qnxt - (m -> n) // TODO what to do about the next pair(n->x)? if it exists
+	m.qnxt.m' = m.qnxt.n // m.qnxt' = (m.qnxt - (m.qnxt.n -> n) + (m.qnxt.n -> m)) - (n -> m)
     Member' = Member + n // TODO n in Member
     n.nxt' = m.nxt // TODO
     m.nxt' = n // TODO
@@ -181,7 +187,7 @@ pred dropQueue[n: Node, m: Member] {
     n in m.qnxt.Node
 
     // Post-conditions
-    m.qnxt' = m.qnxt - (m -> n) // TODO - (x->n) and etc
+	(m.qnxt.n).(m.qnxt)' = n.m.qnxt //m.qnxt' = m.qnxt - (m->n)
 
     // Frame
     Member' = Member
@@ -197,7 +203,8 @@ pred QueueLeader[n: Node] {
     n !in Leader.lnxt.Node
 
     // Post-conditions
-    Leader.lnxt' = Leader.lnxt + ((Leader.lnxt.Member - Member.(Leader.lnxt)) -> n) // n in Leader.lnxt.Node
+    Leader.lnxt' = Leader.lnxt + (n -> (Leader.lnxt.Member - Member.(Leader.lnxt)))
+	// ^^ points to last in queue ^^
     LQueue' = LQueue + n // n in LQueue
 
     // Frame
@@ -212,8 +219,8 @@ pred LeaveMemberRing[m: Member] {
     m !in Leader
 
     // Post-conditions
-    m.nxt.qnxt' = m.nxt.qnxt + m.qnxt   // TODO - what if it is a single node ring?
-    // TODO
+    m.nxt.qnxt' = m.nxt.qnxt + m.qnxt
+	(nxt.m).nxt' = m.nxt // if its a single node ring this probably doesnt do anything 
 	Member' = Member - m
 
     // Frame
@@ -227,7 +234,7 @@ pred PromoteLeader[m: Member, l: Leader] {
     // Post-conditions
     Leader' = m
     LQueue' = LQueue - m
-    m.lnxt' = l.lnxt - (m -> l) // TODO is the new head cool afterwards? Actually I think so but idk
+    m.lnxt' = l.lnxt - (m -> l)
 
     // Frame
 	Member' = Member
