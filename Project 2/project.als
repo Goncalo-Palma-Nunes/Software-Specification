@@ -35,44 +35,44 @@ fact MemberRing {
 fact LeaderCandidatesAreMembers {
     /* all nodes in the leader queue are members */
     // Node.(~(Leader.lnxt)) = LQueue && Leader !in LQueue
-	Leader.lnxt.Node = LQueue && Leader !in LQueue
+    Leader.lnxt.Node = LQueue && Leader !in LQueue
 }
 
 fact allRoadsLeadtoLeader {
-	/* Leader is always reached by following the leader queue (order)*/
-	all lq: LQueue | Leader in lq.^(Leader.lnxt)
-	// TODO - without forall ?
+    /* Leader is always reached by following the leader queue (order)*/
+    all lq: LQueue | Leader in lq.^(Leader.lnxt)
+    // TODO - without forall ?
 }
 
 fact oneLeaderQueue {
-	/* There can only be a single leader queue */
-	one Leader.lnxt.Leader
+    /* There can only be a single leader queue */
+    one Leader.lnxt.Leader
 }
 
 fact allRoadsLeadtoMember {
-	/* Member is always reached by following the member queue (order)*/
-	all n: Node, m: Member | n in m.qnxt.Node implies m in n.^(m.qnxt)
-	// TODO - without forall ?
+    /* Member is always reached by following the qnxt queue (order)*/
+    all n: Node, m: Member | n in m.qnxt.Node implies m in n.^(m.qnxt)
+    // TODO - without forall ?
 }
 
 fact oneMemberQueue {
-	/* Only a single member queue per member */
-	all m: Member | lone m.qnxt.m
+    /* Only a single qnxt queue per member */
+    all m: Member | lone m.qnxt.m
 }
 
 fact noLoopsMemberQueue {
-	/* Node cannot reach self following the queue (order)*/
-	all n: Node | n !in n.^(Member.qnxt)
+    /* Node cannot reach self following the queue (order)*/
+    all n: Node | n !in n.^(Member.qnxt)
 }
 
 
 fact NoMemberInQueue {
-    /* no member in a member queue*/
-	no (Member.qnxt.Node & Member)
+    /* no member in a qnxt queue*/
+    no (Member.qnxt.Node & Member)
 }
 
 fact {
-    /* non-member nodes are not allowed to queue in more than one member queue
+    /* non-member nodes are not allowed to queue in more than one qnxt queue
         at a time. */
     all m1, m2: Member | 
         m1 != m2 => no (m1.qnxt.Node & m2.qnxt.Node)
@@ -115,53 +115,61 @@ pred nonMembersQueued {
 }
 
 pred someMessageEach {
-	some SentMsg && some SendingMsg && some PendingMsg 
+    some SentMsg && some SendingMsg && some PendingMsg 
 }
 
 /* == DYNAMIC MODELLING == */
 
 pred init[] {
-	// Set of members consists only of the leader
-	Member = Leader
-	// All messages are in pending state
-	PendingMsg = Msg
-	// No node is queueing to become the leader
-	no LQueue
+    // Set of members consists only of the leader
+    Member = Leader
+    // All messages are in pending state
+    PendingMsg = Msg
+    // No node is queueing to become the leader
+    no LQueue
 }
 
 pred stutter[] {
-	// TODO - do we need to mention every attribute remains the same? doing it anyway...
-	// Nodes
-	Member' = Member
-	nxt' = nxt
-	qnxt' = qnxt
+    // TODO - do we need to mention every attribute remains the same? doing it anyway...
+    // Nodes
+    Member' = Member
+    nxt' = nxt
+    qnxt' = qnxt
 	
-	Leader' = Leader
-	lnxt' = lnxt
-	LQueue' = LQueue
-	// Messages
+    Leader' = Leader
+    lnxt' = lnxt
+    LQueue' = LQueue
+    // Messages
 }
 
 pred trans[] {
-	stutter[]
+    stutter[]
 }
 
 pred addQueue[n: Node, m: Member] {
-    // Pre-conditions
-    n !in Member
-    n !in m.qnxt.Node
+    one nlast: Node | addQueueAux[n, m, nlast]
+}
 
-    // Post-conditions
-    m.qnxt' = m.qnxt + (n -> (m.qnxt.Node - Node.(m.lnxt)))
+pred addQueueAux[n: Node, m: Member, nlast: Node] {
+    // Pre-condition
+    // n is not a member
+    n !in Member
+    // n not in m's queue
+    n !in m.qnxt.Node
+    // nlast has no queue nodes pointing to it AND its reachable thru the queue
+    no m.qnxt.nlast && nlast in m.*(~(m.qnxt))
+
+    // Post-condition
+    // n points to last node in m's queue
+    m.qnxt' = m.qnxt + (n -> nlast)
+    // TODO - Perguntar ao fragoso
 
     // Frame
     Member' = Member
-	nxt' = nxt
-	all m: Member - m | m.qnxt' = m.qnxt 
-	Leader' = Leader
-	lnxt = lnxt
-
-    // TODO - Perguntar ao fragoso
+    nxt' = nxt
+    all m: Member - m | m.qnxt' = m.qnxt 
+    Leader' = Leader
+    lnxt = lnxt
 }
 
 pred promoteMember[n: Node, m: Member] {
@@ -170,48 +178,64 @@ pred promoteMember[n: Node, m: Member] {
     m.qnxt.m = n // n is head of m's queue
 
     // Post-conditions
-	m.qnxt.m' = m.qnxt.n // m.qnxt' = (m.qnxt - (m.qnxt.n -> n) + (m.qnxt.n -> m)) - (n -> m)
+    m.qnxt.m' = m.qnxt.n // m.qnxt' = (m.qnxt - (m.qnxt.n -> n) + (m.qnxt.n -> m)) - (n -> m)
     Member' = Member + n // TODO n in Member
     n.nxt' = m.nxt // TODO
     m.nxt' = n // TODO
 
     // Frame (nxt,qnxt,Member,LQueue,Leader,lnxt)
-	all m: Member - m | m.qnxt' = m.qnxt && m.nxt' = m.nxt
-	Leader' = Leader
-	lnxt' = lnxt
+    all m: Member - m | m.qnxt' = m.qnxt && m.nxt' = m.nxt
+    Leader' = Leader
+    lnxt' = lnxt
 }
 
 pred dropQueue[n: Node, m: Member] {
+    lone nprev: Node | dropQueueAux[n, m, nprev]
+}
+
+pred dropQueueAux[n: Node, m: Member, nprev: Node] {
     // Pre-conditions
     n !in Member
+    // n part of m's qnxt queue
     n in m.qnxt.Node
+    // nprev points to n
+    nprev in m.qnxt.n // in or = ?
 
-    // Post-conditions
-	(m.qnxt.n).(m.qnxt)' = n.m.qnxt //m.qnxt' = m.qnxt - (m->n)
+    // Post-condition
+    // Previous node in queue points to the node n pointed to
+    nprev.m.qnxt' = n.m.qnxt //m.qnxt' = m.qnxt - (m->n)
 
     // Frame
     Member' = Member
-	nxt' = nxt
-	all m1: Member - m | m1.qnxt' = m.qnxt
-	Leader' = Leader
-	lnxt' = lnxt 
+    nxt' = nxt
+    all m1: Member - m | m1.qnxt' = m.qnxt
+    Leader' = Leader
+    lnxt' = lnxt 
 }
 
-pred QueueLeader[n: Node] {
+pred QueueLeader[m: Member] {
+    // n in Member
+    one mlast: Member | addQueueAux[m, mlast]
+    // // n is not in leader queue
+    // n !in Leader.lnxt.Node
+}
+
+pred QueueLeaderAux[m: Member, mlast: Member] {
     // Pre-conditions
-    n in Member
-    n !in Leader.lnxt.Node
+    // mlast has no queue nodes pointing to it AND its reachable thru the queue
+    no (Leader.lnxt).mlast && mlast in Leader.*(~(Leader.lnxt))
 
     // Post-conditions
-    Leader.lnxt' = Leader.lnxt + (n -> (Leader.lnxt.Member - Member.(Leader.lnxt)))
-	// ^^ points to last in queue ^^
-    LQueue' = LQueue + n // n in LQueue
+    // m points to last member in leader queue
+    Leader.lnxt' = Leader.lnxt + (n -> mlast)
+    // m in LQueue
+    LQueue' = LQueue + m // n in LQueue ??? TODO multiple ns in LQueue??
 
     // Frame
-	Member' = Member
-	Leader' = Leader
-	nxt' = nxt
-	qnxt' = qnxt
+    Member' = Member
+    Leader' = Leader
+    nxt' = nxt
+    qnxt' = qnxt
 }
 
 pred LeaveMemberRing[m: Member] {
@@ -220,34 +244,35 @@ pred LeaveMemberRing[m: Member] {
 
     // Post-conditions
     m.nxt.qnxt' = m.nxt.qnxt + m.qnxt
-	(nxt.m).nxt' = m.nxt // if its a single node ring this probably doesnt do anything 
-	Member' = Member - m
+    (nxt.m).nxt' = m.nxt // if its a single node ring this probably doesnt do anything 
+    Member' = Member - m
 
     // Frame
-	// TODO
+    // TODO
 }
 
-pred PromoteLeader[m: Member, l: Leader] {
+pred PromoteLeader[m: Member] {
     // Pre-conditions
-    m = Leader.(~(Leader.lnxt)) // m in Leader.lnxt.Node
+    // m is the head of the leader queue
+    m = Leader.(~(Leader.lnxt))
 
     // Post-conditions
     Leader' = m
-    LQueue' = LQueue - m
+    LQueue' = LQueue - m // TODO he might still have messages queued ?
     m.lnxt' = l.lnxt - (m -> l)
 
     // Frame
-	Member' = Member
-	qnxt' = qnxt
-	nxt' = nxt
+    Member' = Member
+    qnxt' = qnxt
+    nxt' = nxt
 }
 
 fun visQueueNext[]: Node -> lone Node {
-	Member.qnxt
+    Member.qnxt
 }
 
 fun visLeaderNext[]: Node -> lone Node {
-	Leader.lnxt
+    Leader.lnxt
 }
 
 run {#Node=5 && #Member=2 && #Member.qnxt.Member>1 && some LQueue && someMessageEach } for 5
