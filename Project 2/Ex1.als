@@ -7,12 +7,12 @@ sig Node {
 
 sig Member in Node {
     nxt: lone Member,
-    qnxt : Node -> lone Node,
-    outbox: set Msg
+    var qnxt : Node -> lone Node,
+    var outbox: set Msg
 }
 
 one sig Leader in Member {
-    lnxt: Node -> lone Node
+    var lnxt: Node -> lone Node
 }
 
 sig LQueue in Member {
@@ -37,7 +37,7 @@ fact MemberRing {
 fact LeaderCandidatesAreMembers {
     /* all nodes in the leader queue are members */
     // Node.(~(Leader.lnxt)) = LQueue && Leader !in LQueue
-	Leader.lnxt.Node = LQueue && Leader !in LQueue
+	Leader.lnxt.Node = LQueue //&& Leader !in LQueue
 }
 
 fact allRoadsLeadtoLeader {
@@ -128,5 +128,6 @@ fun visQueueNext[]: Node -> lone Node {
 fun visLeaderNext[]: Node -> lone Node {
 	Leader.lnxt
 }
+
 
 run {#Node=5 && #Member=2 && #Member.qnxt.Member>1 && some LQueue && someMessageEach } for 5
