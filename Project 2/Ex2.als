@@ -62,6 +62,28 @@ pred addQueueAux[n: Node, m: Member, nlast: Node] {
     lnxt' = lnxt
 }
 
+pred dropQueue[n: Node] {
+    some m: Member | dropQueueAux[n, m]
+}
+
+pred dropQueueAux[n: Node, m: Member] {
+    // Pre-conditions
+    n in m.qnxt.Node
+    no n.~(m.qnxt)
+
+    // Post-conditions
+    m.qnxt' = m.qnxt - (n -> m.qnxt.n)
+
+    // Frame (nxt,qnxt,Member,LQueue,Leader,lnxt)
+    Member' = Member
+    nxt' = nxt
+    all m: Member - m | m.qnxt' = m.qnxt
+    Leader' = Leader
+    lnxt' = lnxt
+}
+
+run {eventually (some n: Node | dropQueue[n])} for 5
+
 
 // run {eventually (some n: Node, m: Member | addQueue[n, m])} for 5
 
@@ -92,5 +114,7 @@ pred memberPromotionAux[m: Member, n: Node] {
 fact {
     system[]
 }
+
+run { eventually some m: Member | memberPromotion[m] } for 2 Node, 0 Msg
 
 run { eventually some m: Member | memberPromotion[m] } for 3 Node, 0 Msg, 3 steps
