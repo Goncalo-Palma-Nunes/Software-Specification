@@ -5,17 +5,17 @@ sig Node {
 
 }
 
-sig Member in Node {
-    nxt: lone Member,
+var sig Member in Node {
+    var nxt: lone Member,
     var qnxt : Node -> lone Node,
     var outbox: set Msg
 }
 
-one sig Leader in Member {
+var one sig Leader in Member {
     var lnxt: Node -> lone Node
 }
 
-sig LQueue in Member {
+var sig LQueue in Member {
 
 }
 

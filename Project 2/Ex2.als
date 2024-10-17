@@ -63,7 +63,7 @@ pred addQueueAux[n: Node, m: Member, nlast: Node] {
 }
 
 
-run {eventually (some n: Node, m: Member | addQueue[n, m])} for 5
+// run {eventually (some n: Node, m: Member | addQueue[n, m])} for 5
 
 pred memberPromotion[m: Member] {
     some n: Node | memberPromotionAux[m, n]
@@ -72,18 +72,20 @@ pred memberPromotion[m: Member] {
 pred memberPromotionAux[m: Member, n: Node] {
     // Pre-conditions
     n !in Member
-    m.qnxt.n = n // n is head of m's queue
+    (m.qnxt).m = n // n is head of m's queue
+    no n.~(m.qnxt)
+    //some (m.qnxt).n
 
     // Post-conditions
-    m.qnxt.n' = m.qnxt.m // m.qnxt' = (m.qnxt - (m.qnxt.m -> n) + (m.qnxt.m -> m)) - (n -> m)
-    Member' = Member + n // TODO n in Member
-    n.nxt' = m.nxt // TODO
-    m.nxt' = n // TODO
+    Member' = Member + n // n in Member
+    no (m.qnxt') 
+    nxt' = nxt + (m->n) + (n->m.nxt) - (m->m.nxt)
 
     // Frame (nxt,qnxt,Member,LQueue,Leader,lnxt)
     all m: Member - m | m.qnxt' = m.qnxt && m.nxt' = m.nxt
     Leader' = Leader
     lnxt' = lnxt
+
 }
 
 
@@ -91,4 +93,4 @@ fact {
     system[]
 }
 
-run {} for 5
+run { eventually some m: Member | memberPromotion[m] } for 3 Node, 0 Msg, 3 steps
