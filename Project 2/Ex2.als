@@ -1,6 +1,14 @@
 module Ex2
 open Ex1
 
+fun visQueueNext[]: Node -> lone Node {
+    Member.qnxt
+}
+
+fun visLeaderNext[]: Node -> lone Node {
+    Leader.lnxt
+}
+
 pred init[] {
     Member = Leader
     Msg = PendingMsg
@@ -26,8 +34,10 @@ pred trans[] {
     stutter[]
     ||
     some n: Node, m: Member | addQueue[n, m]
-    ||
-    some m: Member | memberPromotion[m]
+    // ||
+    // some n: Node | dropQueue[n]
+    // ||
+    // some m: Member | memberPromotion[m]
 }
 
 pred system[] {
@@ -51,7 +61,8 @@ pred addQueueAux[n: Node, m: Member, nlast: Node] {
 
     // Post-condition
     // n points to last node in m's queue
-    m.qnxt' = m.qnxt + (n -> nlast)
+    // m.qnxt' = m.qnxt + (n -> nlast)
+    m.qnxt' = m.qnxt + (nlast -> n)
     // TODO - Perguntar ao fragoso
 
     // Frame
@@ -63,10 +74,10 @@ pred addQueueAux[n: Node, m: Member, nlast: Node] {
 }
 
 pred dropQueue[n: Node] {
-    some m: Member | dropQueueAux[n, m]
+    some m: Member | dropQueueAux1[n, m]
 }
 
-pred dropQueueAux[n: Node, m: Member] {
+pred dropQueueAux1[n: Node, m: Member] {
     // Pre-conditions
     n in m.qnxt.Node
     no n.~(m.qnxt)
@@ -82,10 +93,40 @@ pred dropQueueAux[n: Node, m: Member] {
     lnxt' = lnxt
 }
 
-run {eventually (some n: Node | dropQueue[n])} for 5
+// pred dropQueueAux2[n: Node, m: Member] {
+//     // Pre-conditions
+//     n in m.qnxt.Node
+//     some n.~(m.qnxt)
+
+//     // Post-conditions
+//     m.qnxt' = m.qnxt - (m.qnxt.n -> n) + (m.qnxt.n -> m)
+
+//     // Frame (nxt,qnxt,Member,LQueue,Leader,lnxt)
+//     Member' = Member
+//     nxt' = nxt
+//     all m: Member - m | m.qnxt' = m.qnxt
+//     Leader' = Leader
+//     lnxt' = lnxt
+// }
+
+// Gera modelo que 1 tira 1 nó da queue
+run {#Msg=0 && eventually (some n: Node | dropQueue[n])} for 5
+
+// Gera modelo que adiciona 1 nó a uma queue
+run {#Msg=0 && eventually (some n: Node, m: Member | addQueue[n, m])} for 5
+
+// Gera modelo que adiciona 2 nós a uma queue
+run {#Member=1 && #Node=4 && #Msg=0 && 
+    (eventually (some n1, n2: Node, m: Member | n1 != n2 && addQueue[n1, m] 
+                                                && (eventually addQueue[n2, m])))
+    } for 5
 
 
-// run {eventually (some n: Node, m: Member | addQueue[n, m])} for 5
+// Gera modelo que tira 2 nós de uma queue
+run {#Member=1 && #Node=4 && #Msg=0 && 
+    (eventually #Member.qnxt=2)
+    // (eventually (some n1, n2: Node| n1 != n2 && dropQueue[n1] && (eventually dropQueue[n2])))
+    } for 5
 
 pred memberPromotion[m: Member] {
     some n: Node | memberPromotionAux[m, n]
