@@ -42,14 +42,14 @@ pred trans[] {
 
 pred system[] {
     init[]
-    trans[]
+    && always trans[]
 }
 
 pred addQueue[n: Node, m: Member] {
-    some nlast: Node | addQueueAux[n, m, nlast]
+    some nlast: Node | addQueueAux1[n, m, nlast]
 }
 
-pred addQueueAux[n: Node, m: Member, nlast: Node] {
+pred addQueueAux1[n: Node, m: Member, nlast: Node] {
     // Pre-condition
     // n is not a member
     n !in Member
@@ -57,12 +57,13 @@ pred addQueueAux[n: Node, m: Member, nlast: Node] {
     // n not in m's queue
     n !in m.qnxt.Node
     // nlast has no queue nodes pointing to it AND its reachable thru the queue
-    no m.qnxt.nlast && nlast in m.*(~(m.qnxt))
+    no m.qnxt.nlast
+    nlast in m.*(~(m.qnxt))
 
     // Post-condition
     // n points to last node in m's queue
-    // m.qnxt' = m.qnxt + (n -> nlast)
-    m.qnxt' = m.qnxt + (nlast -> n)
+    m.qnxt' = m.qnxt + (n -> nlast)
+    // m.qnxt' = m.qnxt + (nlast -> n)
     // TODO - Perguntar ao fragoso
 
     // Frame
@@ -72,6 +73,12 @@ pred addQueueAux[n: Node, m: Member, nlast: Node] {
     Leader' = Leader
     lnxt' = lnxt
 }
+
+run {#Member=1 && #Node=4 && #Msg=0 && 
+    (eventually (some n1, n2: Node, m: Member | n1 != n2 && addQueue[n1, m] 
+                                                && (eventually addQueue[n2, m])))
+    } for 5
+
 
 pred dropQueue[n: Node] {
     some m: Member | dropQueueAux1[n, m]
