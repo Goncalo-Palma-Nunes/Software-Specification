@@ -34,8 +34,8 @@ pred trans[] {
     stutter[]
     ||
     some n: Node, m: Member | addQueue[n, m]
-    // ||
-    // some n: Node | dropQueue[n]
+    ||
+    some n: Node | dropQueue[n]
     // ||
     // some m: Member | memberPromotion[m]
 }
@@ -63,7 +63,6 @@ pred addQueueAux1[n: Node, m: Member, nlast: Node] {
     // Post-condition
     // n points to last node in m's queue
     m.qnxt' = m.qnxt + (n -> nlast)
-    // m.qnxt' = m.qnxt + (nlast -> n)
     // TODO - Perguntar ao fragoso
 
     // Frame
@@ -73,12 +72,6 @@ pred addQueueAux1[n: Node, m: Member, nlast: Node] {
     Leader' = Leader
     lnxt' = lnxt
 }
-
-run {#Member=1 && #Node=4 && #Msg=0 && 
-    (eventually (some n1, n2: Node, m: Member | n1 != n2 && addQueue[n1, m] 
-                                                && (eventually addQueue[n2, m])))
-    } for 5
-
 
 pred dropQueue[n: Node] {
     some m: Member | dropQueueAux1[n, m]
@@ -90,7 +83,8 @@ pred dropQueueAux1[n: Node, m: Member] {
     no n.~(m.qnxt)
 
     // Post-conditions
-    m.qnxt' = m.qnxt - (n -> m.qnxt.n)
+    // m.qnxt' = m.qnxt - (n -> m.qnxt.n)
+    m.qnxt' = m.qnxt - (n -> m)
 
     // Frame (nxt,qnxt,Member,LQueue,Leader,lnxt)
     Member' = Member
