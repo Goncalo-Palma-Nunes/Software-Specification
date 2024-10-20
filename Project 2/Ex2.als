@@ -45,6 +45,8 @@ pred trans[] {
     some m: Member | memberPromotion[m]
 	||
 	some m: Member | leaderApplication[m]
+	||
+	leaderPromotion[]
     ||
     some msg: Msg, m: Member | redirectMessage[msg, m]
 }
@@ -53,6 +55,11 @@ pred system[] {
     init[]
     && always trans[]
 }
+
+fact {
+    system[]
+}
+
 
 pred addQueue[n: Node, m: Member] {
     some nlast: Node | addQueueAux1[n, m, nlast]
@@ -220,8 +227,29 @@ pred leaderApplicationAux1[m: Member, mlast: Member] {
     Leader' = Leader
 }
 
-fact {
-    system[]
+pred leaderPromotion[] {
+	some m: Member | leaderPromotionAux1[m]
+}
+
+pred leaderPromotionAux1[m: Member] {
+	// Pre-condition
+	// m in LQueue
+	m in LQueue // kinda unnecessary
+	// m is the head of the leader queue
+	m = Leader.lnxt.Leader
+	// All of Leader's messages have finished broadcasting
+	sndr.Leader in SentMsg
+	
+	// Post-condition
+	// m is the new Leader
+	Leader' = m
+	LQueue' = LQueue - m
+	m.lnxt' = Leader.lnxt - (m -> Leader)
+
+	// Frame
+	Member' = Member
+    nxt' = nxt
+    qnxt' = qnxt
 }
 
 pred redirectMessage[msg: Msg, m: Member] {
@@ -316,3 +344,6 @@ run { #Msg=0 && #Member=1 && #Node=3 && eventually (some n1,n2: Member | n1 != n
 // Test Member promotion twice and leader application
 run { #Msg=0 && #Member=1 && #Node=3 && eventually (some n1,n2,n3: Member | n1 != n2 && n2 != n3 && n1 != n3 &&
 	eventually (some m1: Member | leaderApplication[m1] && eventually (some m2: Member - m1 | leaderApplication[m2]))) } for 5
+
+// Test Leader Promotion
+run { #Msg=0 && #Member=1 && #Node=3 && eventually (some n1,n2: Member | n1 != n2 && eventually (leaderPromotion[])) } for 5
