@@ -2,13 +2,12 @@ module Ex1
 
 
 sig Node {
-
+    var outbox: set Msg,
 }
 
 var sig Member in Node {
     var nxt: lone Member,
-    var qnxt : Node -> lone Node,
-    var outbox: set Msg
+    var qnxt : Node -> lone Node
 }
 
 var one sig Leader in Member {
@@ -19,12 +18,12 @@ var sig LQueue in Member {
 
 }
 
-abstract sig Msg {
-   sndr: Node,
-   rcvrs: set Node
+sig Msg {
+  sndr: Node, 
+  var rcvrs: set Node 
 }
 
-sig SentMsg, SendingMsg, PendingMsg extends Msg {}
+var sig SentMsg, SendingMsg, PendingMsg in Msg {}
 
 
 fact MemberRing {
@@ -48,7 +47,7 @@ fact allRoadsLeadtoLeader {
 
 fact oneLeaderQueue {
 	/* There can only be a single leader queue */
-	one Leader.lnxt.Leader
+	lone Leader.lnxt.Leader
 }
 
 fact allRoadsLeadtoMember {
@@ -67,11 +66,11 @@ fact noLoopsMemberQueue {
 	all n: Node | n !in n.^(Member.qnxt)
 }
 
-
 fact NoMemberInQueue {
     /* no member in a member queue*/
 	no (Member.qnxt.Node & Member)
 }
+
 
 fact {
     /* non-member nodes are not allowed to queue in more than one member queue
@@ -83,10 +82,16 @@ fact {
 fact {
     /* A message is considered sent when broadcasting process 
         has terminated (the leader received back the message) */
-    all msg: SentMsg | msg.sndr in msg.rcvrs
+    all msg: SentMsg | msg.sndr in msg.rcvrs and some (msg.rcvrs - msg.sndr)
 
     /* if the sender is in the receiver set, then the message
         already cycled through the ring */
+}
+
+fact {
+    /* If a message is in the sent state, then it has left
+    everyone's outbox */
+    all msg: SentMsg, node: Node | msg !in node.outbox
 }
 
 fact {
@@ -97,6 +102,20 @@ fact {
 }
 
 fact {
+    /* A message can't be in more than one state at once */
+    (no (SentMsg & SendingMsg))
+    and 
+    (no (SentMsg & PendingMsg))
+    and
+    (no (SendingMsg & PendingMsg))
+}
+
+fact {
+    /* A message must be in some state */
+    Msg = (SentMsg + SendingMsg + PendingMsg)
+}
+
+fact {
     /* A message is considered sending, if the broadcasting
         process has started, but not yet finished. In other words,
         the message has left the leader, but it hasn't received it
@@ -104,9 +123,16 @@ fact {
     all msg: SendingMsg | (some msg.rcvrs) && (msg.sndr !in msg.rcvrs)
 }
 
+
+fact {
+    /* A node can't be outside the ring if it has messages in the
+    sending state */
+    all msg: SendingMsg | msg.sndr in Member
+}
+
 assert PendingMsgsNotReceived {
     /* If a message is sending, it shouldn't be in anyone's outbox */
-    all msg: PendingMsg | msg !in Member.outbox
+    all msg: PendingMsg | msg !in (Member - msg.sndr).outbox
 
     // TODO - Isto talvez seja útil para dar debug com checks? Não sei...
     // Será que fazia sentido ser um facto?
