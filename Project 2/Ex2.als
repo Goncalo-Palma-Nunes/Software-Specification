@@ -25,7 +25,14 @@ pred stutter[] {
     Leader' = Leader
     lnxt' = lnxt
     LQueue' = LQueue
+
     // Messages
+    SendingMsg' = SendingMsg
+    SentMsg' = SentMsg
+    PendingMsg' = PendingMsg
+    outbox' = outbox
+
+    // TODO - do we need all of this?
 }
 
 pred trans[] {
@@ -38,6 +45,8 @@ pred trans[] {
     some m: Member | memberPromotion[m]
 	||
 	some m: Member | leaderApplication[m]
+    ||
+    some msg: Msg, m: Member | redirectMessage[msg, m]
 }
 
 pred system[] {
@@ -214,6 +223,87 @@ pred leaderApplicationAux1[m: Member, mlast: Member] {
 fact {
     system[]
 }
+
+pred redirectMessage[msg: Msg, m: Member] {
+    redirectEndBroadcast[msg, m]
+    ||
+    some mnext: Member | redirectMessageAux[msg, m, mnext]
+}
+
+pred redirectEndBroadcast[msg: Msg, m: Member] {
+    // Message reached the leader again
+    
+    // Pre-conditions
+    msg in m.outbox
+    msg in SendingMsg
+    m = msg.sndr
+
+    // Post-conditions
+    SentMsg' = SentMsg + msg
+    SendingMsg' = SendingMsg - msg
+    m.outbox' = m.outbox - msg
+
+    // Frame (nxt,qnxt,Member,LQueue,Leader,lnxt)
+    Member' = Member
+    nxt' = nxt
+    qnxt' = qnxt
+    Leader' = Leader
+    lnxt' = lnxt
+    PendingMsg' = PendingMsg
+}
+
+pred redirectMessageAux[msg: Msg, m: Member, mnext: Member] {
+    // Pre-conditions
+    msg in m.outbox
+    (redirectSendingMsg[msg, m] or redirectPendingMsg[msg, m])
+    m != mnext // can't message itself (only happens if m is the only member)
+    mnext = m.nxt
+
+    // Post-conditions
+    mnext.outbox' = mnext.outbox + msg
+    m.outbox' = m.outbox - msg
+
+    // Frame (nxt,qnxt,Member,LQueue,Leader,lnxt)
+    Member' = Member
+    nxt' = nxt
+    qnxt' = qnxt
+    Leader' = Leader
+    lnxt' = lnxt
+    SentMsg' = SentMsg  // Msg hasn't reached leader so it hasn't terminated broadcast
+}
+
+pred redirectSendingMsg[msg: Msg, m: Member] {
+    // Pre-conditions
+    msg in SendingMsg
+
+    // Frame
+    PendingMsg' = PendingMsg
+    SendingMsg' = SendingMsg
+}
+
+pred redirectPendingMsg[msg: Msg, m: Member] {
+    // Pre-conditions
+    msg in PendingMsg
+    m = msg.sndr
+
+    // Post-conditions
+    SendingMsg' = SendingMsg + msg
+    PendingMsg' = PendingMsg - msg
+}
+
+run {
+    eventually (#Member=2 and
+        (after (some msg: Msg, m: Member, mnext: Member |
+            redirectMessage[msg, m] and
+                (after redirectMessage[msg, mnext]) and
+                    (after redirectMessage[msg, m])
+            )
+        )
+    )
+}
+
+run {eventually some SentMsg} for 5
+
 
 run { eventually some m: Member | memberPromotion[m] } for 2 Node, 0 Msg
 
