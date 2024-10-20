@@ -75,6 +75,8 @@ pred addQueueAux1[n: Node, m: Member, nlast: Node] {
 
 pred dropQueue[n: Node] {
     some m: Member | dropQueueAux1[n, m]
+	||
+	some m: Member, nprev: Node | dropQueueAux2[n, m, nprev]
 }
 
 pred dropQueueAux1[n: Node, m: Member] {
@@ -84,7 +86,7 @@ pred dropQueueAux1[n: Node, m: Member] {
 
     // Post-conditions
     // m.qnxt' = m.qnxt - (n -> m.qnxt.n)
-    m.qnxt' = m.qnxt - (n -> m)
+    m.qnxt' = m.qnxt - (n -> n.(m.qnxt))
 
     // Frame (nxt,qnxt,Member,LQueue,Leader,lnxt)
     Member' = Member
@@ -94,24 +96,24 @@ pred dropQueueAux1[n: Node, m: Member] {
     lnxt' = lnxt
 }
 
-// pred dropQueueAux2[n: Node, m: Member] {
-//     // Pre-conditions
-//     n in m.qnxt.Node
-//     some n.~(m.qnxt)
+pred dropQueueAux2[n: Node, m: Member, nprev: Node] {
+    // Pre-conditions
+    n in m.qnxt.Node
+    nprev = (m.qnxt).n
 
-//     // Post-conditions
-//     m.qnxt' = m.qnxt - (m.qnxt.n -> n) + (m.qnxt.n -> m)
+    // Post-conditions
+    m.qnxt' = m.qnxt - (n -> n.(m.qnxt)) - (nprev -> n) + (nprev -> n.(m.qnxt))
 
-//     // Frame (nxt,qnxt,Member,LQueue,Leader,lnxt)
-//     Member' = Member
-//     nxt' = nxt
-//     all m: Member - m | m.qnxt' = m.qnxt
-//     Leader' = Leader
-//     lnxt' = lnxt
-// }
+    // Frame (nxt,qnxt,Member,LQueue,Leader,lnxt)
+    Member' = Member
+    nxt' = nxt
+    all m: Member - m | m.qnxt' = m.qnxt
+    Leader' = Leader
+    lnxt' = lnxt
+}
 
 // Gera modelo que 1 tira 1 nó da queue
-run {#Msg=0 && eventually (some n: Node | dropQueue[n])} for 5
+run {#Msg=0 && eventually (#qnxt=2 && eventually (some n1, n2: Node, m: Member | dropQueueAux2[n1, m, n2]))} for 5
 
 // Gera modelo que adiciona 1 nó a uma queue
 run {#Msg=0 && eventually (some n: Node, m: Member | addQueue[n, m])} for 5
