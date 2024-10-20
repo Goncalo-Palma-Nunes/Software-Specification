@@ -44,6 +44,8 @@ pred trans[] {
     ||
     some m: Member | memberPromotion[m]
 	||
+	some m: Member | memberExit[m]
+	||
 	some m: Member | leaderApplication[m]
 	||
 	leaderPromotion[]
@@ -199,6 +201,40 @@ pred memberPromotionAux2[m: Member, n: Node, nprev: Node] {
 	LQueue' = LQueue
 }
 
+pred memberExit[m: Member] {
+	some mprev: Member | memberExitAux1[m, mprev]
+}
+
+pred memberExitAux1[m: Member, mprev: Member] {
+	// Pre-conditions
+	mprev != m
+	// mprev next is to m
+	mprev.nxt = m
+	// m is not the Leader
+	m != Leader
+	// m is not in the Leader queue
+	m !in LQueue
+	// m does not have any nodes in it's member queue
+	no m.qnxt
+	// All of m's messages have finished broadcasting 
+	sndr.m in SentMsg
+	
+	// Post-conditions
+	// mprev next is to m.nxt
+	nxt' = nxt - (m->m.nxt) + (mprev->m.nxt)
+	// mprev or m.nxt gets m's qnxt
+	// EDIT: NOT NEEDED!
+	// m no longer a member
+	Member' = Member - m
+	
+	// Frame
+	all m: Member - m - mprev | m.nxt' = m.nxt
+	qnxt' = qnxt // EDIT: !!
+	lnxt' = lnxt
+	LQueue' = LQueue
+	Leader' = Leader
+}
+
 pred leaderApplication[m: Member] {
     some mlast: Member | leaderApplicationAux1[m, mlast]
 }
@@ -347,3 +383,6 @@ run { #Msg=0 && #Member=1 && #Node=3 && eventually (some n1,n2,n3: Member | n1 !
 
 // Test Leader Promotion
 run { #Msg=0 && #Member=1 && #Node=3 && eventually (some n1,n2: Member | n1 != n2 && eventually (leaderPromotion[])) } for 5
+
+// Test Member Exit
+run { #Msg=0 && #Member=1 && #Node=3 && eventually (some n1,n2: Member | n1 != n2 && eventually (some m: Member | memberExit[m])) } for 5
