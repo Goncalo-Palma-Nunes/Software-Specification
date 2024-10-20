@@ -11,6 +11,7 @@ fun visLeaderNext[]: Node -> lone Node {
 
 pred init[] {
     Member = Leader
+	nxt = (Leader->Leader)
     Msg = PendingMsg
     no Node.qnxt
 }
@@ -25,9 +26,6 @@ pred stutter[] {
     lnxt' = lnxt
     LQueue' = LQueue
     // Messages
-
-
-    // TODO - do we need all of this?
 }
 
 pred trans[] {
@@ -36,8 +34,8 @@ pred trans[] {
     some n: Node, m: Member | addQueue[n, m]
     ||
     some n: Node | dropQueue[n]
-    // ||
-    // some m: Member | memberPromotion[m]
+    ||
+    some m: Member | memberPromotion[m]
 }
 
 pred system[] {
@@ -71,6 +69,7 @@ pred addQueueAux1[n: Node, m: Member, nlast: Node] {
     all m: Member - m | m.qnxt' = m.qnxt 
     Leader' = Leader
     lnxt' = lnxt
+	LQueue' = LQueue
 }
 
 pred dropQueue[n: Node] {
@@ -94,6 +93,7 @@ pred dropQueueAux1[n: Node, m: Member] {
     all m: Member - m | m.qnxt' = m.qnxt
     Leader' = Leader
     lnxt' = lnxt
+	LQueue' = LQueue
 }
 
 pred dropQueueAux2[n: Node, m: Member, nprev: Node] {
@@ -110,6 +110,7 @@ pred dropQueueAux2[n: Node, m: Member, nprev: Node] {
     all m: Member - m | m.qnxt' = m.qnxt
     Leader' = Leader
     lnxt' = lnxt
+	LQueue' = LQueue
 }
 
 // Gera modelo que 1 tira 1 nó da queue
@@ -132,26 +133,49 @@ run {#Member=1 && #Node=4 && #Msg=0 &&
     } for 5
 
 pred memberPromotion[m: Member] {
-    some n: Node | memberPromotionAux[m, n]
+    some n: Node | memberPromotionAux1[m, n]
+	||
+	some n, nprev: Node | memberPromotionAux2[m, n, nprev]
 }
 
-pred memberPromotionAux[m: Member, n: Node] {
+pred memberPromotionAux1[m: Member, n: Node] {
     // Pre-conditions
     n !in Member
     (m.qnxt).m = n // n is head of m's queue
-    no n.~(m.qnxt)
-    //some (m.qnxt).n
+    no (m.qnxt).n // No other node in queue
 
     // Post-conditions
-    Member' = Member + n // n in Member
-    no (m.qnxt') 
-    nxt' = nxt + (m->n) + (n->m.nxt) - (m->m.nxt)
+	Member' = Member + n // n in Member
+	m.qnxt' = m.qnxt - (n->m)
+    nxt' = nxt + (m -> n) + (n -> m.nxt) - (m -> m.nxt)
+	no n.qnxt' // Possibly unnecessary
+	no n.outbox' // Possibly unnecessary
 
     // Frame (nxt,qnxt,Member,LQueue,Leader,lnxt)
     all m: Member - m | m.qnxt' = m.qnxt && m.nxt' = m.nxt
     Leader' = Leader
     lnxt' = lnxt
+	LQueue' = LQueue
+}
 
+pred memberPromotionAux2[m: Member, n: Node, nprev: Node] {
+    // Pre-conditions
+    n !in Member
+    (m.qnxt).m = n // n is head of m's queue
+    (m.qnxt).n = nprev // nprev is node in queue pointing to n
+
+    // Post-conditions
+    Member' = Member + n // n in Member
+    m.qnxt' = m.qnxt - (n -> m) - (nprev -> n) + (nprev -> m)
+    nxt' = nxt + (m->n) + (n->m.nxt) - (m->m.nxt)
+	no n.qnxt' // Possibly unnecessary
+	no n.outbox' // Possibly unnecessary
+
+    // Frame (nxt,qnxt,Member,LQueue,Leader,lnxt)
+    all m: Member - m | m.qnxt' = m.qnxt && m.nxt' = m.nxt
+    Leader' = Leader
+    lnxt' = lnxt
+	LQueue' = LQueue
 }
 
 
@@ -161,4 +185,5 @@ fact {
 
 run { eventually some m: Member | memberPromotion[m] } for 2 Node, 0 Msg
 
-run { eventually some m: Member | memberPromotion[m] } for 3 Node, 0 Msg, 3 steps
+// Test Member promotion twice
+run { #Msg=0 && #Member=1 && #Node=3 && eventually (some n1,n2,n3: Member | n1 != n2 && n2 != n3 && n1 != n3) } for 5
