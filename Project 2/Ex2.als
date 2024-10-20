@@ -36,6 +36,8 @@ pred trans[] {
     some n: Node | dropQueue[n]
     ||
     some m: Member | memberPromotion[m]
+	||
+	some m: Member | leaderApplication[m]
 }
 
 pred system[] {
@@ -100,6 +102,7 @@ pred dropQueueAux2[n: Node, m: Member, nprev: Node] {
     // Pre-conditions
     n in m.qnxt.Node
     nprev = (m.qnxt).n
+	// TODO nprev != n 
 
     // Post-conditions
     m.qnxt' = m.qnxt - (n -> n.(m.qnxt)) - (nprev -> n) + (nprev -> n.(m.qnxt))
@@ -143,6 +146,7 @@ pred memberPromotionAux1[m: Member, n: Node] {
     n !in Member
     (m.qnxt).m = n // n is head of m's queue
     no (m.qnxt).n // No other node in queue
+	// TODO nprev != n 
 
     // Post-conditions
 	Member' = Member + n // n in Member
@@ -163,6 +167,7 @@ pred memberPromotionAux2[m: Member, n: Node, nprev: Node] {
     n !in Member
     (m.qnxt).m = n // n is head of m's queue
     (m.qnxt).n = nprev // nprev is node in queue pointing to n
+	// TODO nprev != n 
 
     // Post-conditions
     Member' = Member + n // n in Member
@@ -178,6 +183,33 @@ pred memberPromotionAux2[m: Member, n: Node, nprev: Node] {
 	LQueue' = LQueue
 }
 
+pred leaderApplication[m: Member] {
+    some mlast: Member | leaderApplicationAux1[m, mlast]
+}
+
+pred leaderApplicationAux1[m: Member, mlast: Member] {
+    // Pre-condition
+    // m is a member
+    m in Member
+    m != mlast
+    // m not in Leader application queue
+    m !in LQueue
+	m !in Leader.lnxt.Node
+    // mlast has no members pointing to it AND its reachable thru the queue
+    no Leader.lnxt.mlast
+    mlast in Leader.*(~(Leader.lnxt))
+
+    // Post-condition
+    // m points to last member in Leader application queue (or the leader)
+    Leader.lnxt' = Leader.lnxt + (m -> mlast)
+	LQueue' = LQueue + m
+
+    // Frame
+    Member' = Member
+    nxt' = nxt
+    qnxt' = qnxt
+    Leader' = Leader
+}
 
 fact {
     system[]
@@ -187,3 +219,10 @@ run { eventually some m: Member | memberPromotion[m] } for 2 Node, 0 Msg
 
 // Test Member promotion twice
 run { #Msg=0 && #Member=1 && #Node=3 && eventually (some n1,n2,n3: Member | n1 != n2 && n2 != n3 && n1 != n3) } for 5
+
+// Test Member promotion and leader application
+run { #Msg=0 && #Member=1 && #Node=3 && eventually (some n1,n2: Member | n1 != n2 && eventually (some m: Member | leaderApplication[m])) } for 5
+
+// Test Member promotion twice and leader application
+run { #Msg=0 && #Member=1 && #Node=3 && eventually (some n1,n2,n3: Member | n1 != n2 && n2 != n3 && n1 != n3 &&
+	eventually (some m1: Member | leaderApplication[m1] && eventually (some m2: Member - m1 | leaderApplication[m2]))) } for 5

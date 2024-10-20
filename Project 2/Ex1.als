@@ -45,9 +45,19 @@ fact allRoadsLeadtoLeader {
 	// TODO - without forall ?
 }
 
-fact oneLeaderQueue {
+//fact oneLeaderQueue {
 	/* There can only be a single leader queue */
-	lone Leader.lnxt.Leader
+	//one Leader.lnxt.Leader
+//}
+
+fact indianLeaderQueue {
+	/* Reachable queue members only have one arrow pointing at them */
+	all m: Member.(Leader.lnxt) | one (Leader.lnxt).m
+}
+
+fact noLoopsLeaderQueue {
+	/* Member cannot reach self following the queue (order + no repetition)*/
+	all m: Member | m !in m.^(Leader.lnxt)
 }
 
 fact allRoadsLeadtoMember {
@@ -56,9 +66,14 @@ fact allRoadsLeadtoMember {
 	// TODO - without forall ?
 }
 
-fact oneMemberQueue {
+//fact oneMemberQueue {
 	/* Only a single member queue per member */
-	all m: Member | lone m.qnxt.m
+	//all m: Member | lone m.qnxt.m
+//}
+
+fact indianMemberQueue {
+	/* Reachable queue nodes only have one arrow pointing at them */
+	all n: Node.(Member.qnxt) | one (Member.qnxt).n
 }
 
 fact noLoopsMemberQueue {
