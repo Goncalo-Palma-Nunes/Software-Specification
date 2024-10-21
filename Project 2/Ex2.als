@@ -28,6 +28,7 @@ pred stutterMsg[] {
     SentMsg' = SentMsg
     PendingMsg' = PendingMsg
     outbox' = outbox
+	rcvrs' = rcvrs
 }
 
 pred stutterLeader[] {
@@ -126,7 +127,7 @@ pred dropQueueAux2[n: Node, m: Member, nprev: Node] {
     // Pre-conditions
     n in m.qnxt.Node
     nprev = (m.qnxt).n
-	// TODO nprev != n 
+	nprev != n
 
     // Post-conditions
     m.qnxt' = m.qnxt - (n -> n.(m.qnxt)) - (nprev -> n) + (nprev -> n.(m.qnxt))
@@ -168,7 +169,6 @@ pred memberPromotionAux1[m: Member, n: Node] {
     n !in Member
     (m.qnxt).m = n // n is head of m's queue
     no (m.qnxt).n // No other node in queue
-	// TODO nprev != n 
 
     // Post-conditions
 	Member' = Member + n // n in Member
@@ -188,7 +188,7 @@ pred memberPromotionAux2[m: Member, n: Node, nprev: Node] {
     n !in Member
     (m.qnxt).m = n // n is head of m's queue
     (m.qnxt).n = nprev // nprev is node in queue pointing to n
-	// TODO nprev != n 
+	// nprev != n // redundant
 
     // Post-conditions
     Member' = Member + n // n in Member
@@ -316,11 +316,13 @@ pred redirectEndBroadcast[msg: Msg, m: Member] {
 }
 
 pred redirectMessageAux[msg: Msg, m: Member, mnext: Member] {
-    // Pre-conditions
+	// Pre-conditions
+	m = msg.sndr implies msg in PendingMsg
     msg in m.outbox
-    (redirectSendingMsg[msg, m] or redirectPendingMsg[msg, m])
-    m != mnext // can't message itself (only happens if m is the only member)
+	m != mnext // can't message itself (only happens if m is the only member)
     mnext = m.nxt
+
+    (redirectSendingMsg[msg, m] or redirectPendingMsg[msg, m])
 
     // Post-conditions
     mnext.outbox' = mnext.outbox + msg
@@ -348,8 +350,20 @@ pred redirectPendingMsg[msg: Msg, m: Member] {
     m = msg.sndr
 
     // Post-conditions
+	PendingMsg' = PendingMsg - msg
     SendingMsg' = SendingMsg + msg
-    PendingMsg' = PendingMsg - msg
+}
+
+// Simple message broadcast
+run {
+    eventually (#Member=2 && #Msg=1 &&
+        (eventually (some msg: Msg, m: Member |
+            redirectMessage[msg, m]
+			&& eventually (redirectMessage[msg, m.nxt]
+			&& eventually (redirectMessage[msg, m]))
+            )
+        )
+    )
 }
 
 run {
