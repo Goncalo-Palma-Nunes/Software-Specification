@@ -17,22 +17,32 @@ pred init[] {
 }
 
 pred stutter[] {
-    // Nodes
-    Member' = Member
-    nxt' = nxt
-    qnxt' = qnxt
-	
-    Leader' = Leader
-    lnxt' = lnxt
-    LQueue' = LQueue
+    stutterRing[]
+    stutterQueue[]
+    stutterLeader[]
+    stutterMsg[]
+}
 
-    // Messages
+pred stutterMsg[] {
     SendingMsg' = SendingMsg
     SentMsg' = SentMsg
     PendingMsg' = PendingMsg
     outbox' = outbox
+}
 
-    // TODO - do we need all of this?
+pred stutterLeader[] {
+    Leader' = Leader
+    lnxt' = lnxt
+    LQueue' = LQueue
+}
+
+pred stutterRing[] {
+    Member' = Member
+    nxt' = nxt
+}
+
+pred stutterQueue[] {
+    qnxt' = qnxt
 }
 
 pred trans[] {
@@ -84,12 +94,10 @@ pred addQueueAux1[n: Node, m: Member, nlast: Node] {
     // TODO - Perguntar ao fragoso
 
     // Frame
-    Member' = Member
-    nxt' = nxt
+    stutterRing[]
     all m: Member - m | m.qnxt' = m.qnxt 
-    Leader' = Leader
-    lnxt' = lnxt
-	LQueue' = LQueue
+    stutterLeader[]
+    stutterMsg[]
 }
 
 pred dropQueue[n: Node] {
@@ -108,12 +116,10 @@ pred dropQueueAux1[n: Node, m: Member] {
     m.qnxt' = m.qnxt - (n -> n.(m.qnxt))
 
     // Frame (nxt,qnxt,Member,LQueue,Leader,lnxt)
-    Member' = Member
-    nxt' = nxt
+    stutterRing[]
     all m: Member - m | m.qnxt' = m.qnxt
-    Leader' = Leader
-    lnxt' = lnxt
-	LQueue' = LQueue
+    stutterLeader[]
+    stutterMsg[]
 }
 
 pred dropQueueAux2[n: Node, m: Member, nprev: Node] {
@@ -126,12 +132,10 @@ pred dropQueueAux2[n: Node, m: Member, nprev: Node] {
     m.qnxt' = m.qnxt - (n -> n.(m.qnxt)) - (nprev -> n) + (nprev -> n.(m.qnxt))
 
     // Frame (nxt,qnxt,Member,LQueue,Leader,lnxt)
-    Member' = Member
-    nxt' = nxt
+    stutterRing[]
     all m: Member - m | m.qnxt' = m.qnxt
-    Leader' = Leader
-    lnxt' = lnxt
-	LQueue' = LQueue
+    stutterLeader[]
+    stutterMsg[]
 }
 
 // Gera modelo que 1 tira 1 nó da queue
@@ -175,9 +179,8 @@ pred memberPromotionAux1[m: Member, n: Node] {
 
     // Frame (nxt,qnxt,Member,LQueue,Leader,lnxt)
     all m: Member - m | m.qnxt' = m.qnxt && m.nxt' = m.nxt
-    Leader' = Leader
-    lnxt' = lnxt
-	LQueue' = LQueue
+    stutterLeader[]
+    stutterMsg[]
 }
 
 pred memberPromotionAux2[m: Member, n: Node, nprev: Node] {
@@ -196,9 +199,8 @@ pred memberPromotionAux2[m: Member, n: Node, nprev: Node] {
 
     // Frame (nxt,qnxt,Member,LQueue,Leader,lnxt)
     all m: Member - m | m.qnxt' = m.qnxt && m.nxt' = m.nxt
-    Leader' = Leader
-    lnxt' = lnxt
-	LQueue' = LQueue
+    stutterLeader[]
+    stutterMsg[]
 }
 
 pred memberExit[m: Member] {
@@ -230,9 +232,8 @@ pred memberExitAux1[m: Member, mprev: Member] {
 	// Frame
 	all m: Member - m - mprev | m.nxt' = m.nxt
 	qnxt' = qnxt // EDIT: !!
-	lnxt' = lnxt
-	LQueue' = LQueue
-	Leader' = Leader
+	stutterLeader[]
+    stutterMsg[]
 }
 
 pred leaderApplication[m: Member] {
@@ -257,9 +258,9 @@ pred leaderApplicationAux1[m: Member, mlast: Member] {
 	LQueue' = LQueue + m
 
     // Frame
-    Member' = Member
-    nxt' = nxt
-    qnxt' = qnxt
+    stutterRing[]
+    stutterQueue[]
+    stutterMsg[]
     Leader' = Leader
 }
 
@@ -283,9 +284,9 @@ pred leaderPromotionAux1[m: Member] {
 	m.lnxt' = Leader.lnxt - (m -> Leader)
 
 	// Frame
-	Member' = Member
-    nxt' = nxt
-    qnxt' = qnxt
+	stutterRing[]
+    stutterQueue[]
+    stutterMsg[]
 }
 
 pred redirectMessage[msg: Msg, m: Member] {
@@ -308,11 +309,9 @@ pred redirectEndBroadcast[msg: Msg, m: Member] {
     m.outbox' = m.outbox - msg
 
     // Frame (nxt,qnxt,Member,LQueue,Leader,lnxt)
-    Member' = Member
-    nxt' = nxt
-    qnxt' = qnxt
-    Leader' = Leader
-    lnxt' = lnxt
+	stutterRing[]
+    stutterQueue[]
+    stutterLeader[]
     PendingMsg' = PendingMsg
 }
 
@@ -328,11 +327,9 @@ pred redirectMessageAux[msg: Msg, m: Member, mnext: Member] {
     m.outbox' = m.outbox - msg
 
     // Frame (nxt,qnxt,Member,LQueue,Leader,lnxt)
-    Member' = Member
-    nxt' = nxt
-    qnxt' = qnxt
-    Leader' = Leader
-    lnxt' = lnxt
+	stutterRing[]
+    stutterQueue[]
+    stutterLeader[]
     SentMsg' = SentMsg  // Msg hasn't reached leader so it hasn't terminated broadcast
 }
 
