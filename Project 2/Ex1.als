@@ -131,6 +131,12 @@ fact {
 }
 
 fact {
+    /* If a node has a sending message in the outbox,
+    then it is a member */
+    all n: Node | some (n.outbox & SendingMsg) => n in Member
+}
+
+fact {
     /* A message is considered sending, if the broadcasting
         process has started, but not yet finished. In other words,
         the message has left the leader, but it hasn't received it
@@ -145,12 +151,28 @@ fact {
     all msg: SendingMsg | msg.sndr in Member
 }
 
-assert PendingMsgsNotReceived {
-    /* If a message is sending, it shouldn't be in anyone's outbox */
-    all msg: PendingMsg | msg !in (Member - msg.sndr).outbox
+fact {
+    /* Sending messages are in someone's outbox */
+    all msg: SendingMsg | some n: Node | 
+        (n.outbox = n.outbox + msg) && (msg.sndr != n)
+}
 
-    // TODO - Isto talvez seja útil para dar debug com checks? Não sei...
-    // Será que fazia sentido ser um facto?
+// fact {
+//     /* the outbox can only contain pending messages belonging
+//     to the node itself or sending messages belonging to other nodes */
+//     all n: Node | 
+//         all msg: Msg | msg in n.outbox implies
+//             (msg in (n.(~sndr) & PendingMsg))
+//             or 
+//             (msg in ((Node - n).(~sndr) & SendingMsg))
+
+//     // TODO - falta o caso em que está sending na outbox de si próprio (voltou ao líder)
+// }
+
+
+fact PendingMsgsNotReceived {
+    /* If a message is pending, it shouldn't be in anyone's outbox */
+    all msg: PendingMsg | msg !in (Member - msg.sndr).outbox
 }
 
 
@@ -171,4 +193,4 @@ fun visLeaderNext[]: Node -> lone Node {
 }
 
 
-run {#Node=5 && #Member=2 && #Member.qnxt.Member>1 && some LQueue && someMessageEach } for 5
+run {#Node=5 && #Member=2 && #Member.qnxt.Member>1 && some LQueue && someMessageEach} for 5
