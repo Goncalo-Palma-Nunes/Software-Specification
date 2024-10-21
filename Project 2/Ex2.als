@@ -223,7 +223,7 @@ pred memberExitAux1[m: Member, mprev: Member] {
 	
 	// Post-conditions
 	// mprev next is to m.nxt
-	nxt' = nxt - (m->m.nxt) + (mprev->m.nxt)
+	nxt' = nxt - (m->m.nxt) - (mprev->m) + (mprev->m.nxt)
 	// mprev or m.nxt gets m's qnxt
 	// EDIT: NOT NEEDED!
 	// m no longer a member
@@ -382,4 +382,4 @@ run { #Msg=0 && #Member=1 && #Node=3 && eventually (some n1,n2,n3: Member | n1 !
 run { #Msg=0 && #Member=1 && #Node=3 && eventually (some n1,n2: Member | n1 != n2 && eventually (leaderPromotion[])) } for 5
 
 // Test Member Exit
-run { #Msg=0 && #Member=1 && #Node=3 && eventually (some n1,n2: Member | n1 != n2 && eventually (some m: Member | memberExit[m])) } for 5
+run { #Msg=0 && #Member=1 && #Node=2 && eventually (some n1,n2: Member | n1 != n2 && eventually (some m: Member | memberExit[m])) } for 5 // 
