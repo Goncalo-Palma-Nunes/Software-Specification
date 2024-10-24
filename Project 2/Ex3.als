@@ -72,12 +72,40 @@ pred fairnessLeaderPromotion[n: Node] {
     (always eventually leaderPromotionAux1[n])
 }
 
-pred redirectMsgPre[] {
-    // TODO
+pred redirectMsgPre[n: Node, msg: Msg] {
+    redirectMsgEndBroadcastPre[msg, n]
+    or
+    (some mnext: Member | redirectMsgPreAux[msg, n, mnext])
 }
 
-pred fairnessRedirectMsg[] {
-    // TODO
+pred redirectMsgEndBroadcastPre[msg: Msg, m: Member] {
+    (msg in m.outbox and msg in SendingMsg and m = msg.sndr)
+}
+
+pred redirectMsgPreAux[msg: Msg, m: Node, mnext: Member] {
+    (
+        m in Member
+        and m = msg.sndr implies msg in PendingMsg
+        and msg in m.outbox
+	    and m != mnext
+        and mnext = m.nxt
+        and (
+            (msg in SendingMsg)
+            or
+            (msg in PendingMsg
+            and m = msg.sndr)
+        )
+    )
+
+}
+
+pred fairnessRedirectMsg[n: Node] {
+    all msg: sndr.n | 
+        (
+            (eventually always redirectMsgPre[n, msg])
+            implies
+            (always eventually redirectMessage[msg, n])
+        )
 }
 
 pred fairness[] {
@@ -88,5 +116,7 @@ pred fairness[] {
             fairnessJoinRing[n]
             and
             fairnessLeaderPromotion[n]
+            and
+            fairnessRedirectMsg[n]
         )
 }
