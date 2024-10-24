@@ -304,9 +304,10 @@ pred redirectEndBroadcast[msg: Msg, m: Member] {
     m = msg.sndr
 
     // Post-conditions
+    msg.rcvrs' = msg.rcvrs + m
     SentMsg' = SentMsg + msg
     SendingMsg' = SendingMsg - msg
-    m.outbox' = m.outbox - msg
+    outbox' = outbox - (m->msg)
 
     // Frame (nxt,qnxt,Member,LQueue,Leader,lnxt)
 	stutterRing[]
@@ -325,8 +326,8 @@ pred redirectMessageAux[msg: Msg, m: Member, mnext: Member] {
     (redirectSendingMsg[msg, m] or redirectPendingMsg[msg, m])
 
     // Post-conditions
-    mnext.outbox' = mnext.outbox + msg
-    m.outbox' = m.outbox - msg
+    msg.rcvrs' = (m != msg.sndr implies msg.rcvrs + m else msg.rcvrs)
+    outbox' = outbox - (m->msg) + (mnext -> msg)
 
     // Frame (nxt,qnxt,Member,LQueue,Leader,lnxt)
 	stutterRing[]
@@ -397,3 +398,16 @@ run { #Msg=0 && #Member=1 && #Node=3 && eventually (some n1,n2: Member | n1 != n
 
 // Test Member Exit
 run { #Msg=0 && #Member=1 && #Node=2 && eventually (some n1,n2: Member | n1 != n2 && eventually (some m: Member | memberExit[m])) } for 5 // 
+
+
+// 2.2 1) 5 Nodes OK, 1 Leader Promotion OK, 1 Member Promotion OK, 1 Member Exit OK, 1 Node Exit OK, 1 Broadcast (full) OK
+// TODO
+
+// 2.2 2) 5 Nodes OK, 1 Leader Promotion OK, 1 Member Promotion OK, 1 Member Exit OK, 1 Node Exit OK, 1 Broadcast (full) OK
+run { #Node=5 && one sndr.Leader &&
+     eventually (some m: Member | memberPromotion[m]) &&
+     eventually (some msg: Msg, m: Member | redirectMessage[msg, m]) &&
+     eventually (leaderPromotion[]) &&
+     eventually (some mq: Member | memberExit[mq]) &&
+     eventually (some nm: Node - Member | dropQueue[nm])
+} for 6 but 1 Msg
