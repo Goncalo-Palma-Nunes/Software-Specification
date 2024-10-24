@@ -159,7 +159,7 @@ fact {
 
 fact {
     /* Messages are in, at most, one outbox */
-    all msg: Msg | lone (msg.(~sndr) & Node)
+    all msg: Msg | lone (msg.(~outbox) & Node)
 }
 
 fact PendingMsgsNotReceived {
