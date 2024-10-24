@@ -157,6 +157,10 @@ fact {
 
 }
 
+fact {
+    /* Messages are in, at most, one outbox */
+    all msg: Msg | lone (msg.(~sndr) & Node)
+}
 
 fact PendingMsgsNotReceived {
     /* If a message is pending, it shouldn't be in anyone's outbox 
