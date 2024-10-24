@@ -30,7 +30,6 @@ fact MemberRing {
     /* From one member you can get to all others 
     through the next pointer */
     all m: Member | Member in m.*nxt
-    // TODO - without forall?
 }
 
 fact LeaderCandidatesAreMembers {
@@ -42,13 +41,8 @@ fact LeaderCandidatesAreMembers {
 fact allRoadsLeadtoLeader {
 	/* Leader is always reached by following the leader queue (order)*/
 	all lq: LQueue | Leader in lq.^(Leader.lnxt)
-	// TODO - without forall ?
 }
 
-//fact oneLeaderQueue {
-	/* There can only be a single leader queue */
-	//one Leader.lnxt.Leader
-//}
 
 fact indianLeaderQueue {
 	/* Reachable queue members only have one arrow pointing at them */
@@ -63,13 +57,8 @@ fact noLoopsLeaderQueue {
 fact allRoadsLeadtoMember {
 	/* Member is always reached by following the member queue (order)*/
 	all n: Node, m: Member | n in m.qnxt.Node implies m in n.^(m.qnxt)
-	// TODO - without forall ?
 }
 
-//fact oneMemberQueue {
-	/* Only a single member queue per member */
-	//all m: Member | lone m.qnxt.m
-//}
 
 fact indianMemberQueue {
 	/* Reachable queue nodes only have one arrow pointing at them */
@@ -157,22 +146,27 @@ fact {
         (n.outbox = n.outbox + msg) && (msg.sndr != n)
 }
 
-// fact {
-//     /* the outbox can only contain pending messages belonging
-//     to the node itself or sending messages belonging to other nodes */
-//     all n: Node | 
-//         all msg: Msg | msg in n.outbox implies
-//             (msg in (n.(~sndr) & PendingMsg))
-//             or 
-//             (msg in ((Node - n).(~sndr) & SendingMsg))
+fact {
+    /* the outbox can only contain pending messages belonging
+    to the node itself or sending messages belonging to other nodes */
+    all n: Node | 
+        all msg: Msg | msg in n.outbox implies
+            (msg in (n.(~sndr) & PendingMsg))
+            or 
+            (msg in (Node.(~sndr) & SendingMsg))
 
-//     // TODO - falta o caso em que está sending na outbox de si próprio (voltou ao líder)
-// }
+}
 
 
 fact PendingMsgsNotReceived {
-    /* If a message is pending, it shouldn't be in anyone's outbox */
+    /* If a message is pending, it shouldn't be in anyone's outbox 
+    except the sender's */
     all msg: PendingMsg | msg !in (Member - msg.sndr).outbox
+}
+
+fact PendingMsgInSndrOutbox {
+    /* If a message is pending, it should be in the sender's outbox */
+    all msg: PendingMsg | msg in msg.sndr.outbox
 }
 
 
