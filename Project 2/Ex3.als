@@ -120,3 +120,21 @@ pred fairness[] {
             fairnessRedirectMsg[n]
         )
 }
+
+pred OneAtATimePre[] {
+    fairness[] and noExits[] and #Node >= 2
+}
+
+pred OneAtATime[] {
+    OneAtATimePre[] implies (eventually Msg = PendingMsg)
+}
+
+run {fairness[] and #Node >= 2} for 5
+
+run {noExits[] and #Node >= 2} for 5
+
+run OneAtATimePre for 6
+
+run OneAtATime for 6
+
+run {(fairness[] and #Node >= 2) implies (eventually Msg = PendingMsg)}
