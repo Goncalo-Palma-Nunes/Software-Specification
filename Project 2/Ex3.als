@@ -191,7 +191,7 @@ pred OneAtATimePre[] {
 }
 
 pred OneAtATime[] {
-    OneAtATimePre[] implies (eventually Msg = PendingMsg)
+    OneAtATimePre[] implies (eventually Msg = SentMsg)
 }
 
 run {fairness[] and #Node >= 2} for 5
@@ -202,6 +202,6 @@ run OneAtATimePre for 5
 
 run OneAtATime for 6
 
-run {(fairness[] and #Node >= 2) implies (eventually Msg = PendingMsg)}
+run {(fairness[] and #Node >= 2) implies (eventually Msg = SentMsg)}
 
 run {always Valid[]} for 5
