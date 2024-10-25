@@ -191,5 +191,5 @@ fun visLeaderNext[]: Node -> lone Node {
 	Leader.lnxt
 }
 
-
-run {#Node=5 && #Member=2 && #Member.qnxt.Member>1 && some LQueue && someMessageEach} for 5
+// Ex 1.2.1 and 1.2.2 (Generates multiple configurations)
+run {#Node=5 && #Member=2 && (#Member.qnxt.Member>1) && (some LQueue) && someMessageEach} for 5

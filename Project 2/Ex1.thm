@@ -13,28 +13,16 @@
    <type name="String"/>
    <type name="univ"/>
    <type name="seq/Int"/>
-   <set name="this/LQueue" type="Node"/>
-</node>
-
-<node color="Blue">
-   <set name="this/Member" type="Node"/>
-</node>
-
-<node color="Gray">
-   <type name="Node"/>
-</node>
-
-<node color="Green">
-   <type name="SentMsg"/>
    <set name="this/Leader" type="Node"/>
-</node>
-
-<node color="Red">
-   <type name="PendingMsg"/>
+   <set name="this/LQueue" type="Node"/>
+   <set name="this/PendingMsg" type="Msg"/>
+   <set name="this/SendingMsg" type="Msg"/>
+   <set name="this/SentMsg" type="Msg"/>
 </node>
 
 <node color="Yellow">
-   <type name="SendingMsg"/>
+   <type name="Node"/>
+   <set name="this/Member" type="Node"/>
 </node>
 
 <edge visible="no">
