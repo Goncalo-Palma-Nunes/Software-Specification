@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<alloy>
+
+<view>
+
+<defaultnode/>
+
+<defaultedge/>
+
+<node>
+   <type name="Int"/>
+   <type name="String"/>
+   <type name="univ"/>
+   <type name="Ex1/Msg"/>
+   <type name="Ex1/Node"/>
+   <type name="seq/Int"/>
+   <set name="$dropQueue_m" type="Ex1/Node"/>
+   <set name="$leaderPromotion_m" type="Ex1/Node"/>
+   <set name="$m" type="Ex1/Node"/>
+   <set name="$m&apos;" type="Ex1/Node"/>
+   <set name="$memberExit_mprev" type="Ex1/Node"/>
+   <set name="$memberPromotion_n" type="Ex1/Node"/>
+   <set name="$mq" type="Ex1/Node"/>
+   <set name="$msg" type="Ex1/Msg"/>
+   <set name="$nm" type="Ex1/Node"/>
+   <set name="Ex1/Leader" type="Ex1/Node"/>
+   <set name="Ex1/LQueue" type="Ex1/Node"/>
+   <set name="Ex1/Member" type="Ex1/Node"/>
+   <set name="Ex1/PendingMsg" type="Ex1/Msg"/>
+   <set name="Ex1/SendingMsg" type="Ex1/Msg"/>
+   <set name="Ex1/SentMsg" type="Ex1/Msg"/>
+</node>
+
+<edge visible="no">
+   <relation name="lnxt"> <type name="Ex1/Node"/> <type name="Ex1/Node"/> <type name="Ex1/Node"/> </relation>
+   <relation name="qnxt"> <type name="Ex1/Node"/> <type name="Ex1/Node"/> <type name="Ex1/Node"/> </relation>
+</edge>
+
+<edge visible="no" attribute="yes">
+   <relation name="outbox"> <type name="Ex1/Node"/> <type name="Ex1/Msg"/> </relation>
+   <relation name="rcvrs"> <type name="Ex1/Msg"/> <type name="Ex1/Node"/> </relation>
+</edge>
+
+</view>
+
+</alloy>
