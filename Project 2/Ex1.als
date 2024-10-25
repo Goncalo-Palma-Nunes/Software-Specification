@@ -159,6 +159,7 @@ fact {
 
 fact {
     /* Messages are in, at most, one outbox */
+    //all msg: Msg | lone outbox.msg
     all msg: Msg | lone (msg.(~outbox) & Node)
 }
 

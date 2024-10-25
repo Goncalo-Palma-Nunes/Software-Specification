@@ -49,19 +49,19 @@ pred stutterQueue[] {
 pred trans[] {
     stutter[]
     ||
-    some n: Node, m: Member | addQueue[n, m]
+    (some n: Node, m: Member | addQueue[n, m])
     ||
-    some n: Node | dropQueue[n]
+    (some n: Node | dropQueue[n])
     ||
-    some m: Member | memberPromotion[m]
-	||
-	some m: Member | memberExit[m]
-	||
-	some m: Member | leaderApplication[m]
-	||
-	leaderPromotion[]
+    (some m: Member | memberPromotion[m])
     ||
-    some msg: Msg, m: Member | redirectMessage[msg, m]
+    (some m: Member | memberExit[m])
+    ||
+    (some m: Member | leaderApplication[m])
+    ||
+    (leaderPromotion[])
+    ||
+    (some msg: Msg, m: Member | redirectMessage[msg, m])
 }
 
 pred system[] {
@@ -224,8 +224,6 @@ pred memberExitAux1[m: Member, mprev: Member] {
 	// Post-conditions
 	// mprev next is to m.nxt
 	nxt' = nxt - (m->m.nxt) - (mprev->m) + (mprev->m.nxt)
-	// mprev or m.nxt gets m's qnxt
-	// EDIT: NOT NEEDED!
 	// m no longer a member
 	Member' = Member - m
 	
@@ -394,20 +392,27 @@ run { #Msg=0 && #Member=1 && #Node=3 && eventually (some n1,n2,n3: Member | n1 !
 	eventually (some m1: Member | leaderApplication[m1] && eventually (some m2: Member - m1 | leaderApplication[m2]))) } for 5
 
 // Test Leader Promotion
-run { #Msg=0 && #Member=1 && #Node=3 && eventually (some n1,n2: Member | n1 != n2 && eventually (leaderPromotion[])) } for 5
+run { #Msg=0 && #Member=1 && #Node=3 && (eventually (some n1,n2: Member | n1 != n2)) && (eventually (leaderPromotion[])) } for 5
 
 // Test Member Exit
-run { #Msg=0 && #Member=1 && #Node=2 && eventually (some n1,n2: Member | n1 != n2 && eventually (some m: Member | memberExit[m])) } for 5 // 
+run { #Msg=0 && #Member=1 && #Node=2 && (eventually (some n1,n2: Member | n1 != n2)) && (eventually (some m: Member | memberExit[m])) } for 5 // 
 
 
-// 2.2 1) 5 Nodes OK, 1 Leader Promotion OK, 1 Member Promotion OK, 1 Member Exit OK, 1 Node Exit OK, 1 Broadcast (full) OK
-// TODO
+// 2.2 1)
+run {
+     (eventually (some m: Member | memberPromotion[m])) &&
+     (eventually (#Member>2)) &&
+     (eventually (leaderPromotion[])) &&
+     (eventually (some msg: Msg, m: Member | redirectMessage[msg, m])) &&
+     (eventually (some mq: Member | memberExit[mq])) &&
+     (eventually (some nm: Node - Member | dropQueue[nm]))
+} for 6 Node, 1 Msg, 12 steps
 
-// 2.2 2) 5 Nodes OK, 1 Leader Promotion OK, 1 Member Promotion OK, 1 Member Exit OK, 1 Node Exit OK, 1 Broadcast (full) OK
-run { #Node=5 && one sndr.Leader &&
-     eventually (some m: Member | memberPromotion[m]) &&
-     eventually (some msg: Msg, m: Member | redirectMessage[msg, m]) &&
-     eventually (leaderPromotion[]) &&
-     eventually (some mq: Member | memberExit[mq]) &&
-     eventually (some nm: Node - Member | dropQueue[nm])
+// 2.2 2)
+run { #Node=5 &&
+     (eventually (some m: Member | memberPromotion[m])) &&
+     (eventually (some msg: Msg, m: Member | redirectMessage[msg, m])) &&
+     (eventually (leaderPromotion[])) &&
+     (eventually (some mq: Member | memberExit[mq])) &&
+     (eventually (some nm: Node - Member | dropQueue[nm]))
 } for 6 but 1 Msg

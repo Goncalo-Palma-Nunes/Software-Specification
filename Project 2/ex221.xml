@@ -1,0 +1,1675 @@
+<alloy builddate="2021-11-03T15:25:43.736Z">
+
+<instance bitwidth="4" maxseq="4" mintrace="1" maxtrace="12" command="Run run$14 for 12 steps, 6 Node, 1 Msg" filename="/home/crea/Software-Specification/Project 2/Ex2.als" tracelength="12" backloop="9">
+
+<sig label="seq/Int" ID="0" parentID="1" builtin="yes">
+</sig>
+
+<sig label="Int" ID="1" parentID="2" builtin="yes">
+</sig>
+
+<sig label="String" ID="3" parentID="2" builtin="yes">
+</sig>
+
+<sig label="Ex1/Node" ID="4" parentID="2">
+   <atom label="Ex1/Node$0"/>
+   <atom label="Ex1/Node$1"/>
+   <atom label="Ex1/Node$2"/>
+</sig>
+
+<field label="outbox" ID="5" parentID="4" var="yes">
+   <tuple> <atom label="Ex1/Node$2"/> <atom label="Ex1/Msg$0"/> </tuple>
+   <types> <type ID="4"/> <type ID="6"/> </types>
+</field>
+
+<sig label="Ex1/Msg" ID="6" parentID="2">
+   <atom label="Ex1/Msg$0"/>
+</sig>
+
+<field label="sndr" ID="7" parentID="6">
+   <tuple> <atom label="Ex1/Msg$0"/> <atom label="Ex1/Node$2"/> </tuple>
+   <types> <type ID="6"/> <type ID="4"/> </types>
+</field>
+
+<field label="rcvrs" ID="8" parentID="6" var="yes">
+   <types> <type ID="6"/> <type ID="4"/> </types>
+</field>
+
+<sig label="univ" ID="2" builtin="yes" var="yes">
+</sig>
+
+<sig label="Ex1/Member" ID="9" var="yes">
+   <atom label="Ex1/Node$2"/>
+   <type ID="4"/>
+</sig>
+
+<field label="nxt" ID="10" parentID="9" var="yes">
+   <tuple> <atom label="Ex1/Node$2"/> <atom label="Ex1/Node$2"/> </tuple>
+   <types> <type ID="4"/> <type ID="4"/> </types>
+</field>
+
+<field label="qnxt" ID="11" parentID="9" var="yes">
+   <types> <type ID="4"/> <type ID="4"/> <type ID="4"/> </types>
+</field>
+
+<sig label="Ex1/Leader" ID="12" one="yes" var="yes">
+   <atom label="Ex1/Node$2"/>
+   <type ID="9"/>
+</sig>
+
+<field label="lnxt" ID="13" parentID="12" var="yes">
+   <types> <type ID="4"/> <type ID="4"/> <type ID="4"/> </types>
+</field>
+
+<sig label="Ex1/LQueue" ID="14" var="yes">
+   <type ID="9"/>
+</sig>
+
+<sig label="Ex1/SentMsg" ID="15" var="yes">
+   <type ID="6"/>
+</sig>
+
+<sig label="Ex1/SendingMsg" ID="16" var="yes">
+   <type ID="6"/>
+</sig>
+
+<sig label="Ex1/PendingMsg" ID="17" var="yes">
+   <atom label="Ex1/Msg$0"/>
+   <type ID="6"/>
+</sig>
+
+<skolem label="$n" ID="18">
+   <types> <type ID="6"/> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$m" ID="19">
+   <tuple> <atom label="Ex1/Node$2"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$memberPromotion_n" ID="20">
+   <tuple> <atom label="Ex1/Node$0"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$leaderPromotion_m" ID="21">
+   <tuple> <atom label="Ex1/Node$0"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$msg" ID="22">
+   <tuple> <atom label="Ex1/Msg$0"/> </tuple>
+   <types> <type ID="6"/> </types>
+</skolem>
+
+<skolem label="$m&apos;" ID="23">
+   <tuple> <atom label="Ex1/Node$2"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$mq" ID="24">
+   <tuple> <atom label="Ex1/Node$1"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$memberExit_mprev" ID="25">
+   <tuple> <atom label="Ex1/Node$0"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$nm" ID="26">
+   <tuple> <atom label="Ex1/Node$1"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$dropQueue_m" ID="27">
+   <tuple> <atom label="Ex1/Node$2"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$this/visQueueNext" ID="m0">
+   <types> <type ID="4"/> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$this/visLeaderNext" ID="m1">
+   <types> <type ID="4"/> <type ID="4"/> </types>
+</skolem>
+
+</instance>
+<instance bitwidth="4" maxseq="4" mintrace="1" maxtrace="12" command="Run run$14 for 12 steps, 6 Node, 1 Msg" filename="/home/crea/Software-Specification/Project 2/Ex2.als" tracelength="12" backloop="9">
+
+<sig label="seq/Int" ID="0" parentID="1" builtin="yes">
+</sig>
+
+<sig label="Int" ID="1" parentID="2" builtin="yes">
+</sig>
+
+<sig label="String" ID="3" parentID="2" builtin="yes">
+</sig>
+
+<sig label="Ex1/Node" ID="4" parentID="2">
+   <atom label="Ex1/Node$0"/>
+   <atom label="Ex1/Node$1"/>
+   <atom label="Ex1/Node$2"/>
+</sig>
+
+<field label="outbox" ID="5" parentID="4" var="yes">
+   <tuple> <atom label="Ex1/Node$2"/> <atom label="Ex1/Msg$0"/> </tuple>
+   <types> <type ID="4"/> <type ID="6"/> </types>
+</field>
+
+<sig label="Ex1/Msg" ID="6" parentID="2">
+   <atom label="Ex1/Msg$0"/>
+</sig>
+
+<field label="sndr" ID="7" parentID="6">
+   <tuple> <atom label="Ex1/Msg$0"/> <atom label="Ex1/Node$2"/> </tuple>
+   <types> <type ID="6"/> <type ID="4"/> </types>
+</field>
+
+<field label="rcvrs" ID="8" parentID="6" var="yes">
+   <types> <type ID="6"/> <type ID="4"/> </types>
+</field>
+
+<sig label="univ" ID="2" builtin="yes" var="yes">
+</sig>
+
+<sig label="Ex1/Member" ID="9" var="yes">
+   <atom label="Ex1/Node$2"/>
+   <type ID="4"/>
+</sig>
+
+<field label="nxt" ID="10" parentID="9" var="yes">
+   <tuple> <atom label="Ex1/Node$2"/> <atom label="Ex1/Node$2"/> </tuple>
+   <types> <type ID="4"/> <type ID="4"/> </types>
+</field>
+
+<field label="qnxt" ID="11" parentID="9" var="yes">
+   <tuple> <atom label="Ex1/Node$2"/> <atom label="Ex1/Node$1"/> <atom label="Ex1/Node$2"/> </tuple>
+   <types> <type ID="4"/> <type ID="4"/> <type ID="4"/> </types>
+</field>
+
+<sig label="Ex1/Leader" ID="12" one="yes" var="yes">
+   <atom label="Ex1/Node$2"/>
+   <type ID="9"/>
+</sig>
+
+<field label="lnxt" ID="13" parentID="12" var="yes">
+   <types> <type ID="4"/> <type ID="4"/> <type ID="4"/> </types>
+</field>
+
+<sig label="Ex1/LQueue" ID="14" var="yes">
+   <type ID="9"/>
+</sig>
+
+<sig label="Ex1/SentMsg" ID="15" var="yes">
+   <type ID="6"/>
+</sig>
+
+<sig label="Ex1/SendingMsg" ID="16" var="yes">
+   <type ID="6"/>
+</sig>
+
+<sig label="Ex1/PendingMsg" ID="17" var="yes">
+   <atom label="Ex1/Msg$0"/>
+   <type ID="6"/>
+</sig>
+
+<skolem label="$n" ID="18">
+   <types> <type ID="6"/> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$m" ID="19">
+   <tuple> <atom label="Ex1/Node$2"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$memberPromotion_n" ID="20">
+   <tuple> <atom label="Ex1/Node$0"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$leaderPromotion_m" ID="21">
+   <tuple> <atom label="Ex1/Node$0"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$msg" ID="22">
+   <tuple> <atom label="Ex1/Msg$0"/> </tuple>
+   <types> <type ID="6"/> </types>
+</skolem>
+
+<skolem label="$m&apos;" ID="23">
+   <tuple> <atom label="Ex1/Node$2"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$mq" ID="24">
+   <tuple> <atom label="Ex1/Node$1"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$memberExit_mprev" ID="25">
+   <tuple> <atom label="Ex1/Node$0"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$nm" ID="26">
+   <tuple> <atom label="Ex1/Node$1"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$dropQueue_m" ID="27">
+   <tuple> <atom label="Ex1/Node$2"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$this/visQueueNext" ID="m0">
+   <tuple> <atom label="Ex1/Node$1"/> <atom label="Ex1/Node$2"/> </tuple>
+   <types> <type ID="4"/> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$this/visLeaderNext" ID="m1">
+   <types> <type ID="4"/> <type ID="4"/> </types>
+</skolem>
+
+</instance>
+<instance bitwidth="4" maxseq="4" mintrace="1" maxtrace="12" command="Run run$14 for 12 steps, 6 Node, 1 Msg" filename="/home/crea/Software-Specification/Project 2/Ex2.als" tracelength="12" backloop="9">
+
+<sig label="seq/Int" ID="0" parentID="1" builtin="yes">
+</sig>
+
+<sig label="Int" ID="1" parentID="2" builtin="yes">
+</sig>
+
+<sig label="String" ID="3" parentID="2" builtin="yes">
+</sig>
+
+<sig label="Ex1/Node" ID="4" parentID="2">
+   <atom label="Ex1/Node$0"/>
+   <atom label="Ex1/Node$1"/>
+   <atom label="Ex1/Node$2"/>
+</sig>
+
+<field label="outbox" ID="5" parentID="4" var="yes">
+   <tuple> <atom label="Ex1/Node$2"/> <atom label="Ex1/Msg$0"/> </tuple>
+   <types> <type ID="4"/> <type ID="6"/> </types>
+</field>
+
+<sig label="Ex1/Msg" ID="6" parentID="2">
+   <atom label="Ex1/Msg$0"/>
+</sig>
+
+<field label="sndr" ID="7" parentID="6">
+   <tuple> <atom label="Ex1/Msg$0"/> <atom label="Ex1/Node$2"/> </tuple>
+   <types> <type ID="6"/> <type ID="4"/> </types>
+</field>
+
+<field label="rcvrs" ID="8" parentID="6" var="yes">
+   <types> <type ID="6"/> <type ID="4"/> </types>
+</field>
+
+<sig label="univ" ID="2" builtin="yes" var="yes">
+</sig>
+
+<sig label="Ex1/Member" ID="9" var="yes">
+   <atom label="Ex1/Node$2"/>
+   <type ID="4"/>
+</sig>
+
+<field label="nxt" ID="10" parentID="9" var="yes">
+   <tuple> <atom label="Ex1/Node$2"/> <atom label="Ex1/Node$2"/> </tuple>
+   <types> <type ID="4"/> <type ID="4"/> </types>
+</field>
+
+<field label="qnxt" ID="11" parentID="9" var="yes">
+   <types> <type ID="4"/> <type ID="4"/> <type ID="4"/> </types>
+</field>
+
+<sig label="Ex1/Leader" ID="12" one="yes" var="yes">
+   <atom label="Ex1/Node$2"/>
+   <type ID="9"/>
+</sig>
+
+<field label="lnxt" ID="13" parentID="12" var="yes">
+   <types> <type ID="4"/> <type ID="4"/> <type ID="4"/> </types>
+</field>
+
+<sig label="Ex1/LQueue" ID="14" var="yes">
+   <type ID="9"/>
+</sig>
+
+<sig label="Ex1/SentMsg" ID="15" var="yes">
+   <type ID="6"/>
+</sig>
+
+<sig label="Ex1/SendingMsg" ID="16" var="yes">
+   <type ID="6"/>
+</sig>
+
+<sig label="Ex1/PendingMsg" ID="17" var="yes">
+   <atom label="Ex1/Msg$0"/>
+   <type ID="6"/>
+</sig>
+
+<skolem label="$n" ID="18">
+   <types> <type ID="6"/> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$m" ID="19">
+   <tuple> <atom label="Ex1/Node$2"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$memberPromotion_n" ID="20">
+   <tuple> <atom label="Ex1/Node$0"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$leaderPromotion_m" ID="21">
+   <tuple> <atom label="Ex1/Node$0"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$msg" ID="22">
+   <tuple> <atom label="Ex1/Msg$0"/> </tuple>
+   <types> <type ID="6"/> </types>
+</skolem>
+
+<skolem label="$m&apos;" ID="23">
+   <tuple> <atom label="Ex1/Node$2"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$mq" ID="24">
+   <tuple> <atom label="Ex1/Node$1"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$memberExit_mprev" ID="25">
+   <tuple> <atom label="Ex1/Node$0"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$nm" ID="26">
+   <tuple> <atom label="Ex1/Node$1"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$dropQueue_m" ID="27">
+   <tuple> <atom label="Ex1/Node$2"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$this/visQueueNext" ID="m0">
+   <types> <type ID="4"/> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$this/visLeaderNext" ID="m1">
+   <types> <type ID="4"/> <type ID="4"/> </types>
+</skolem>
+
+</instance>
+<instance bitwidth="4" maxseq="4" mintrace="1" maxtrace="12" command="Run run$14 for 12 steps, 6 Node, 1 Msg" filename="/home/crea/Software-Specification/Project 2/Ex2.als" tracelength="12" backloop="9">
+
+<sig label="seq/Int" ID="0" parentID="1" builtin="yes">
+</sig>
+
+<sig label="Int" ID="1" parentID="2" builtin="yes">
+</sig>
+
+<sig label="String" ID="3" parentID="2" builtin="yes">
+</sig>
+
+<sig label="Ex1/Node" ID="4" parentID="2">
+   <atom label="Ex1/Node$0"/>
+   <atom label="Ex1/Node$1"/>
+   <atom label="Ex1/Node$2"/>
+</sig>
+
+<field label="outbox" ID="5" parentID="4" var="yes">
+   <tuple> <atom label="Ex1/Node$2"/> <atom label="Ex1/Msg$0"/> </tuple>
+   <types> <type ID="4"/> <type ID="6"/> </types>
+</field>
+
+<sig label="Ex1/Msg" ID="6" parentID="2">
+   <atom label="Ex1/Msg$0"/>
+</sig>
+
+<field label="sndr" ID="7" parentID="6">
+   <tuple> <atom label="Ex1/Msg$0"/> <atom label="Ex1/Node$2"/> </tuple>
+   <types> <type ID="6"/> <type ID="4"/> </types>
+</field>
+
+<field label="rcvrs" ID="8" parentID="6" var="yes">
+   <types> <type ID="6"/> <type ID="4"/> </types>
+</field>
+
+<sig label="univ" ID="2" builtin="yes" var="yes">
+</sig>
+
+<sig label="Ex1/Member" ID="9" var="yes">
+   <atom label="Ex1/Node$2"/>
+   <type ID="4"/>
+</sig>
+
+<field label="nxt" ID="10" parentID="9" var="yes">
+   <tuple> <atom label="Ex1/Node$2"/> <atom label="Ex1/Node$2"/> </tuple>
+   <types> <type ID="4"/> <type ID="4"/> </types>
+</field>
+
+<field label="qnxt" ID="11" parentID="9" var="yes">
+   <tuple> <atom label="Ex1/Node$2"/> <atom label="Ex1/Node$0"/> <atom label="Ex1/Node$2"/> </tuple>
+   <types> <type ID="4"/> <type ID="4"/> <type ID="4"/> </types>
+</field>
+
+<sig label="Ex1/Leader" ID="12" one="yes" var="yes">
+   <atom label="Ex1/Node$2"/>
+   <type ID="9"/>
+</sig>
+
+<field label="lnxt" ID="13" parentID="12" var="yes">
+   <types> <type ID="4"/> <type ID="4"/> <type ID="4"/> </types>
+</field>
+
+<sig label="Ex1/LQueue" ID="14" var="yes">
+   <type ID="9"/>
+</sig>
+
+<sig label="Ex1/SentMsg" ID="15" var="yes">
+   <type ID="6"/>
+</sig>
+
+<sig label="Ex1/SendingMsg" ID="16" var="yes">
+   <type ID="6"/>
+</sig>
+
+<sig label="Ex1/PendingMsg" ID="17" var="yes">
+   <atom label="Ex1/Msg$0"/>
+   <type ID="6"/>
+</sig>
+
+<skolem label="$n" ID="18">
+   <types> <type ID="6"/> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$m" ID="19">
+   <tuple> <atom label="Ex1/Node$2"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$memberPromotion_n" ID="20">
+   <tuple> <atom label="Ex1/Node$0"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$leaderPromotion_m" ID="21">
+   <tuple> <atom label="Ex1/Node$0"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$msg" ID="22">
+   <tuple> <atom label="Ex1/Msg$0"/> </tuple>
+   <types> <type ID="6"/> </types>
+</skolem>
+
+<skolem label="$m&apos;" ID="23">
+   <tuple> <atom label="Ex1/Node$2"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$mq" ID="24">
+   <tuple> <atom label="Ex1/Node$1"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$memberExit_mprev" ID="25">
+   <tuple> <atom label="Ex1/Node$0"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$nm" ID="26">
+   <tuple> <atom label="Ex1/Node$1"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$dropQueue_m" ID="27">
+   <tuple> <atom label="Ex1/Node$2"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$this/visQueueNext" ID="m0">
+   <tuple> <atom label="Ex1/Node$0"/> <atom label="Ex1/Node$2"/> </tuple>
+   <types> <type ID="4"/> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$this/visLeaderNext" ID="m1">
+   <types> <type ID="4"/> <type ID="4"/> </types>
+</skolem>
+
+</instance>
+<instance bitwidth="4" maxseq="4" mintrace="1" maxtrace="12" command="Run run$14 for 12 steps, 6 Node, 1 Msg" filename="/home/crea/Software-Specification/Project 2/Ex2.als" tracelength="12" backloop="9">
+
+<sig label="seq/Int" ID="0" parentID="1" builtin="yes">
+</sig>
+
+<sig label="Int" ID="1" parentID="2" builtin="yes">
+</sig>
+
+<sig label="String" ID="3" parentID="2" builtin="yes">
+</sig>
+
+<sig label="Ex1/Node" ID="4" parentID="2">
+   <atom label="Ex1/Node$0"/>
+   <atom label="Ex1/Node$1"/>
+   <atom label="Ex1/Node$2"/>
+</sig>
+
+<field label="outbox" ID="5" parentID="4" var="yes">
+   <tuple> <atom label="Ex1/Node$2"/> <atom label="Ex1/Msg$0"/> </tuple>
+   <types> <type ID="4"/> <type ID="6"/> </types>
+</field>
+
+<sig label="Ex1/Msg" ID="6" parentID="2">
+   <atom label="Ex1/Msg$0"/>
+</sig>
+
+<field label="sndr" ID="7" parentID="6">
+   <tuple> <atom label="Ex1/Msg$0"/> <atom label="Ex1/Node$2"/> </tuple>
+   <types> <type ID="6"/> <type ID="4"/> </types>
+</field>
+
+<field label="rcvrs" ID="8" parentID="6" var="yes">
+   <types> <type ID="6"/> <type ID="4"/> </types>
+</field>
+
+<sig label="univ" ID="2" builtin="yes" var="yes">
+</sig>
+
+<sig label="Ex1/Member" ID="9" var="yes">
+   <atom label="Ex1/Node$0"/>
+   <atom label="Ex1/Node$2"/>
+   <type ID="4"/>
+</sig>
+
+<field label="nxt" ID="10" parentID="9" var="yes">
+   <tuple> <atom label="Ex1/Node$0"/> <atom label="Ex1/Node$2"/> </tuple>
+   <tuple> <atom label="Ex1/Node$2"/> <atom label="Ex1/Node$0"/> </tuple>
+   <types> <type ID="4"/> <type ID="4"/> </types>
+</field>
+
+<field label="qnxt" ID="11" parentID="9" var="yes">
+   <types> <type ID="4"/> <type ID="4"/> <type ID="4"/> </types>
+</field>
+
+<sig label="Ex1/Leader" ID="12" one="yes" var="yes">
+   <atom label="Ex1/Node$2"/>
+   <type ID="9"/>
+</sig>
+
+<field label="lnxt" ID="13" parentID="12" var="yes">
+   <types> <type ID="4"/> <type ID="4"/> <type ID="4"/> </types>
+</field>
+
+<sig label="Ex1/LQueue" ID="14" var="yes">
+   <type ID="9"/>
+</sig>
+
+<sig label="Ex1/SentMsg" ID="15" var="yes">
+   <type ID="6"/>
+</sig>
+
+<sig label="Ex1/SendingMsg" ID="16" var="yes">
+   <type ID="6"/>
+</sig>
+
+<sig label="Ex1/PendingMsg" ID="17" var="yes">
+   <atom label="Ex1/Msg$0"/>
+   <type ID="6"/>
+</sig>
+
+<skolem label="$n" ID="18">
+   <types> <type ID="6"/> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$m" ID="19">
+   <tuple> <atom label="Ex1/Node$2"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$memberPromotion_n" ID="20">
+   <tuple> <atom label="Ex1/Node$0"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$leaderPromotion_m" ID="21">
+   <tuple> <atom label="Ex1/Node$0"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$msg" ID="22">
+   <tuple> <atom label="Ex1/Msg$0"/> </tuple>
+   <types> <type ID="6"/> </types>
+</skolem>
+
+<skolem label="$m&apos;" ID="23">
+   <tuple> <atom label="Ex1/Node$2"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$mq" ID="24">
+   <tuple> <atom label="Ex1/Node$1"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$memberExit_mprev" ID="25">
+   <tuple> <atom label="Ex1/Node$0"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$nm" ID="26">
+   <tuple> <atom label="Ex1/Node$1"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$dropQueue_m" ID="27">
+   <tuple> <atom label="Ex1/Node$2"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$this/visQueueNext" ID="m0">
+   <types> <type ID="4"/> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$this/visLeaderNext" ID="m1">
+   <types> <type ID="4"/> <type ID="4"/> </types>
+</skolem>
+
+</instance>
+<instance bitwidth="4" maxseq="4" mintrace="1" maxtrace="12" command="Run run$14 for 12 steps, 6 Node, 1 Msg" filename="/home/crea/Software-Specification/Project 2/Ex2.als" tracelength="12" backloop="9">
+
+<sig label="seq/Int" ID="0" parentID="1" builtin="yes">
+</sig>
+
+<sig label="Int" ID="1" parentID="2" builtin="yes">
+</sig>
+
+<sig label="String" ID="3" parentID="2" builtin="yes">
+</sig>
+
+<sig label="Ex1/Node" ID="4" parentID="2">
+   <atom label="Ex1/Node$0"/>
+   <atom label="Ex1/Node$1"/>
+   <atom label="Ex1/Node$2"/>
+</sig>
+
+<field label="outbox" ID="5" parentID="4" var="yes">
+   <tuple> <atom label="Ex1/Node$0"/> <atom label="Ex1/Msg$0"/> </tuple>
+   <types> <type ID="4"/> <type ID="6"/> </types>
+</field>
+
+<sig label="Ex1/Msg" ID="6" parentID="2">
+   <atom label="Ex1/Msg$0"/>
+</sig>
+
+<field label="sndr" ID="7" parentID="6">
+   <tuple> <atom label="Ex1/Msg$0"/> <atom label="Ex1/Node$2"/> </tuple>
+   <types> <type ID="6"/> <type ID="4"/> </types>
+</field>
+
+<field label="rcvrs" ID="8" parentID="6" var="yes">
+   <types> <type ID="6"/> <type ID="4"/> </types>
+</field>
+
+<sig label="univ" ID="2" builtin="yes" var="yes">
+</sig>
+
+<sig label="Ex1/Member" ID="9" var="yes">
+   <atom label="Ex1/Node$0"/>
+   <atom label="Ex1/Node$2"/>
+   <type ID="4"/>
+</sig>
+
+<field label="nxt" ID="10" parentID="9" var="yes">
+   <tuple> <atom label="Ex1/Node$0"/> <atom label="Ex1/Node$2"/> </tuple>
+   <tuple> <atom label="Ex1/Node$2"/> <atom label="Ex1/Node$0"/> </tuple>
+   <types> <type ID="4"/> <type ID="4"/> </types>
+</field>
+
+<field label="qnxt" ID="11" parentID="9" var="yes">
+   <types> <type ID="4"/> <type ID="4"/> <type ID="4"/> </types>
+</field>
+
+<sig label="Ex1/Leader" ID="12" one="yes" var="yes">
+   <atom label="Ex1/Node$2"/>
+   <type ID="9"/>
+</sig>
+
+<field label="lnxt" ID="13" parentID="12" var="yes">
+   <types> <type ID="4"/> <type ID="4"/> <type ID="4"/> </types>
+</field>
+
+<sig label="Ex1/LQueue" ID="14" var="yes">
+   <type ID="9"/>
+</sig>
+
+<sig label="Ex1/SentMsg" ID="15" var="yes">
+   <type ID="6"/>
+</sig>
+
+<sig label="Ex1/SendingMsg" ID="16" var="yes">
+   <atom label="Ex1/Msg$0"/>
+   <type ID="6"/>
+</sig>
+
+<sig label="Ex1/PendingMsg" ID="17" var="yes">
+   <type ID="6"/>
+</sig>
+
+<skolem label="$n" ID="18">
+   <types> <type ID="6"/> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$m" ID="19">
+   <tuple> <atom label="Ex1/Node$2"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$memberPromotion_n" ID="20">
+   <tuple> <atom label="Ex1/Node$0"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$leaderPromotion_m" ID="21">
+   <tuple> <atom label="Ex1/Node$0"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$msg" ID="22">
+   <tuple> <atom label="Ex1/Msg$0"/> </tuple>
+   <types> <type ID="6"/> </types>
+</skolem>
+
+<skolem label="$m&apos;" ID="23">
+   <tuple> <atom label="Ex1/Node$2"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$mq" ID="24">
+   <tuple> <atom label="Ex1/Node$1"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$memberExit_mprev" ID="25">
+   <tuple> <atom label="Ex1/Node$0"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$nm" ID="26">
+   <tuple> <atom label="Ex1/Node$1"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$dropQueue_m" ID="27">
+   <tuple> <atom label="Ex1/Node$2"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$this/visQueueNext" ID="m0">
+   <types> <type ID="4"/> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$this/visLeaderNext" ID="m1">
+   <types> <type ID="4"/> <type ID="4"/> </types>
+</skolem>
+
+</instance>
+<instance bitwidth="4" maxseq="4" mintrace="1" maxtrace="12" command="Run run$14 for 12 steps, 6 Node, 1 Msg" filename="/home/crea/Software-Specification/Project 2/Ex2.als" tracelength="12" backloop="9">
+
+<sig label="seq/Int" ID="0" parentID="1" builtin="yes">
+</sig>
+
+<sig label="Int" ID="1" parentID="2" builtin="yes">
+</sig>
+
+<sig label="String" ID="3" parentID="2" builtin="yes">
+</sig>
+
+<sig label="Ex1/Node" ID="4" parentID="2">
+   <atom label="Ex1/Node$0"/>
+   <atom label="Ex1/Node$1"/>
+   <atom label="Ex1/Node$2"/>
+</sig>
+
+<field label="outbox" ID="5" parentID="4" var="yes">
+   <tuple> <atom label="Ex1/Node$2"/> <atom label="Ex1/Msg$0"/> </tuple>
+   <types> <type ID="4"/> <type ID="6"/> </types>
+</field>
+
+<sig label="Ex1/Msg" ID="6" parentID="2">
+   <atom label="Ex1/Msg$0"/>
+</sig>
+
+<field label="sndr" ID="7" parentID="6">
+   <tuple> <atom label="Ex1/Msg$0"/> <atom label="Ex1/Node$2"/> </tuple>
+   <types> <type ID="6"/> <type ID="4"/> </types>
+</field>
+
+<field label="rcvrs" ID="8" parentID="6" var="yes">
+   <tuple> <atom label="Ex1/Msg$0"/> <atom label="Ex1/Node$0"/> </tuple>
+   <types> <type ID="6"/> <type ID="4"/> </types>
+</field>
+
+<sig label="univ" ID="2" builtin="yes" var="yes">
+</sig>
+
+<sig label="Ex1/Member" ID="9" var="yes">
+   <atom label="Ex1/Node$0"/>
+   <atom label="Ex1/Node$2"/>
+   <type ID="4"/>
+</sig>
+
+<field label="nxt" ID="10" parentID="9" var="yes">
+   <tuple> <atom label="Ex1/Node$0"/> <atom label="Ex1/Node$2"/> </tuple>
+   <tuple> <atom label="Ex1/Node$2"/> <atom label="Ex1/Node$0"/> </tuple>
+   <types> <type ID="4"/> <type ID="4"/> </types>
+</field>
+
+<field label="qnxt" ID="11" parentID="9" var="yes">
+   <types> <type ID="4"/> <type ID="4"/> <type ID="4"/> </types>
+</field>
+
+<sig label="Ex1/Leader" ID="12" one="yes" var="yes">
+   <atom label="Ex1/Node$2"/>
+   <type ID="9"/>
+</sig>
+
+<field label="lnxt" ID="13" parentID="12" var="yes">
+   <types> <type ID="4"/> <type ID="4"/> <type ID="4"/> </types>
+</field>
+
+<sig label="Ex1/LQueue" ID="14" var="yes">
+   <type ID="9"/>
+</sig>
+
+<sig label="Ex1/SentMsg" ID="15" var="yes">
+   <type ID="6"/>
+</sig>
+
+<sig label="Ex1/SendingMsg" ID="16" var="yes">
+   <atom label="Ex1/Msg$0"/>
+   <type ID="6"/>
+</sig>
+
+<sig label="Ex1/PendingMsg" ID="17" var="yes">
+   <type ID="6"/>
+</sig>
+
+<skolem label="$n" ID="18">
+   <types> <type ID="6"/> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$m" ID="19">
+   <tuple> <atom label="Ex1/Node$2"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$memberPromotion_n" ID="20">
+   <tuple> <atom label="Ex1/Node$0"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$leaderPromotion_m" ID="21">
+   <tuple> <atom label="Ex1/Node$0"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$msg" ID="22">
+   <tuple> <atom label="Ex1/Msg$0"/> </tuple>
+   <types> <type ID="6"/> </types>
+</skolem>
+
+<skolem label="$m&apos;" ID="23">
+   <tuple> <atom label="Ex1/Node$2"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$mq" ID="24">
+   <tuple> <atom label="Ex1/Node$1"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$memberExit_mprev" ID="25">
+   <tuple> <atom label="Ex1/Node$0"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$nm" ID="26">
+   <tuple> <atom label="Ex1/Node$1"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$dropQueue_m" ID="27">
+   <tuple> <atom label="Ex1/Node$2"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$this/visQueueNext" ID="m0">
+   <types> <type ID="4"/> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$this/visLeaderNext" ID="m1">
+   <types> <type ID="4"/> <type ID="4"/> </types>
+</skolem>
+
+</instance>
+<instance bitwidth="4" maxseq="4" mintrace="1" maxtrace="12" command="Run run$14 for 12 steps, 6 Node, 1 Msg" filename="/home/crea/Software-Specification/Project 2/Ex2.als" tracelength="12" backloop="9">
+
+<sig label="seq/Int" ID="0" parentID="1" builtin="yes">
+</sig>
+
+<sig label="Int" ID="1" parentID="2" builtin="yes">
+</sig>
+
+<sig label="String" ID="3" parentID="2" builtin="yes">
+</sig>
+
+<sig label="Ex1/Node" ID="4" parentID="2">
+   <atom label="Ex1/Node$0"/>
+   <atom label="Ex1/Node$1"/>
+   <atom label="Ex1/Node$2"/>
+</sig>
+
+<field label="outbox" ID="5" parentID="4" var="yes">
+   <types> <type ID="4"/> <type ID="6"/> </types>
+</field>
+
+<sig label="Ex1/Msg" ID="6" parentID="2">
+   <atom label="Ex1/Msg$0"/>
+</sig>
+
+<field label="sndr" ID="7" parentID="6">
+   <tuple> <atom label="Ex1/Msg$0"/> <atom label="Ex1/Node$2"/> </tuple>
+   <types> <type ID="6"/> <type ID="4"/> </types>
+</field>
+
+<field label="rcvrs" ID="8" parentID="6" var="yes">
+   <tuple> <atom label="Ex1/Msg$0"/> <atom label="Ex1/Node$0"/> </tuple>
+   <tuple> <atom label="Ex1/Msg$0"/> <atom label="Ex1/Node$2"/> </tuple>
+   <types> <type ID="6"/> <type ID="4"/> </types>
+</field>
+
+<sig label="univ" ID="2" builtin="yes" var="yes">
+</sig>
+
+<sig label="Ex1/Member" ID="9" var="yes">
+   <atom label="Ex1/Node$0"/>
+   <atom label="Ex1/Node$2"/>
+   <type ID="4"/>
+</sig>
+
+<field label="nxt" ID="10" parentID="9" var="yes">
+   <tuple> <atom label="Ex1/Node$0"/> <atom label="Ex1/Node$2"/> </tuple>
+   <tuple> <atom label="Ex1/Node$2"/> <atom label="Ex1/Node$0"/> </tuple>
+   <types> <type ID="4"/> <type ID="4"/> </types>
+</field>
+
+<field label="qnxt" ID="11" parentID="9" var="yes">
+   <types> <type ID="4"/> <type ID="4"/> <type ID="4"/> </types>
+</field>
+
+<sig label="Ex1/Leader" ID="12" one="yes" var="yes">
+   <atom label="Ex1/Node$2"/>
+   <type ID="9"/>
+</sig>
+
+<field label="lnxt" ID="13" parentID="12" var="yes">
+   <types> <type ID="4"/> <type ID="4"/> <type ID="4"/> </types>
+</field>
+
+<sig label="Ex1/LQueue" ID="14" var="yes">
+   <type ID="9"/>
+</sig>
+
+<sig label="Ex1/SentMsg" ID="15" var="yes">
+   <atom label="Ex1/Msg$0"/>
+   <type ID="6"/>
+</sig>
+
+<sig label="Ex1/SendingMsg" ID="16" var="yes">
+   <type ID="6"/>
+</sig>
+
+<sig label="Ex1/PendingMsg" ID="17" var="yes">
+   <type ID="6"/>
+</sig>
+
+<skolem label="$n" ID="18">
+   <types> <type ID="6"/> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$m" ID="19">
+   <tuple> <atom label="Ex1/Node$2"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$memberPromotion_n" ID="20">
+   <tuple> <atom label="Ex1/Node$0"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$leaderPromotion_m" ID="21">
+   <tuple> <atom label="Ex1/Node$0"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$msg" ID="22">
+   <tuple> <atom label="Ex1/Msg$0"/> </tuple>
+   <types> <type ID="6"/> </types>
+</skolem>
+
+<skolem label="$m&apos;" ID="23">
+   <tuple> <atom label="Ex1/Node$2"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$mq" ID="24">
+   <tuple> <atom label="Ex1/Node$1"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$memberExit_mprev" ID="25">
+   <tuple> <atom label="Ex1/Node$0"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$nm" ID="26">
+   <tuple> <atom label="Ex1/Node$1"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$dropQueue_m" ID="27">
+   <tuple> <atom label="Ex1/Node$2"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$this/visQueueNext" ID="m0">
+   <types> <type ID="4"/> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$this/visLeaderNext" ID="m1">
+   <types> <type ID="4"/> <type ID="4"/> </types>
+</skolem>
+
+</instance>
+<instance bitwidth="4" maxseq="4" mintrace="1" maxtrace="12" command="Run run$14 for 12 steps, 6 Node, 1 Msg" filename="/home/crea/Software-Specification/Project 2/Ex2.als" tracelength="12" backloop="9">
+
+<sig label="seq/Int" ID="0" parentID="1" builtin="yes">
+</sig>
+
+<sig label="Int" ID="1" parentID="2" builtin="yes">
+</sig>
+
+<sig label="String" ID="3" parentID="2" builtin="yes">
+</sig>
+
+<sig label="Ex1/Node" ID="4" parentID="2">
+   <atom label="Ex1/Node$0"/>
+   <atom label="Ex1/Node$1"/>
+   <atom label="Ex1/Node$2"/>
+</sig>
+
+<field label="outbox" ID="5" parentID="4" var="yes">
+   <types> <type ID="4"/> <type ID="6"/> </types>
+</field>
+
+<sig label="Ex1/Msg" ID="6" parentID="2">
+   <atom label="Ex1/Msg$0"/>
+</sig>
+
+<field label="sndr" ID="7" parentID="6">
+   <tuple> <atom label="Ex1/Msg$0"/> <atom label="Ex1/Node$2"/> </tuple>
+   <types> <type ID="6"/> <type ID="4"/> </types>
+</field>
+
+<field label="rcvrs" ID="8" parentID="6" var="yes">
+   <tuple> <atom label="Ex1/Msg$0"/> <atom label="Ex1/Node$0"/> </tuple>
+   <tuple> <atom label="Ex1/Msg$0"/> <atom label="Ex1/Node$2"/> </tuple>
+   <types> <type ID="6"/> <type ID="4"/> </types>
+</field>
+
+<sig label="univ" ID="2" builtin="yes" var="yes">
+</sig>
+
+<sig label="Ex1/Member" ID="9" var="yes">
+   <atom label="Ex1/Node$0"/>
+   <atom label="Ex1/Node$2"/>
+   <type ID="4"/>
+</sig>
+
+<field label="nxt" ID="10" parentID="9" var="yes">
+   <tuple> <atom label="Ex1/Node$0"/> <atom label="Ex1/Node$2"/> </tuple>
+   <tuple> <atom label="Ex1/Node$2"/> <atom label="Ex1/Node$0"/> </tuple>
+   <types> <type ID="4"/> <type ID="4"/> </types>
+</field>
+
+<field label="qnxt" ID="11" parentID="9" var="yes">
+   <types> <type ID="4"/> <type ID="4"/> <type ID="4"/> </types>
+</field>
+
+<sig label="Ex1/Leader" ID="12" one="yes" var="yes">
+   <atom label="Ex1/Node$2"/>
+   <type ID="9"/>
+</sig>
+
+<field label="lnxt" ID="13" parentID="12" var="yes">
+   <tuple> <atom label="Ex1/Node$2"/> <atom label="Ex1/Node$0"/> <atom label="Ex1/Node$2"/> </tuple>
+   <types> <type ID="4"/> <type ID="4"/> <type ID="4"/> </types>
+</field>
+
+<sig label="Ex1/LQueue" ID="14" var="yes">
+   <atom label="Ex1/Node$0"/>
+   <type ID="9"/>
+</sig>
+
+<sig label="Ex1/SentMsg" ID="15" var="yes">
+   <atom label="Ex1/Msg$0"/>
+   <type ID="6"/>
+</sig>
+
+<sig label="Ex1/SendingMsg" ID="16" var="yes">
+   <type ID="6"/>
+</sig>
+
+<sig label="Ex1/PendingMsg" ID="17" var="yes">
+   <type ID="6"/>
+</sig>
+
+<skolem label="$n" ID="18">
+   <types> <type ID="6"/> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$m" ID="19">
+   <tuple> <atom label="Ex1/Node$2"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$memberPromotion_n" ID="20">
+   <tuple> <atom label="Ex1/Node$0"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$leaderPromotion_m" ID="21">
+   <tuple> <atom label="Ex1/Node$0"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$msg" ID="22">
+   <tuple> <atom label="Ex1/Msg$0"/> </tuple>
+   <types> <type ID="6"/> </types>
+</skolem>
+
+<skolem label="$m&apos;" ID="23">
+   <tuple> <atom label="Ex1/Node$2"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$mq" ID="24">
+   <tuple> <atom label="Ex1/Node$1"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$memberExit_mprev" ID="25">
+   <tuple> <atom label="Ex1/Node$0"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$nm" ID="26">
+   <tuple> <atom label="Ex1/Node$1"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$dropQueue_m" ID="27">
+   <tuple> <atom label="Ex1/Node$2"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$this/visQueueNext" ID="m0">
+   <types> <type ID="4"/> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$this/visLeaderNext" ID="m1">
+   <tuple> <atom label="Ex1/Node$0"/> <atom label="Ex1/Node$2"/> </tuple>
+   <types> <type ID="4"/> <type ID="4"/> </types>
+</skolem>
+
+</instance>
+<instance bitwidth="4" maxseq="4" mintrace="1" maxtrace="12" command="Run run$14 for 12 steps, 6 Node, 1 Msg" filename="/home/crea/Software-Specification/Project 2/Ex2.als" tracelength="12" backloop="9">
+
+<sig label="seq/Int" ID="0" parentID="1" builtin="yes">
+</sig>
+
+<sig label="Int" ID="1" parentID="2" builtin="yes">
+</sig>
+
+<sig label="String" ID="3" parentID="2" builtin="yes">
+</sig>
+
+<sig label="Ex1/Node" ID="4" parentID="2">
+   <atom label="Ex1/Node$0"/>
+   <atom label="Ex1/Node$1"/>
+   <atom label="Ex1/Node$2"/>
+</sig>
+
+<field label="outbox" ID="5" parentID="4" var="yes">
+   <types> <type ID="4"/> <type ID="6"/> </types>
+</field>
+
+<sig label="Ex1/Msg" ID="6" parentID="2">
+   <atom label="Ex1/Msg$0"/>
+</sig>
+
+<field label="sndr" ID="7" parentID="6">
+   <tuple> <atom label="Ex1/Msg$0"/> <atom label="Ex1/Node$2"/> </tuple>
+   <types> <type ID="6"/> <type ID="4"/> </types>
+</field>
+
+<field label="rcvrs" ID="8" parentID="6" var="yes">
+   <tuple> <atom label="Ex1/Msg$0"/> <atom label="Ex1/Node$0"/> </tuple>
+   <tuple> <atom label="Ex1/Msg$0"/> <atom label="Ex1/Node$2"/> </tuple>
+   <types> <type ID="6"/> <type ID="4"/> </types>
+</field>
+
+<sig label="univ" ID="2" builtin="yes" var="yes">
+</sig>
+
+<sig label="Ex1/Member" ID="9" var="yes">
+   <atom label="Ex1/Node$0"/>
+   <atom label="Ex1/Node$2"/>
+   <type ID="4"/>
+</sig>
+
+<field label="nxt" ID="10" parentID="9" var="yes">
+   <tuple> <atom label="Ex1/Node$0"/> <atom label="Ex1/Node$2"/> </tuple>
+   <tuple> <atom label="Ex1/Node$2"/> <atom label="Ex1/Node$0"/> </tuple>
+   <types> <type ID="4"/> <type ID="4"/> </types>
+</field>
+
+<field label="qnxt" ID="11" parentID="9" var="yes">
+   <types> <type ID="4"/> <type ID="4"/> <type ID="4"/> </types>
+</field>
+
+<sig label="Ex1/Leader" ID="12" one="yes" var="yes">
+   <atom label="Ex1/Node$0"/>
+   <type ID="9"/>
+</sig>
+
+<field label="lnxt" ID="13" parentID="12" var="yes">
+   <types> <type ID="4"/> <type ID="4"/> <type ID="4"/> </types>
+</field>
+
+<sig label="Ex1/LQueue" ID="14" var="yes">
+   <type ID="9"/>
+</sig>
+
+<sig label="Ex1/SentMsg" ID="15" var="yes">
+   <atom label="Ex1/Msg$0"/>
+   <type ID="6"/>
+</sig>
+
+<sig label="Ex1/SendingMsg" ID="16" var="yes">
+   <type ID="6"/>
+</sig>
+
+<sig label="Ex1/PendingMsg" ID="17" var="yes">
+   <type ID="6"/>
+</sig>
+
+<skolem label="$n" ID="18">
+   <types> <type ID="6"/> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$m" ID="19">
+   <tuple> <atom label="Ex1/Node$2"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$memberPromotion_n" ID="20">
+   <tuple> <atom label="Ex1/Node$0"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$leaderPromotion_m" ID="21">
+   <tuple> <atom label="Ex1/Node$0"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$msg" ID="22">
+   <tuple> <atom label="Ex1/Msg$0"/> </tuple>
+   <types> <type ID="6"/> </types>
+</skolem>
+
+<skolem label="$m&apos;" ID="23">
+   <tuple> <atom label="Ex1/Node$2"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$mq" ID="24">
+   <tuple> <atom label="Ex1/Node$1"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$memberExit_mprev" ID="25">
+   <tuple> <atom label="Ex1/Node$0"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$nm" ID="26">
+   <tuple> <atom label="Ex1/Node$1"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$dropQueue_m" ID="27">
+   <tuple> <atom label="Ex1/Node$2"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$this/visQueueNext" ID="m0">
+   <types> <type ID="4"/> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$this/visLeaderNext" ID="m1">
+   <types> <type ID="4"/> <type ID="4"/> </types>
+</skolem>
+
+</instance>
+<instance bitwidth="4" maxseq="4" mintrace="1" maxtrace="12" command="Run run$14 for 12 steps, 6 Node, 1 Msg" filename="/home/crea/Software-Specification/Project 2/Ex2.als" tracelength="12" backloop="9">
+
+<sig label="seq/Int" ID="0" parentID="1" builtin="yes">
+</sig>
+
+<sig label="Int" ID="1" parentID="2" builtin="yes">
+</sig>
+
+<sig label="String" ID="3" parentID="2" builtin="yes">
+</sig>
+
+<sig label="Ex1/Node" ID="4" parentID="2">
+   <atom label="Ex1/Node$0"/>
+   <atom label="Ex1/Node$1"/>
+   <atom label="Ex1/Node$2"/>
+</sig>
+
+<field label="outbox" ID="5" parentID="4" var="yes">
+   <types> <type ID="4"/> <type ID="6"/> </types>
+</field>
+
+<sig label="Ex1/Msg" ID="6" parentID="2">
+   <atom label="Ex1/Msg$0"/>
+</sig>
+
+<field label="sndr" ID="7" parentID="6">
+   <tuple> <atom label="Ex1/Msg$0"/> <atom label="Ex1/Node$2"/> </tuple>
+   <types> <type ID="6"/> <type ID="4"/> </types>
+</field>
+
+<field label="rcvrs" ID="8" parentID="6" var="yes">
+   <tuple> <atom label="Ex1/Msg$0"/> <atom label="Ex1/Node$0"/> </tuple>
+   <tuple> <atom label="Ex1/Msg$0"/> <atom label="Ex1/Node$2"/> </tuple>
+   <types> <type ID="6"/> <type ID="4"/> </types>
+</field>
+
+<sig label="univ" ID="2" builtin="yes" var="yes">
+</sig>
+
+<sig label="Ex1/Member" ID="9" var="yes">
+   <atom label="Ex1/Node$0"/>
+   <atom label="Ex1/Node$2"/>
+   <type ID="4"/>
+</sig>
+
+<field label="nxt" ID="10" parentID="9" var="yes">
+   <tuple> <atom label="Ex1/Node$0"/> <atom label="Ex1/Node$2"/> </tuple>
+   <tuple> <atom label="Ex1/Node$2"/> <atom label="Ex1/Node$0"/> </tuple>
+   <types> <type ID="4"/> <type ID="4"/> </types>
+</field>
+
+<field label="qnxt" ID="11" parentID="9" var="yes">
+   <tuple> <atom label="Ex1/Node$0"/> <atom label="Ex1/Node$1"/> <atom label="Ex1/Node$0"/> </tuple>
+   <types> <type ID="4"/> <type ID="4"/> <type ID="4"/> </types>
+</field>
+
+<sig label="Ex1/Leader" ID="12" one="yes" var="yes">
+   <atom label="Ex1/Node$0"/>
+   <type ID="9"/>
+</sig>
+
+<field label="lnxt" ID="13" parentID="12" var="yes">
+   <types> <type ID="4"/> <type ID="4"/> <type ID="4"/> </types>
+</field>
+
+<sig label="Ex1/LQueue" ID="14" var="yes">
+   <type ID="9"/>
+</sig>
+
+<sig label="Ex1/SentMsg" ID="15" var="yes">
+   <atom label="Ex1/Msg$0"/>
+   <type ID="6"/>
+</sig>
+
+<sig label="Ex1/SendingMsg" ID="16" var="yes">
+   <type ID="6"/>
+</sig>
+
+<sig label="Ex1/PendingMsg" ID="17" var="yes">
+   <type ID="6"/>
+</sig>
+
+<skolem label="$n" ID="18">
+   <types> <type ID="6"/> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$m" ID="19">
+   <tuple> <atom label="Ex1/Node$2"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$memberPromotion_n" ID="20">
+   <tuple> <atom label="Ex1/Node$0"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$leaderPromotion_m" ID="21">
+   <tuple> <atom label="Ex1/Node$0"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$msg" ID="22">
+   <tuple> <atom label="Ex1/Msg$0"/> </tuple>
+   <types> <type ID="6"/> </types>
+</skolem>
+
+<skolem label="$m&apos;" ID="23">
+   <tuple> <atom label="Ex1/Node$2"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$mq" ID="24">
+   <tuple> <atom label="Ex1/Node$1"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$memberExit_mprev" ID="25">
+   <tuple> <atom label="Ex1/Node$0"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$nm" ID="26">
+   <tuple> <atom label="Ex1/Node$1"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$dropQueue_m" ID="27">
+   <tuple> <atom label="Ex1/Node$2"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$this/visQueueNext" ID="m0">
+   <tuple> <atom label="Ex1/Node$1"/> <atom label="Ex1/Node$0"/> </tuple>
+   <types> <type ID="4"/> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$this/visLeaderNext" ID="m1">
+   <types> <type ID="4"/> <type ID="4"/> </types>
+</skolem>
+
+</instance>
+<instance bitwidth="4" maxseq="4" mintrace="1" maxtrace="12" command="Run run$14 for 12 steps, 6 Node, 1 Msg" filename="/home/crea/Software-Specification/Project 2/Ex2.als" tracelength="12" backloop="9">
+
+<sig label="seq/Int" ID="0" parentID="1" builtin="yes">
+</sig>
+
+<sig label="Int" ID="1" parentID="2" builtin="yes">
+</sig>
+
+<sig label="String" ID="3" parentID="2" builtin="yes">
+</sig>
+
+<sig label="Ex1/Node" ID="4" parentID="2">
+   <atom label="Ex1/Node$0"/>
+   <atom label="Ex1/Node$1"/>
+   <atom label="Ex1/Node$2"/>
+</sig>
+
+<field label="outbox" ID="5" parentID="4" var="yes">
+   <types> <type ID="4"/> <type ID="6"/> </types>
+</field>
+
+<sig label="Ex1/Msg" ID="6" parentID="2">
+   <atom label="Ex1/Msg$0"/>
+</sig>
+
+<field label="sndr" ID="7" parentID="6">
+   <tuple> <atom label="Ex1/Msg$0"/> <atom label="Ex1/Node$2"/> </tuple>
+   <types> <type ID="6"/> <type ID="4"/> </types>
+</field>
+
+<field label="rcvrs" ID="8" parentID="6" var="yes">
+   <tuple> <atom label="Ex1/Msg$0"/> <atom label="Ex1/Node$0"/> </tuple>
+   <tuple> <atom label="Ex1/Msg$0"/> <atom label="Ex1/Node$2"/> </tuple>
+   <types> <type ID="6"/> <type ID="4"/> </types>
+</field>
+
+<sig label="univ" ID="2" builtin="yes" var="yes">
+</sig>
+
+<sig label="Ex1/Member" ID="9" var="yes">
+   <atom label="Ex1/Node$0"/>
+   <atom label="Ex1/Node$1"/>
+   <atom label="Ex1/Node$2"/>
+   <type ID="4"/>
+</sig>
+
+<field label="nxt" ID="10" parentID="9" var="yes">
+   <tuple> <atom label="Ex1/Node$0"/> <atom label="Ex1/Node$1"/> </tuple>
+   <tuple> <atom label="Ex1/Node$1"/> <atom label="Ex1/Node$2"/> </tuple>
+   <tuple> <atom label="Ex1/Node$2"/> <atom label="Ex1/Node$0"/> </tuple>
+   <types> <type ID="4"/> <type ID="4"/> </types>
+</field>
+
+<field label="qnxt" ID="11" parentID="9" var="yes">
+   <types> <type ID="4"/> <type ID="4"/> <type ID="4"/> </types>
+</field>
+
+<sig label="Ex1/Leader" ID="12" one="yes" var="yes">
+   <atom label="Ex1/Node$0"/>
+   <type ID="9"/>
+</sig>
+
+<field label="lnxt" ID="13" parentID="12" var="yes">
+   <types> <type ID="4"/> <type ID="4"/> <type ID="4"/> </types>
+</field>
+
+<sig label="Ex1/LQueue" ID="14" var="yes">
+   <type ID="9"/>
+</sig>
+
+<sig label="Ex1/SentMsg" ID="15" var="yes">
+   <atom label="Ex1/Msg$0"/>
+   <type ID="6"/>
+</sig>
+
+<sig label="Ex1/SendingMsg" ID="16" var="yes">
+   <type ID="6"/>
+</sig>
+
+<sig label="Ex1/PendingMsg" ID="17" var="yes">
+   <type ID="6"/>
+</sig>
+
+<skolem label="$n" ID="18">
+   <types> <type ID="6"/> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$m" ID="19">
+   <tuple> <atom label="Ex1/Node$2"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$memberPromotion_n" ID="20">
+   <tuple> <atom label="Ex1/Node$0"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$leaderPromotion_m" ID="21">
+   <tuple> <atom label="Ex1/Node$0"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$msg" ID="22">
+   <tuple> <atom label="Ex1/Msg$0"/> </tuple>
+   <types> <type ID="6"/> </types>
+</skolem>
+
+<skolem label="$m&apos;" ID="23">
+   <tuple> <atom label="Ex1/Node$2"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$mq" ID="24">
+   <tuple> <atom label="Ex1/Node$1"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$memberExit_mprev" ID="25">
+   <tuple> <atom label="Ex1/Node$0"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$nm" ID="26">
+   <tuple> <atom label="Ex1/Node$1"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$dropQueue_m" ID="27">
+   <tuple> <atom label="Ex1/Node$2"/> </tuple>
+   <types> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$this/visQueueNext" ID="m0">
+   <types> <type ID="4"/> <type ID="4"/> </types>
+</skolem>
+
+<skolem label="$this/visLeaderNext" ID="m1">
+   <types> <type ID="4"/> <type ID="4"/> </types>
+</skolem>
+
+</instance>
+
+<source filename="/home/crea/Software-Specification/Project 2/Ex2.als" content="module Ex2&#x000a;open Ex1&#x000a;&#x000a;fun visQueueNext[]: Node -&gt; lone Node {&#x000a;    Member.qnxt&#x000a;}&#x000a;&#x000a;fun visLeaderNext[]: Node -&gt; lone Node {&#x000a;    Leader.lnxt&#x000a;}&#x000a;&#x000a;pred init[] {&#x000a;    Member = Leader&#x000a;&#x0009;nxt = (Leader-&gt;Leader)&#x000a;    Msg = PendingMsg&#x000a;    no Node.qnxt&#x000a;}&#x000a;&#x000a;pred stutter[] {&#x000a;    stutterRing[]&#x000a;    stutterQueue[]&#x000a;    stutterLeader[]&#x000a;    stutterMsg[]&#x000a;}&#x000a;&#x000a;pred stutterMsg[] {&#x000a;    SendingMsg&apos; = SendingMsg&#x000a;    SentMsg&apos; = SentMsg&#x000a;    PendingMsg&apos; = PendingMsg&#x000a;    outbox&apos; = outbox&#x000a;&#x0009;rcvrs&apos; = rcvrs&#x000a;}&#x000a;&#x000a;pred stutterLeader[] {&#x000a;    Leader&apos; = Leader&#x000a;    lnxt&apos; = lnxt&#x000a;    LQueue&apos; = LQueue&#x000a;}&#x000a;&#x000a;pred stutterRing[] {&#x000a;    Member&apos; = Member&#x000a;    nxt&apos; = nxt&#x000a;}&#x000a;&#x000a;pred stutterQueue[] {&#x000a;    qnxt&apos; = qnxt&#x000a;}&#x000a;&#x000a;pred trans[] {&#x000a;    stutter[]&#x000a;    ||&#x000a;    (some n: Node, m: Member | addQueue[n, m])&#x000a;    ||&#x000a;    (some n: Node | dropQueue[n])&#x000a;    ||&#x000a;    (some m: Member | memberPromotion[m])&#x000a;&#x0009;||&#x000a;&#x0009;(some m: Member | memberExit[m])&#x000a;&#x0009;||&#x000a;&#x0009;(some m: Member | leaderApplication[m])&#x000a;&#x0009;||&#x000a;&#x0009;(leaderPromotion[])&#x000a;    ||&#x000a;    (some msg: Msg, m: Member | redirectMessage[msg, m])&#x000a;}&#x000a;&#x000a;pred system[] {&#x000a;    init[]&#x000a;    &amp;&amp; always trans[]&#x000a;}&#x000a;&#x000a;fact {&#x000a;    system[]&#x000a;}&#x000a;&#x000a;&#x000a;pred addQueue[n: Node, m: Member] {&#x000a;    some nlast: Node | addQueueAux1[n, m, nlast]&#x000a;}&#x000a;&#x000a;pred addQueueAux1[n: Node, m: Member, nlast: Node] {&#x000a;    // Pre-condition&#x000a;    // n is not a member&#x000a;    n !in Member&#x000a;    n != nlast&#x000a;    // n not in m&apos;s queue&#x000a;    n !in m.qnxt.Node&#x000a;    // nlast has no queue nodes pointing to it AND its reachable thru the queue&#x000a;    no m.qnxt.nlast&#x000a;    nlast in m.*(~(m.qnxt))&#x000a;&#x000a;    // Post-condition&#x000a;    // n points to last node in m&apos;s queue&#x000a;    m.qnxt&apos; = m.qnxt + (n -&gt; nlast)&#x000a;    // TODO - Perguntar ao fragoso&#x000a;&#x000a;    // Frame&#x000a;    stutterRing[]&#x000a;    all m: Member - m | m.qnxt&apos; = m.qnxt &#x000a;    stutterLeader[]&#x000a;    stutterMsg[]&#x000a;}&#x000a;&#x000a;pred dropQueue[n: Node] {&#x000a;    some m: Member | dropQueueAux1[n, m]&#x000a;&#x0009;||&#x000a;&#x0009;some m: Member, nprev: Node | dropQueueAux2[n, m, nprev]&#x000a;}&#x000a;&#x000a;pred dropQueueAux1[n: Node, m: Member] {&#x000a;    // Pre-conditions&#x000a;    n in m.qnxt.Node&#x000a;    no n.~(m.qnxt)&#x000a;&#x000a;    // Post-conditions&#x000a;    // m.qnxt&apos; = m.qnxt - (n -&gt; m.qnxt.n)&#x000a;    m.qnxt&apos; = m.qnxt - (n -&gt; n.(m.qnxt))&#x000a;&#x000a;    // Frame (nxt,qnxt,Member,LQueue,Leader,lnxt)&#x000a;    stutterRing[]&#x000a;    all m: Member - m | m.qnxt&apos; = m.qnxt&#x000a;    stutterLeader[]&#x000a;    stutterMsg[]&#x000a;}&#x000a;&#x000a;pred dropQueueAux2[n: Node, m: Member, nprev: Node] {&#x000a;    // Pre-conditions&#x000a;    n in m.qnxt.Node&#x000a;    nprev = (m.qnxt).n&#x000a;&#x0009;nprev != n&#x000a;&#x000a;    // Post-conditions&#x000a;    m.qnxt&apos; = m.qnxt - (n -&gt; n.(m.qnxt)) - (nprev -&gt; n) + (nprev -&gt; n.(m.qnxt))&#x000a;&#x000a;    // Frame (nxt,qnxt,Member,LQueue,Leader,lnxt)&#x000a;    stutterRing[]&#x000a;    all m: Member - m | m.qnxt&apos; = m.qnxt&#x000a;    stutterLeader[]&#x000a;    stutterMsg[]&#x000a;}&#x000a;&#x000a;// Gera modelo que 1 tira 1 n&#x00f3; da queue&#x000a;run {#Msg=0 &amp;&amp; eventually (#qnxt=2 &amp;&amp; eventually (some n1, n2: Node, m: Member | dropQueueAux2[n1, m, n2]))} for 5&#x000a;&#x000a;// Gera modelo que adiciona 1 n&#x00f3; a uma queue&#x000a;run {#Msg=0 &amp;&amp; eventually (some n: Node, m: Member | addQueue[n, m])} for 5&#x000a;&#x000a;// Gera modelo que adiciona 2 n&#x00f3;s a uma queue&#x000a;run {#Member=1 &amp;&amp; #Node=4 &amp;&amp; #Msg=0 &amp;&amp; &#x000a;    (eventually (some n1, n2: Node, m: Member | n1 != n2 &amp;&amp; addQueue[n1, m] &#x000a;                                                &amp;&amp; (eventually addQueue[n2, m])))&#x000a;    } for 5&#x000a;&#x000a;&#x000a;// Gera modelo que tira 2 n&#x00f3;s de uma queue&#x000a;run {#Member=1 &amp;&amp; #Node=4 &amp;&amp; #Msg=0 &amp;&amp; &#x000a;    (eventually #Member.qnxt=2)&#x000a;    // (eventually (some n1, n2: Node| n1 != n2 &amp;&amp; dropQueue[n1] &amp;&amp; (eventually dropQueue[n2])))&#x000a;    } for 5&#x000a;&#x000a;pred memberPromotion[m: Member] {&#x000a;    some n: Node | memberPromotionAux1[m, n]&#x000a;&#x0009;||&#x000a;&#x0009;some n, nprev: Node | memberPromotionAux2[m, n, nprev]&#x000a;}&#x000a;&#x000a;pred memberPromotionAux1[m: Member, n: Node] {&#x000a;    // Pre-conditions&#x000a;    n !in Member&#x000a;    (m.qnxt).m = n // n is head of m&apos;s queue&#x000a;    no (m.qnxt).n // No other node in queue&#x000a;&#x000a;    // Post-conditions&#x000a;&#x0009;Member&apos; = Member + n // n in Member&#x000a;&#x0009;m.qnxt&apos; = m.qnxt - (n-&gt;m)&#x000a;    nxt&apos; = nxt + (m -&gt; n) + (n -&gt; m.nxt) - (m -&gt; m.nxt)&#x000a;&#x0009;no n.qnxt&apos; // Possibly unnecessary&#x000a;&#x0009;no n.outbox&apos; // Possibly unnecessary&#x000a;&#x000a;    // Frame (nxt,qnxt,Member,LQueue,Leader,lnxt)&#x000a;    all m: Member - m | m.qnxt&apos; = m.qnxt &amp;&amp; m.nxt&apos; = m.nxt&#x000a;    stutterLeader[]&#x000a;    stutterMsg[]&#x000a;}&#x000a;&#x000a;pred memberPromotionAux2[m: Member, n: Node, nprev: Node] {&#x000a;    // Pre-conditions&#x000a;    n !in Member&#x000a;    (m.qnxt).m = n // n is head of m&apos;s queue&#x000a;    (m.qnxt).n = nprev // nprev is node in queue pointing to n&#x000a;&#x0009;// nprev != n // redundant&#x000a;&#x000a;    // Post-conditions&#x000a;    Member&apos; = Member + n // n in Member&#x000a;    m.qnxt&apos; = m.qnxt - (n -&gt; m) - (nprev -&gt; n) + (nprev -&gt; m)&#x000a;    nxt&apos; = nxt + (m-&gt;n) + (n-&gt;m.nxt) - (m-&gt;m.nxt)&#x000a;&#x0009;no n.qnxt&apos; // Possibly unnecessary&#x000a;&#x0009;no n.outbox&apos; // Possibly unnecessary&#x000a;&#x000a;    // Frame (nxt,qnxt,Member,LQueue,Leader,lnxt)&#x000a;    all m: Member - m | m.qnxt&apos; = m.qnxt &amp;&amp; m.nxt&apos; = m.nxt&#x000a;    stutterLeader[]&#x000a;    stutterMsg[]&#x000a;}&#x000a;&#x000a;pred memberExit[m: Member] {&#x000a;&#x0009;some mprev: Member | memberExitAux1[m, mprev]&#x000a;}&#x000a;&#x000a;pred memberExitAux1[m: Member, mprev: Member] {&#x000a;&#x0009;// Pre-conditions&#x000a;&#x0009;mprev != m&#x000a;&#x0009;// mprev next is to m&#x000a;&#x0009;mprev.nxt = m&#x000a;&#x0009;// m is not the Leader&#x000a;&#x0009;m != Leader&#x000a;&#x0009;// m is not in the Leader queue&#x000a;&#x0009;m !in LQueue&#x000a;&#x0009;// m does not have any nodes in it&apos;s member queue&#x000a;&#x0009;no m.qnxt&#x000a;&#x0009;// All of m&apos;s messages have finished broadcasting &#x000a;&#x0009;sndr.m in SentMsg&#x000a;&#x0009;&#x000a;&#x0009;// Post-conditions&#x000a;&#x0009;// mprev next is to m.nxt&#x000a;&#x0009;nxt&apos; = nxt - (m-&gt;m.nxt) - (mprev-&gt;m) + (mprev-&gt;m.nxt)&#x000a;&#x0009;// mprev or m.nxt gets m&apos;s qnxt&#x000a;&#x0009;// EDIT: NOT NEEDED!&#x000a;&#x0009;// m no longer a member&#x000a;&#x0009;Member&apos; = Member - m&#x000a;&#x0009;&#x000a;&#x0009;// Frame&#x000a;&#x0009;all m: Member - m - mprev | m.nxt&apos; = m.nxt&#x000a;&#x0009;qnxt&apos; = qnxt // EDIT: !!&#x000a;&#x0009;stutterLeader[]&#x000a;    stutterMsg[]&#x000a;}&#x000a;&#x000a;pred leaderApplication[m: Member] {&#x000a;    some mlast: Member | leaderApplicationAux1[m, mlast]&#x000a;}&#x000a;&#x000a;pred leaderApplicationAux1[m: Member, mlast: Member] {&#x000a;    // Pre-condition&#x000a;    // m is a member&#x000a;    m in Member&#x000a;    m != mlast&#x000a;    // m not in Leader application queue&#x000a;    m !in LQueue&#x000a;&#x0009;m !in Leader.lnxt.Node&#x000a;    // mlast has no members pointing to it AND its reachable thru the queue&#x000a;    no Leader.lnxt.mlast&#x000a;    mlast in Leader.*(~(Leader.lnxt))&#x000a;&#x000a;    // Post-condition&#x000a;    // m points to last member in Leader application queue (or the leader)&#x000a;    Leader.lnxt&apos; = Leader.lnxt + (m -&gt; mlast)&#x000a;&#x0009;LQueue&apos; = LQueue + m&#x000a;&#x000a;    // Frame&#x000a;    stutterRing[]&#x000a;    stutterQueue[]&#x000a;    stutterMsg[]&#x000a;    Leader&apos; = Leader&#x000a;}&#x000a;&#x000a;pred leaderPromotion[] {&#x000a;&#x0009;some m: Member | leaderPromotionAux1[m]&#x000a;}&#x000a;&#x000a;pred leaderPromotionAux1[m: Member] {&#x000a;&#x0009;// Pre-condition&#x000a;&#x0009;// m in LQueue&#x000a;&#x0009;m in LQueue // kinda unnecessary&#x000a;&#x0009;// m is the head of the leader queue&#x000a;&#x0009;m = Leader.lnxt.Leader&#x000a;&#x0009;// All of Leader&apos;s messages have finished broadcasting&#x000a;&#x0009;sndr.Leader in SentMsg&#x000a;&#x0009;&#x000a;&#x0009;// Post-condition&#x000a;&#x0009;// m is the new Leader&#x000a;&#x0009;Leader&apos; = m&#x000a;&#x0009;LQueue&apos; = LQueue - m&#x000a;&#x0009;m.lnxt&apos; = Leader.lnxt - (m -&gt; Leader)&#x000a;&#x000a;&#x0009;// Frame&#x000a;&#x0009;stutterRing[]&#x000a;    stutterQueue[]&#x000a;    stutterMsg[]&#x000a;}&#x000a;&#x000a;pred redirectMessage[msg: Msg, m: Member] {&#x000a;    redirectEndBroadcast[msg, m]&#x000a;    ||&#x000a;    some mnext: Member | redirectMessageAux[msg, m, mnext]&#x000a;}&#x000a;&#x000a;pred redirectEndBroadcast[msg: Msg, m: Member] {&#x000a;    // Message reached the leader again&#x000a;    &#x000a;    // Pre-conditions&#x000a;    msg in m.outbox&#x000a;    msg in SendingMsg&#x000a;    m = msg.sndr&#x000a;&#x000a;    // Post-conditions&#x000a;    msg.rcvrs&apos; = msg.rcvrs + m&#x000a;    SentMsg&apos; = SentMsg + msg&#x000a;    SendingMsg&apos; = SendingMsg - msg&#x000a;    outbox&apos; = outbox - (m-&gt;msg)&#x000a;&#x000a;    // Frame (nxt,qnxt,Member,LQueue,Leader,lnxt)&#x000a;&#x0009;stutterRing[]&#x000a;    stutterQueue[]&#x000a;    stutterLeader[]&#x000a;    PendingMsg&apos; = PendingMsg&#x000a;}&#x000a;&#x000a;pred redirectMessageAux[msg: Msg, m: Member, mnext: Member] {&#x000a;&#x0009;// Pre-conditions&#x000a;&#x0009;m = msg.sndr implies msg in PendingMsg&#x000a;    msg in m.outbox&#x000a;&#x0009;m != mnext // can&apos;t message itself (only happens if m is the only member)&#x000a;    mnext = m.nxt&#x000a;&#x000a;    (redirectSendingMsg[msg, m] or redirectPendingMsg[msg, m])&#x000a;&#x000a;    // Post-conditions&#x000a;    msg.rcvrs&apos; = (m != msg.sndr implies msg.rcvrs + m else msg.rcvrs)&#x000a;    outbox&apos; = outbox - (m-&gt;msg) + (mnext -&gt; msg)&#x000a;&#x000a;    // Frame (nxt,qnxt,Member,LQueue,Leader,lnxt)&#x000a;&#x0009;stutterRing[]&#x000a;    stutterQueue[]&#x000a;    stutterLeader[]&#x000a;    SentMsg&apos; = SentMsg  // Msg hasn&apos;t reached leader so it hasn&apos;t terminated broadcast&#x000a;}&#x000a;&#x000a;pred redirectSendingMsg[msg: Msg, m: Member] {&#x000a;    // Pre-conditions&#x000a;    msg in SendingMsg&#x000a;&#x000a;    // Frame&#x000a;    PendingMsg&apos; = PendingMsg&#x000a;    SendingMsg&apos; = SendingMsg&#x000a;}&#x000a;&#x000a;pred redirectPendingMsg[msg: Msg, m: Member] {&#x000a;    // Pre-conditions&#x000a;    msg in PendingMsg&#x000a;    m = msg.sndr&#x000a;&#x000a;    // Post-conditions&#x000a;&#x0009;PendingMsg&apos; = PendingMsg - msg&#x000a;    SendingMsg&apos; = SendingMsg + msg&#x000a;}&#x000a;&#x000a;// Simple message broadcast&#x000a;run {&#x000a;    eventually (#Member=2 &amp;&amp; #Msg=1 &amp;&amp;&#x000a;        (eventually (some msg: Msg, m: Member |&#x000a;            redirectMessage[msg, m]&#x000a;&#x0009;&#x0009;&#x0009;&amp;&amp; eventually (redirectMessage[msg, m.nxt]&#x000a;&#x0009;&#x0009;&#x0009;&amp;&amp; eventually (redirectMessage[msg, m]))&#x000a;            )&#x000a;        )&#x000a;    )&#x000a;}&#x000a;&#x000a;run {&#x000a;    eventually (#Member=2 and&#x000a;        (after (some msg: Msg, m: Member, mnext: Member |&#x000a;            redirectMessage[msg, m] and&#x000a;                (after redirectMessage[msg, mnext]) and&#x000a;                    (after redirectMessage[msg, m])&#x000a;            )&#x000a;        )&#x000a;    )&#x000a;}&#x000a;&#x000a;run {eventually some SentMsg} for 5&#x000a;&#x000a;&#x000a;run { eventually some m: Member | memberPromotion[m] } for 2 Node, 0 Msg&#x000a;&#x000a;// Test Member promotion twice&#x000a;run { #Msg=0 &amp;&amp; #Member=1 &amp;&amp; #Node=3 &amp;&amp; eventually (some n1,n2,n3: Member | n1 != n2 &amp;&amp; n2 != n3 &amp;&amp; n1 != n3) } for 5&#x000a;&#x000a;// Test Member promotion and leader application&#x000a;run { #Msg=0 &amp;&amp; #Member=1 &amp;&amp; #Node=3 &amp;&amp; eventually (some n1,n2: Member | n1 != n2 &amp;&amp; eventually (some m: Member | leaderApplication[m])) } for 5&#x000a;&#x000a;// Test Member promotion twice and leader application&#x000a;run { #Msg=0 &amp;&amp; #Member=1 &amp;&amp; #Node=3 &amp;&amp; eventually (some n1,n2,n3: Member | n1 != n2 &amp;&amp; n2 != n3 &amp;&amp; n1 != n3 &amp;&amp;&#x000a;&#x0009;eventually (some m1: Member | leaderApplication[m1] &amp;&amp; eventually (some m2: Member - m1 | leaderApplication[m2]))) } for 5&#x000a;&#x000a;// Test Leader Promotion&#x000a;run { #Msg=0 &amp;&amp; #Member=1 &amp;&amp; #Node=3 &amp;&amp; eventually (some n1,n2: Member | n1 != n2 &amp;&amp; eventually (leaderPromotion[])) } for 5&#x000a;&#x000a;// Test Member Exit&#x000a;run { #Msg=0 &amp;&amp; #Member=1 &amp;&amp; #Node=2 &amp;&amp; eventually (some n1,n2: Member | n1 != n2 &amp;&amp; eventually (some m: Member | memberExit[m])) } for 5 // &#x000a;&#x000a;&#x000a;// 2.2 1) 5 Nodes OK, 1 Leader Promotion OK, 1 Member Promotion OK, 1 Member Exit OK, 1 Node Exit OK, 1 Broadcast (full) OK&#x000a;run {&#x000a;     (eventually (some m: Member | memberPromotion[m])) &amp;&amp;&#x000a;&#x0009; (eventually (#Member&gt;2)) &amp;&amp;&#x000a;     (eventually (leaderPromotion[])) &amp;&amp;&#x000a;     (eventually (some msg: Msg, m: Member | redirectMessage[msg, m])) &amp;&amp;&#x000a;     (eventually (some mq: Member | memberExit[mq])) &amp;&amp;&#x000a;     (eventually (some nm: Node - Member | dropQueue[nm]))&#x000a;} for 6 Node, 1 Msg, 12 steps&#x000a;&#x000a;// 2.2 2) 5 Nodes OK, 1 Leader Promotion OK, 1 Member Promotion OK, 1 Member Exit OK, 1 Node Exit OK, 1 Broadcast (full) OK&#x000a;run { #Node=5 &amp;&amp;&#x000a;     eventually (some m: Member | memberPromotion[m]) &amp;&amp;&#x000a;     eventually (some msg: Msg, m: Member | redirectMessage[msg, m]) &amp;&amp;&#x000a;     eventually (leaderPromotion[]) &amp;&amp;&#x000a;     eventually (some mq: Member | memberExit[mq]) &amp;&amp;&#x000a;     eventually (some nm: Node - Member | dropQueue[nm])&#x000a;} for 6 but 1 Msg&#x000a;"/>
+
+<source filename="/$alloy4$/models/util/integer.als" content="module util/integer&#x000a;&#x000a;/*&#x000a; * A collection of utility functions for using Integers in Alloy.&#x000a; * Note that integer overflows are silently truncated to the current bitwidth&#x000a; * using the 2&apos;s complement arithmetic, unless the &quot;forbid overfows&quot; option is&#x000a; * turned on, in which case only models that don&apos;t have any overflows are &#x000a; * analyzed. &#x000a; */&#x000a;&#x000a;fun add  [n1, n2: Int] : Int { this/plus[n1, n2] }&#x000a;fun plus [n1, n2: Int] : Int { n1 fun/add n2 }&#x000a;&#x000a;fun sub   [n1, n2: Int] : Int { this/minus[n1, n2] }&#x000a;fun minus [n1, n2: Int] : Int { n1 fun/sub n2 }&#x000a;&#x000a;fun mul [n1, n2: Int] : Int { n1 fun/mul n2 }&#x000a;&#x000a;/**&#x000a; * Performs the division with &quot;round to zero&quot; semantics, except the following 3 cases&#x000a; * 1) if a is 0, then it returns 0&#x000a; * 2) else if b is 0, then it returns 1 if a is negative and -1 if a is positive&#x000a; * 3) else if a is the smallest negative integer, and b is -1, then it returns a&#x000a; */&#x000a;fun div [n1, n2: Int] : Int { n1 fun/div n2 }&#x000a;&#x000a;/** answer is defined to be the unique integer that satisfies &quot;a = ((a/b)*b) + remainder&quot; */&#x000a;fun rem [n1, n2: Int] : Int { n1 fun/rem n2 }&#x000a;&#x000a;/** negate */&#x000a;fun negate [n: Int] : Int { 0 fun/sub n }&#x000a;&#x000a;/** equal to */&#x000a;pred eq [n1, n2: Int] { int[n1] = int[n2] }&#x000a;&#x000a;/** greater than */&#x000a;pred gt [n1, n2: Int] { n1 &gt; n2 }&#x000a;&#x000a;/** less then */&#x000a;pred lt [n1, n2: Int] { n1 &lt; n2 }&#x000a;&#x000a;/** greater than or equal */&#x000a;pred gte [n1, n2: Int] { n1 &gt;= n2 }&#x000a;&#x000a;/** less than or equal */&#x000a;pred lte [n1, n2: Int] { n1 &lt;= n2 }&#x000a;&#x000a;/** integer is zero */&#x000a;pred zero [n: Int] { n = 0 }&#x000a;&#x000a;/** positive */&#x000a;pred pos  [n: Int] { n &gt; 0 }&#x000a;&#x000a;/** negative */&#x000a;pred neg  [n: Int] { n &lt; 0 }&#x000a;&#x000a;/** non-positive */&#x000a;pred nonpos [n: Int] { n &lt;= 0 }&#x000a;&#x000a;/** non-negative */&#x000a;pred nonneg [n: Int] { n &gt;= 0 }&#x000a;&#x000a;/** signum (aka sign or sgn) */&#x000a;fun signum [n: Int] : Int { n&lt;0 =&gt; (0 fun/sub 1) else (n&gt;0 =&gt; 1 else 0) }&#x000a;&#x000a;/**&#x000a; * returns the ith element (zero-based) from the set s&#x000a; * in the ordering of &apos;next&apos;, which is a linear ordering&#x000a; * relation like that provided by util/ordering&#x000a; */&#x000a;fun int2elem[i: Int, next: univ-&gt;univ, s: set univ] : lone s {&#x000a;  {e: s | #^next.e = int i }&#x000a;}&#x000a;&#x000a;/**&#x000a; * returns the index of the element (zero-based) in the&#x000a; * ordering of next, which is a linear ordering relation&#x000a; * like that provided by util/ordering&#x000a; */&#x000a;fun elem2int[e: univ, next: univ-&gt;univ] : lone Int {&#x000a;  Int[#^next.e]&#x000a;}&#x000a;&#x000a;/** returns the largest integer in the current bitwidth */&#x000a;fun max:one Int { fun/max }&#x000a;&#x000a;/** returns the smallest integer in the current bitwidth */&#x000a;fun min:one Int { fun/min }&#x000a;&#x000a;/** maps each integer (except max) to the integer after it */&#x000a;fun next:Int-&gt;Int { fun/next }&#x000a;&#x000a;/** maps each integer (except min) to the integer before it */&#x000a;fun prev:Int-&gt;Int { ~next }&#x000a;&#x000a;/** given a set of integers, return the largest element */&#x000a;fun max [es: set Int]: lone Int { es - es.^prev }&#x000a;&#x000a;/** given a set of integers, return the smallest element */&#x000a;fun min [es: set Int]: lone Int { es - es.^next }&#x000a;&#x000a;/** given an integer, return all integers prior to it */&#x000a;fun prevs [e: Int]: set Int { e.^prev }&#x000a;&#x000a;/** given an integer, return all integers following it */&#x000a;fun nexts [e: Int]: set Int { e.^next }&#x000a;&#x000a;/** returns the larger of the two integers */&#x000a;fun larger [e1, e2: Int]: Int { let a=int[e1], b=int[e2] | (a&lt;b =&gt; b else a) }&#x000a;&#x000a;/** returns the smaller of the two integers */&#x000a;fun smaller [e1, e2: Int]: Int { let a=int[e1], b=int[e2] | (a&lt;b =&gt; a else b) }&#x000a;"/>
+
+<source filename="/home/crea/Software-Specification/Project 2/Ex1.als" content="module Ex1&#x000a;&#x000a;&#x000a;sig Node {&#x000a;    var outbox: set Msg,&#x000a;}&#x000a;&#x000a;var sig Member in Node {&#x000a;    var nxt: lone Member,&#x000a;    var qnxt : Node -&gt; lone Node&#x000a;}&#x000a;&#x000a;var one sig Leader in Member {&#x000a;    var lnxt: Node -&gt; lone Node&#x000a;}&#x000a;&#x000a;var sig LQueue in Member {&#x000a;&#x000a;}&#x000a;&#x000a;sig Msg {&#x000a;  sndr: Node, &#x000a;  var rcvrs: set Node &#x000a;}&#x000a;&#x000a;var sig SentMsg, SendingMsg, PendingMsg in Msg {}&#x000a;&#x000a;&#x000a;fact MemberRing {&#x000a;    /* From one member you can get to all others &#x000a;    through the next pointer */&#x000a;    all m: Member | Member in m.*nxt&#x000a;}&#x000a;&#x000a;fact LeaderCandidatesAreMembers {&#x000a;    /* all nodes in the leader queue are members */&#x000a;    // Node.(~(Leader.lnxt)) = LQueue &amp;&amp; Leader !in LQueue&#x000a;&#x0009;Leader.lnxt.Node = LQueue //&amp;&amp; Leader !in LQueue&#x000a;}&#x000a;&#x000a;fact allRoadsLeadtoLeader {&#x000a;&#x0009;/* Leader is always reached by following the leader queue (order)*/&#x000a;&#x0009;all lq: LQueue | Leader in lq.^(Leader.lnxt)&#x000a;}&#x000a;&#x000a;&#x000a;fact indianLeaderQueue {&#x000a;&#x0009;/* Reachable queue members only have one arrow pointing at them */&#x000a;&#x0009;all m: Member.(Leader.lnxt) | one (Leader.lnxt).m&#x000a;}&#x000a;&#x000a;fact noLoopsLeaderQueue {&#x000a;&#x0009;/* Member cannot reach self following the queue (order + no repetition)*/&#x000a;&#x0009;all m: Member | m !in m.^(Leader.lnxt)&#x000a;}&#x000a;&#x000a;fact allRoadsLeadtoMember {&#x000a;&#x0009;/* Member is always reached by following the member queue (order)*/&#x000a;&#x0009;all n: Node, m: Member | n in m.qnxt.Node implies m in n.^(m.qnxt)&#x000a;}&#x000a;&#x000a;&#x000a;fact indianMemberQueue {&#x000a;&#x0009;/* Reachable queue nodes only have one arrow pointing at them */&#x000a;&#x0009;all n: Node.(Member.qnxt) | one (Member.qnxt).n&#x000a;}&#x000a;&#x000a;fact noLoopsMemberQueue {&#x000a;&#x0009;/* Node cannot reach self following the queue (order)*/&#x000a;&#x0009;all n: Node | n !in n.^(Member.qnxt)&#x000a;}&#x000a;&#x000a;fact NoMemberInQueue {&#x000a;    /* no member in a member queue*/&#x000a;&#x0009;no (Member.qnxt.Node &amp; Member)&#x000a;}&#x000a;&#x000a;&#x000a;fact {&#x000a;    /* non-member nodes are not allowed to queue in more than one member queue&#x000a;        at a time. */&#x000a;    all m1, m2: Member | &#x000a;        m1 != m2 =&gt; no (m1.qnxt.Node &amp; m2.qnxt.Node)&#x000a;}&#x000a;&#x000a;fact {&#x000a;    /* A message is considered sent when broadcasting process &#x000a;        has terminated (the leader received back the message) */&#x000a;    all msg: SentMsg | msg.sndr in msg.rcvrs and some (msg.rcvrs - msg.sndr)&#x000a;&#x000a;    /* if the sender is in the receiver set, then the message&#x000a;        already cycled through the ring */&#x000a;}&#x000a;&#x000a;fact {&#x000a;    /* If a message is in the sent state, then it has left&#x000a;    everyone&apos;s outbox */&#x000a;    all msg: SentMsg, node: Node | msg !in node.outbox&#x000a;}&#x000a;&#x000a;fact {&#x000a;    /* A message is considered pending, if the broadcasting&#x000a;        process has not yet started. In other words, the message&#x000a;        hasn&apos;t left the leader and no one has received it yet. */&#x000a;    all msg: PendingMsg | no msg.rcvrs&#x000a;}&#x000a;&#x000a;fact {&#x000a;    /* A message can&apos;t be in more than one state at once */&#x000a;    (no (SentMsg &amp; SendingMsg))&#x000a;    and &#x000a;    (no (SentMsg &amp; PendingMsg))&#x000a;    and&#x000a;    (no (SendingMsg &amp; PendingMsg))&#x000a;}&#x000a;&#x000a;fact {&#x000a;    /* A message must be in some state */&#x000a;    Msg = (SentMsg + SendingMsg + PendingMsg)&#x000a;}&#x000a;&#x000a;fact {&#x000a;    /* If a node has a sending message in the outbox,&#x000a;    then it is a member */&#x000a;    all n: Node | some (n.outbox &amp; SendingMsg) =&gt; n in Member&#x000a;}&#x000a;&#x000a;fact {&#x000a;    /* A message is considered sending, if the broadcasting&#x000a;        process has started, but not yet finished. In other words,&#x000a;        the message has left the leader, but it hasn&apos;t received it&#x000a;        back yet. */&#x000a;    all msg: SendingMsg | (some msg.rcvrs) &amp;&amp; (msg.sndr !in msg.rcvrs)&#x000a;}&#x000a;&#x000a;&#x000a;fact {&#x000a;    /* A node can&apos;t be outside the ring if it has messages in the&#x000a;    sending state */&#x000a;    all msg: SendingMsg | msg.sndr in Member&#x000a;}&#x000a;&#x000a;fact {&#x000a;    /* Sending messages are in someone&apos;s outbox */&#x000a;    all msg: SendingMsg | some n: Node | &#x000a;        (n.outbox = n.outbox + msg) &amp;&amp; (msg.sndr != n)&#x000a;}&#x000a;&#x000a;fact {&#x000a;    /* the outbox can only contain pending messages belonging&#x000a;    to the node itself or sending messages belonging to other nodes */&#x000a;    all n: Node | &#x000a;        all msg: Msg | msg in n.outbox implies&#x000a;            (msg in (n.(~sndr) &amp; PendingMsg))&#x000a;            or &#x000a;            (msg in (Node.(~sndr) &amp; SendingMsg))&#x000a;&#x000a;}&#x000a;&#x000a;fact {&#x000a;    /* Messages are in, at most, one outbox */&#x000a;    //all msg: Msg | lone outbox.msg&#x000a;    all msg: Msg | lone (msg.(~outbox) &amp; Node)&#x000a;}&#x000a;&#x000a;fact PendingMsgsNotReceived {&#x000a;    /* If a message is pending, it shouldn&apos;t be in anyone&apos;s outbox &#x000a;    except the sender&apos;s */&#x000a;    all msg: PendingMsg | msg !in (Member - msg.sndr).outbox&#x000a;}&#x000a;&#x000a;fact PendingMsgInSndrOutbox {&#x000a;    /* If a message is pending, it should be in the sender&apos;s outbox */&#x000a;    all msg: PendingMsg | msg in msg.sndr.outbox&#x000a;}&#x000a;&#x000a;&#x000a;pred nonMembersQueued {&#x000a;    all n: Node | n !in Member =&gt; one m: Member | n in m.qnxt.Node&#x000a;}&#x000a;&#x000a;pred someMessageEach {&#x000a;&#x0009;some SentMsg &amp;&amp; some SendingMsg &amp;&amp; some PendingMsg &#x000a;}&#x000a;&#x000a;fun visQueueNext[]: Node -&gt; lone Node {&#x000a;&#x0009;Member.qnxt&#x000a;}&#x000a;&#x000a;fun visLeaderNext[]: Node -&gt; lone Node {&#x000a;&#x0009;Leader.lnxt&#x000a;}&#x000a;&#x000a;&#x000a;run {#Node=5 &amp;&amp; #Member=2 &amp;&amp; #Member.qnxt.Member&gt;1 &amp;&amp; some LQueue &amp;&amp; someMessageEach} for 5&#x000a;"/>
+
+</alloy>
