@@ -139,7 +139,7 @@ pred dropQueueAux2[n: Node, m: Member, nprev: Node] {
     stutterMsg[]
 }
 
-// Gera modelo que 1 tira 1 nó da queue
+// Gera modelo que tira 1 nó da queue
 run {#Msg=0 && eventually (#qnxt=2 && eventually (some n1, n2: Node, m: Member | dropQueueAux2[n1, m, n2]))} for 5
 
 // Gera modelo que adiciona 1 nó a uma queue
