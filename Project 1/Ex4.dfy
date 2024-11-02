@@ -162,7 +162,7 @@ module Ex4 {
         invariant curr == null ==> r.content == this.content * s.content
         invariant curr != null ==> // Qualquer valor no novo set está na interseção
                   forall v : nat :: v in r.content ==> v in this.content * s.content
-        // Um valor que esteja na interceção, mas não no curr, tem de já ter sido
+        // Um valor que esteja na interseção, mas não no curr, tem de já ter sido
         // adicionado ao r
         invariant curr != null ==> 
                   forall v : nat :: v in this.content * s.content && v !in curr.content ==> v in r.content
